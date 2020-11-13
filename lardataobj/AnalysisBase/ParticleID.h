@@ -9,6 +9,7 @@
 #ifndef ANAB_PARTICLEID_H
 #define ANAB_PARTICLEID_H
 
+#include <vector>
 #include <iosfwd>
 #include <iostream>
 #include <iomanip>
