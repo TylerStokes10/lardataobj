@@ -329,7 +329,7 @@
     ]]>
   </ioread>
  
-<!--  <ioread
+  <ioread
      version="[-13]"
      sourceClass="anab::ParticleID"
      source="geo::PlaneID fPlaneID; int fNdf; double fMinChi2; double fDeltaChi2; double fChi2Proton; double fChi2Kaon; double fChi2Pion; double fChi2Muon; double fMissingE; double fMissingEavg; double fPIDA"
@@ -339,30 +339,9 @@
      <![CDATA[
               std::cout << "[classes_def] Reading an old version of anab::ParticleID. Constructing new class" << std::endl;
 
-//std::cout << "oldObj: " << *(oldObj->fObject) << std::endl;
-
-//std::cout << "fPlaneID = " << oldObj->fPlaneID << std::endl;
-/*std::cout << "fNdf = " << oldObj->fNdf << std::endl;
-std::cout << "fMinChi2 = " << oldObj->fMinChi2 << std::endl;
-std::cout << "fDeltaChi2 = " << oldObj->fDeltaChi2 << std::endl;
-std::cout << "fChi2Proton = " << oldObj->fChi2Proton << std::endl;
-std::cout << "fChi2Kaon = " << oldObj->fChi2Kaon << std::endl;
-std::cout << "fChi2Pion = " << oldObj->fChi2Pion << std::endl;
-std::cout << "fChi2Muon = " << oldObj->fChi2Muon << std::endl;
-std::cout << "fMissingE = " << oldObj->fMissingE << std::endl;
-std::cout << "fMissingEavg = " << oldObj->fMissingEavg << std::endl;
-std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
-
 
         // create object to store new PID objects
         std::vector<anab::sParticleIDAlgScores> AlgScoresVec;
-
-        std::bitset<8> bs;
-	if (onfile.fPlaneID.isValid){
-	std::cout << "onfile.fPlaneID.isValid = " << onfile.fPlaneID.isValid << std::endl;
-	//std::cout << "Onfile.fPlaneID.Plane = " << onfile.fPlaneID.Plane << " , onfile.fPlaneID.deepestIndex() = " << onfile.fPlaneID.deepestIndex() << ", setting bit " << onfile.fPlaneID.deepestIndex()-onfile.fPlaneID.Plane << std::endl;
-        bs.set(onfile.fPlaneID.deepestIndex()-onfile.fPlaneID.Plane);
-	}
 
         // and individual algScores
         anab::sParticleIDAlgScores chi2_proton;
@@ -372,7 +351,7 @@ std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
         chi2_proton.fTrackDir = anab::kForward;
         chi2_proton.fValue = onfile.fChi2Proton;
         chi2_proton.fNdf = onfile.fNdf;
-        chi2_proton.fPlaneMask = bs;
+	chi2_proton.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores chi2_muon;
         chi2_muon.fAlgName = "Chi2";
@@ -381,7 +360,7 @@ std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
         chi2_muon.fTrackDir = anab::kForward;
         chi2_muon.fValue = onfile.fChi2Muon;
         chi2_muon.fNdf = onfile.fNdf;
-        chi2_muon.fPlaneMask = bs;
+	chi2_muon.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores chi2_pion;
         chi2_pion.fAlgName = "Chi2";
@@ -390,45 +369,43 @@ std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
         chi2_pion.fTrackDir = anab::kForward;
         chi2_pion.fValue = onfile.fChi2Pion;
         chi2_pion.fNdf = onfile.fNdf;
-        chi2_pion.fPlaneMask = bs;
+	chi2_pion.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores chi2_kaon;
         chi2_kaon.fAlgName = "Chi2";
         chi2_kaon.fVariableType = anab::kGOF;
-        chi2_kaon.fAssumedPdg = 211;
+        chi2_kaon.fAssumedPdg = 321;
         chi2_kaon.fTrackDir = anab::kForward;
-        chi2_kaon.fValue = onfile.fChi2Pion;
+        chi2_kaon.fValue = onfile.fChi2Kaon;
         chi2_kaon.fNdf = onfile.fNdf;
-        chi2_kaon.fPlaneMask = bs;
+	chi2_kaon.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores pida;
         pida.fAlgName = "PIDA";
         pida.fVariableType = anab::kPIDA;
-        pida.fAssumedPdg = 321;
         pida.fTrackDir = anab::kForward;
         pida.fValue = onfile.fPIDA;
-        pida.fNdf = onfile.fNdf;
-        pida.fPlaneMask = bs;
+	pida.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores deltachi2;
         deltachi2.fAlgName = "DeltaChi2";
         deltachi2.fValue = onfile.fDeltaChi2;
-        deltachi2.fPlaneMask = bs;
+	deltachi2.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores minchi2;
         minchi2.fAlgName = "MinChi2";
         minchi2.fValue = onfile.fMinChi2;
-        minchi2.fPlaneMask = bs;
+	minchi2.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores missinge;
         missinge.fAlgName = "MissingE";
         missinge.fValue = onfile.fMissingE;
-        missinge.fPlaneMask = bs;
+	missinge.fPlaneID_old = onfile.fPlaneID;
 
         anab::sParticleIDAlgScores avgmissinge;
         avgmissinge.fAlgName = "MissingEavg";
         avgmissinge.fValue = onfile.fMissingEavg;
-        avgmissinge.fPlaneMask = bs;
+	avgmissinge.fPlaneID_old = onfile.fPlaneID;
 
         AlgScoresVec.push_back(chi2_proton);
         AlgScoresVec.push_back(chi2_muon);
@@ -442,6 +419,6 @@ std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
 
         fParticleIDAlgScores = AlgScoresVec;
      ]]>
- </ioread> -->
+ </ioread>
 
 </lcgdict>
