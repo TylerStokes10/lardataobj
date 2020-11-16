@@ -48,7 +48,7 @@ struct sParticleIDAlgScores { ///< determined particle ID
     }
     
     // If fPlaneMask has not been filled, check if fPlaneID_old has been filled. Default (i.e. not filled) PlaneIDs are set to be invalid
-    if (fPlaneID_old.isValid()){
+    if (fPlaneID_old.isValid){
       fPlaneMask.set(fPlaneID_old.Plane);
       return fPlaneMask;
     }
