@@ -27,7 +27,7 @@ struct sParticleIDAlgScores { ///< determined particle ID
   int fAssumedPdg; ///< PDG of particle hypothesis assumed by algorithm, if applicable. Set to 0 by default.
   float fValue; ///< Result of Particle ID algorithm/test
   std::bitset<8> fPlaneMask; ///< Bitset for PlaneID used by algorithm, allowing for multiple planes and up to 8 total planes. Set to all 0s by default. Convention for bitset is that fPlaneMask[0] (i.e. bit 0) represents plane 0, bit 1 represents plane 1, and so on (with plane conventions defined by the experiment).
-  geo::PlaneID fPlaneID_old; ///< For backwards compatibility only. Can't convert geo::PlaneID to PlaneMask in ioread when reading old files, so have to store it in this struct. Should be filled for old files only (where a std::bitset PlaneMask is not available).
+  geo::PlaneID fPlaneID_old; ///< For backwards compatibility only. Can't convert geo::PlaneID to PlaneMask in ioread when reading files based on the old particleID format, so have to store it in this struct. Should be filled for old files only (where a std::bitset PlaneMask is not available).
 
   sParticleIDAlgScores(){
   fAlgName = "AlgNameNotSet";
@@ -41,7 +41,7 @@ struct sParticleIDAlgScores { ///< determined particle ID
   }
 
   /// Use this to access plane mask instead of sParticleIDAlgScores.fPlaneMask for backwards compatibility. 
-  std::bitset<8> getPlaneMask(){ 
+  std::bitset<8> getPlaneMask() const{ 
     // First check if fPlaneMask has been filled. If it has, return that
     if (!fPlaneMask.none()){
       return fPlaneMask;
@@ -49,8 +49,9 @@ struct sParticleIDAlgScores { ///< determined particle ID
     
     // If fPlaneMask has not been filled, check if fPlaneID_old has been filled. Default (i.e. not filled) PlaneIDs are set to be invalid
     if (fPlaneID_old.isValid){
-      fPlaneMask.set(fPlaneID_old.Plane);
-      return fPlaneMask;
+      std::bitset<8> rtn;
+      rtn.set(fPlaneID_old.Plane);
+      return rtn;
     }
 
     // If neither, return fPlaneMask, which we know if it gets here is invalid (all 0s)
