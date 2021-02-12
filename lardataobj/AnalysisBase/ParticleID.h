@@ -11,6 +11,7 @@
 
 #include <iosfwd>
 #include <bitset>
+#include <vector>
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 #include "lardataobj/AnalysisBase/ParticleID_VariableTypeEnums.h"
 
