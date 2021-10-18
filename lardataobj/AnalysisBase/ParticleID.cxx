@@ -35,10 +35,9 @@ namespace anab{
 	<< "\n -- Assuming PDG: " << a.fParticleIDAlgScores.at(i).fAssumedPdg
   << "\n -- Number of degrees of freedom: " << a.fParticleIDAlgScores.at(i).fNdf
 	<< "\n -- Value: " << a.fParticleIDAlgScores.at(i).fValue
-	<< "\n -- Using planeMask: " << a.fParticleIDAlgScores.at(i).fPlaneMask;
+	<< "\n -- Using planeMask: " << a.fParticleIDAlgScores.at(i).getPlaneMask();
     }
     o <<std::endl;
-
 
     return o;
   }
