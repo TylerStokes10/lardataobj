@@ -1,8 +1,8 @@
 cet_make(NO_DICTIONARY
          LIBRARIES
            nusimdata_SimulationBase
-           canvas
-           MF_MessageLogger
+           canvas::canvas
+           messagefacility::MF_MessageLogger
            ROOT::GenVector
            ROOT::Core
            ROOT::Physics

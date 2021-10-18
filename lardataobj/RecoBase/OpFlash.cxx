@@ -9,15 +9,37 @@
 
 #include "lardataobj/RecoBase/OpFlash.h"
 
-#include <cstddef> // std::size_t
+#include <numeric> // std::accumulate()
+#include <utility> // std::move()
 
 namespace recob{
 
   //----------------------------------------------------------------------
-  OpFlash::OpFlash()
-    : fTime(            0.      )
+  OpFlash::OpFlash(double time, double timewidth, double abstime, unsigned int frame,
+		   std::vector<double> PEperOpDet,
+		   bool InBeamFrame, int onBeamTime, double FastToTotal,
+		   double xCenter, double xWidth,
+		   double yCenter, double yWidth,
+		   double zCenter, double zWidth,
+		   std::vector<double> WireCenters,
+		   std::vector<double> WireWidths)
+    : fTime        { time }
+    , fTimeWidth   { timewidth }
+    , fAbsTime     { abstime }
+    , fFrame       { frame }
+    , fPEperOpDet  { std::move(PEperOpDet) }
+    , fWireCenters { std::move(WireCenters) }
+    , fWireWidths  { std::move(WireWidths) }
+    , fXCenter     { xCenter }
+    , fXWidth      { xWidth }
+    , fYCenter     { yCenter }
+    , fYWidth      { yWidth }
+    , fZCenter     { zCenter }
+    , fZWidth      { zWidth }
+    , fFastToTotal { FastToTotal }
+    , fInBeamFrame { InBeamFrame }
+    , fOnBeamTime  { onBeamTime }
   {
-
   }
 
   //----------------------------------------------------------------------
@@ -28,23 +50,13 @@ namespace recob{
 		   double zCenter, double zWidth,
 		   std::vector<double> WireCenters,
 		   std::vector<double> WireWidths)
-  {
-    for (unsigned int i = 0; i < PEperOpDet.size(); ++i)
-      fPEperOpDet.push_back(PEperOpDet[i]);
-    fFrame       = frame;
-    fAbsTime     = abstime;
-    fTimeWidth   = timewidth;
-    fTime        = time;
-    fYCenter     = yCenter;
-    fYWidth      = yWidth;
-    fZCenter     = zCenter;
-    fZWidth      = zWidth;
-    fWireWidths  = WireWidths;
-    fWireCenters = WireCenters;
-    fInBeamFrame = InBeamFrame;
-    fFastToTotal = FastToTotal;
-    fOnBeamTime  = onBeamTime;
-  }
+    : OpFlash{
+      time, timewidth, abstime, frame,
+      std::move(PEperOpDet), InBeamFrame, onBeamTime, FastToTotal,
+      NoCenter, NoCenter, yCenter, yWidth, zCenter, zWidth,
+      std::move(WireCenters), std::move(WireWidths)
+      }
+    {}
 
   //----------------------------------------------------------------------
   bool operator < (const OpFlash & a, const OpFlash & b)
@@ -55,10 +67,7 @@ namespace recob{
   //----------------------------------------------------------------------
   double OpFlash::TotalPE() const
   {
-    double theTotalPE=0;
-    for(size_t i=0; i!=fPEperOpDet.size(); ++i)
-      theTotalPE+=fPEperOpDet.at(i);
-    return theTotalPE;
+    return std::accumulate(fPEperOpDet.begin(), fPEperOpDet.end(), 0.0);
   }
 
 

@@ -138,7 +138,7 @@ void CheckHit(
   BOOST_CHECK_EQUAL(hit.Multiplicity(), multiplicity);
   BOOST_CHECK_EQUAL(hit.LocalIndex(), local_index);
   BOOST_CHECK
-    ((hit.LocalIndex() < hit.Multiplicity()) || (hit.LocalIndex() == -1));
+    (((hit.LocalIndex() < hit.Multiplicity()) || (hit.LocalIndex() == -1)));
 
   // - fit quality
   BOOST_CHECK_EQUAL(hit.GoodnessOfFit(), goodness_of_fit);

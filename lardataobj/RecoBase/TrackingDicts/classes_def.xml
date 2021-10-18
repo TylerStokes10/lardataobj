@@ -162,6 +162,9 @@
   <class name="std::vector<recob::TrackTrajectory>"/>
   <class name="art::Wrapper<std::vector<recob::TrackTrajectory>>"/>
 
+  <class name="std::vector<art::Ptr<recob::TrackTrajectory>>"/>
+  <class name="art::Wrapper<std::vector<art::Ptr<recob::TrackTrajectory>>>"/>
+      
     <!-- associations and wrappers -->
       <!-- hits -->
   <class name="art::Assns<recob::Hit, recob::TrackTrajectory, void>"/>
@@ -312,6 +315,9 @@
   <class name="std::vector<recob::Track>"/>
   <class name="art::Wrapper<std::vector<recob::Track>>"/>
 
+  <class name="std::vector<art::Ptr<recob::Track>>"/>
+  <class name="art::Wrapper<std::vector<art::Ptr<recob::Track>>>"/>
+      
   <class name="art::PtrVector<recob::Track>"/>
   <class name="std::vector<art::PtrVector<recob::Track>>"/>
   <class name="art::Wrapper<std::vector<art::PtrVector<recob::Track>>>"/>

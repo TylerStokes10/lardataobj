@@ -114,7 +114,8 @@
   <class name="recob::OpHit" ClassVersion="14">
     <version ClassVersion="14" checksum="3730974187"/>
   </class>
-  <class name="recob::OpFlash" ClassVersion="18">
+  <class name="recob::OpFlash" ClassVersion="19">
+    <version ClassVersion="19" checksum="4173863904"/>
     <version ClassVersion="18" checksum="507533507"/>
     <version ClassVersion="17" checksum="1882235791"/>
   </class>
@@ -163,7 +164,12 @@
   <class name="art::PtrVector<recob::OpFlash>"/>
   <class name="art::PtrVector<recob::TrackFitHitInfo>"/>
   <class name="art::PtrVector<recob::MCSFitResult>"/>
+  <class name="std::vector<art::Ptr<recob::Hit>>"/>
   <class name="std::vector<art::Ptr<recob::Cluster>>"/>
+  <class name="std::vector<art::Ptr<recob::Shower>>"/>
+  <class name="std::vector<art::Ptr<recob::PFParticle>>"/>
+  <class name="std::vector<art::Ptr<recob::Vertex>>"/>
+  <class name="std::vector<art::Ptr<recob::OpFlash>>"/>
   <class name="std::vector< art::PtrVector<recob::Cluster>>"/>
   <class name="std::vector< art::PtrVector<recob::TrackFitHitInfo>>"/>
 
@@ -206,7 +212,12 @@
   <class name="art::Wrapper< std::vector< recob::OpFlash>>"/>
   <class name="art::Wrapper< std::vector< recob::MCSFitResult>>"/>
   <class name="art::Wrapper< std::vector< art::PtrVector<recob::Cluster>>>"/>
+  <class name="art::Wrapper< std::vector< art::Ptr<recob::Hit>>>"/>
   <class name="art::Wrapper< std::vector< art::Ptr<recob::Cluster>>>"/>
+  <class name="art::Wrapper< std::vector< art::Ptr<recob::Shower>>>"/>
+  <class name="art::Wrapper< std::vector< art::Ptr<recob::PFParticle>>>"/>
+  <class name="art::Wrapper< std::vector< art::Ptr<recob::Vertex>>>"/>
+  <class name="art::Wrapper< std::vector< art::Ptr<recob::OpFlash>>>"/>
   <class name="art::Wrapper< std::vector< std::vector<recob::TrackFitHitInfo>>>"/>
 
   <!-- io rules for types in this file -->

@@ -1,7 +1,7 @@
 cet_make(LIBRARIES lardataobj_RawData
-                   canvas
-                   MF_MessageLogger
-                   cetlib_except
+                   canvas::canvas
+                   messagefacility::MF_MessageLogger
+                   cetlib_except::cetlib_except
                    ROOT::Physics
                    ROOT::Matrix
                    ROOT::GenVector

@@ -1,5 +1,5 @@
 /**
- * raw/OpDetWaveform.h
+ * @file lardataobj/RawData/OpDetWaveform.h
  *
  * Raw signals from the photon detectors.
  * Waveform (adcs in time bins), a channel number, and a time stamp.
@@ -13,7 +13,6 @@
 #include <vector>
 #include <functional> // so we can redefine less<> below
 #include <limits>
-#include <iosfwd>
 
 
 namespace raw {
@@ -27,7 +26,7 @@ namespace raw {
     {
       private:
         Channel_t   fChannel;
-        TimeStamp_t fTimeStamp;
+        TimeStamp_t fTimeStamp; ///< On @ref DetectorClocksElectronicsTime "electronics time scale".
 
 
       public:
@@ -48,23 +47,20 @@ namespace raw {
 
         OpDetWaveform( TimeStamp_t time,
                        Channel_t   chan,
-                       std::vector< uint16_t > rhs )
-            : fChannel(chan)
+                       std::vector< uint16_t > const& rhs )
+            : std::vector< ADC_Count_t >(rhs.begin(), rhs.end())
+            , fChannel(chan)
             , fTimeStamp(time)
         {
-            this->reserve(rhs.size());
-            for (unsigned int i =0; i < rhs.size(); i++)
-                this->push_back(rhs[i]);
         };
 
-
-        ~OpDetWaveform() {};
 
         // Functions included for backwards compatability with previous data types
         std::vector<ADC_Count_t>& Waveform()         { return *this;  }
 
+        // Functions included for backwards compatability with previous data types
+        std::vector<ADC_Count_t>const & Waveform() const { return *this;  }
 
-        static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes");
 
         Channel_t   ChannelNumber() const            { return fChannel; }
         TimeStamp_t TimeStamp() const                { return fTimeStamp; }
