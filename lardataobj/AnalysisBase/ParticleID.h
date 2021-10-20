@@ -46,7 +46,6 @@ struct sParticleIDAlgScores { ///< determined particle ID
     ParticleID();
     
     std::vector<sParticleIDAlgScores> fParticleIDAlgScores; ///< Vector of structs to hold outputs from generic PID algorithms
-    double padding[7];
     geo::PlaneID fPlaneID;
 
   public:

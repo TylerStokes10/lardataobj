@@ -108,8 +108,7 @@
   <version ClassVersion="12" checksum="1421274164"/>
   <version ClassVersion="11" checksum="495386863"/>
  </class>
- <class name="anab::ParticleID"            ClassVersion="17"                           >
-  <version ClassVersion="17" checksum="1544858895"/>
+ <class name="anab::ParticleID"            ClassVersion="16"                           >
   <version ClassVersion="16" checksum="95706418"/>
   <version ClassVersion="15" checksum="1915672523"/>
   <version ClassVersion="14" checksum="2286758712"/>
@@ -330,12 +329,19 @@
      sourceClass="anab::ParticleID"
      source="int fNdf; double fMinChi2; double fDeltaChi2; double fChi2Proton; double fChi2Kaon; double fChi2Pion; double fChi2Muon; double fMissingE; double fMissingEavg; double fPIDA"
      targetClass="anab::ParticleID"
-     target="fParticleIDAlgScores, fPlaneID"
+     target="fParticleIDAlgScores"
      include="lardataobj/AnalysisBase/ParticleID_VariableTypeEnums.h,larcoreobj/SimpleTypesAndConstants/geo_types.h">
      <![CDATA[
-              std::cout << "[classes_def] Reading an old version of anab::ParticleID. Constructing new class" << std::endl;
-	      std::cout << "Old plane id = "<< (fPlaneID.isValid ? 1 : 0) << ' ' << fPlaneID << std::endl;
+        const geo::PlaneID& fPlaneID = newObj->fPlaneID;
 
+        //std::cout << "[classes_def] Reading an old version of anab::ParticleID. Constructing new class" << std::endl;
+	//std::cout << "Old plane id = "<< (fPlaneID.isValid ? 1 : 0) << ' ' << fPlaneID << std::endl;
+
+        // Get plane mask.
+
+        std::bitset<8> bs;
+        if(fPlaneID.isValid)
+          bs.set(fPlaneID.Plane);
 
         // and individual algScores
         anab::sParticleIDAlgScores chi2_proton;
@@ -345,8 +351,7 @@
         chi2_proton.fTrackDir = anab::kForward;
         chi2_proton.fValue = onfile.fChi2Proton;
         chi2_proton.fNdf = onfile.fNdf;
-	//if(fPlaneID.isValid)
-	//  chi2_proton.fPlaneMask.set(fPlaneID.Plane);
+	chi2_proton.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores chi2_muon;
         chi2_muon.fAlgName = "Chi2";
@@ -355,8 +360,7 @@
         chi2_muon.fTrackDir = anab::kForward;
         chi2_muon.fValue = onfile.fChi2Muon;
         chi2_muon.fNdf = onfile.fNdf;
-	//if(fPlaneID.isValid)
-	//  chi2_muon.fPlaneMask.set(fPlaneID.Plane);
+	chi2_muon.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores chi2_pion;
         chi2_pion.fAlgName = "Chi2";
@@ -365,8 +369,7 @@
         chi2_pion.fTrackDir = anab::kForward;
         chi2_pion.fValue = onfile.fChi2Pion;
         chi2_pion.fNdf = onfile.fNdf;
-	//if(fPlaneID.isValid)
-	//  chi2_pion.fPlaneMask.set(fPlaneID.Plane);
+	chi2_pion.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores chi2_kaon;
         chi2_kaon.fAlgName = "Chi2";
@@ -375,40 +378,34 @@
         chi2_kaon.fTrackDir = anab::kForward;
         chi2_kaon.fValue = onfile.fChi2Kaon;
         chi2_kaon.fNdf = onfile.fNdf;
-	//if(fPlaneID.isValid)
-	//  chi2_kaon.fPlaneMask.set(fPlaneID.Plane);
+	chi2_kaon.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores pida;
         pida.fAlgName = "PIDA";
         pida.fVariableType = anab::kPIDA;
         pida.fTrackDir = anab::kForward;
         pida.fValue = onfile.fPIDA;
-	//if(fPlaneID.isValid)
-	//  pida.fPlaneMask.set(fPlaneID.Plane);
+	pida.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores deltachi2;
         deltachi2.fAlgName = "DeltaChi2";
         deltachi2.fValue = onfile.fDeltaChi2;
-	//if(fPlaneID.isValid)
-	//  deltachi2.fPlaneMask.set(fPlaneID.Plane);
+	deltachi2.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores minchi2;
         minchi2.fAlgName = "MinChi2";
         minchi2.fValue = onfile.fMinChi2;
-	//if(fPlaneID.isValid)
-	//  minchi2.fPlaneMask.set(fPlaneID.Plane);
+	minchi2.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores missinge;
         missinge.fAlgName = "MissingE";
         missinge.fValue = onfile.fMissingE;
-	//if(fPlaneID.isValid)
-	//  missinge.fPlaneMask.set(fPlaneID.Plane);
+	missinge.fPlaneMask = bs;
 
         anab::sParticleIDAlgScores avgmissinge;
         avgmissinge.fAlgName = "MissingEavg";
         avgmissinge.fValue = onfile.fMissingEavg;
-	//if(fPlaneID.isValid)
-	//  avgmissinge.fPlaneMask.set(fPlaneID.Plane);
+	avgmissinge.fPlaneMask = bs;
 
         fParticleIDAlgScores.reserve(9);
         fParticleIDAlgScores.push_back(chi2_proton);
@@ -422,120 +419,5 @@
 	fParticleIDAlgScores.push_back(avgmissinge);
      ]]>
  </ioread>
-
-<!--  <ioread
-     version="[-13]"
-     sourceClass="anab::ParticleID"
-     source="geo::PlaneID fPlaneID; int fNdf; double fMinChi2; double fDeltaChi2; double fChi2Proton; double fChi2Kaon; double fChi2Pion; double fChi2Muon; double fMissingE; double fMissingEavg; double fPIDA"
-     targetClass="anab::ParticleID"
-     target="fParticleIDAlgScores"
-     include="lardataobj/AnalysisBase/ParticleID_VariableTypeEnums.h,larcoreobj/SimpleTypesAndConstants/geo_types.h">
-     <![CDATA[
-        std::cout << "[classes_def] Reading an old version of anab::ParticleID. Constructing new class" << std::endl;
-
-//std::cout << "oldObj: " << *(oldObj->fObject) << std::endl;
-
-//std::cout << "fPlaneID = " << oldObj->fPlaneID << std::endl;
-/*std::cout << "fNdf = " << oldObj->fNdf << std::endl;
-std::cout << "fMinChi2 = " << oldObj->fMinChi2 << std::endl;
-std::cout << "fDeltaChi2 = " << oldObj->fDeltaChi2 << std::endl;
-std::cout << "fChi2Proton = " << oldObj->fChi2Proton << std::endl;
-std::cout << "fChi2Kaon = " << oldObj->fChi2Kaon << std::endl;
-std::cout << "fChi2Pion = " << oldObj->fChi2Pion << std::endl;
-std::cout << "fChi2Muon = " << oldObj->fChi2Muon << std::endl;
-std::cout << "fMissingE = " << oldObj->fMissingE << std::endl;
-std::cout << "fMissingEavg = " << oldObj->fMissingEavg << std::endl;
-std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
-
-
-        // create object to store new PID objects
-        std::vector<anab::sParticleIDAlgScores> AlgScoresVec;
-
-        std::bitset<8> bs;
-	if (onfile.fPlaneID.isValid){
-	std::cout << "onfile.fPlaneID.isValid = " << onfile.fPlaneID.isValid << std::endl;
-	//std::cout << "Onfile.fPlaneID.Plane = " << onfile.fPlaneID.Plane << " , onfile.fPlaneID.deepestIndex() = " << onfile.fPlaneID.deepestIndex() << ", setting bit " << onfile.fPlaneID.deepestIndex()-onfile.fPlaneID.Plane << std::endl;
-        bs.set(onfile.fPlaneID.deepestIndex()-onfile.fPlaneID.Plane);
-	}
-
-        // and individual algScores
-        anab::sParticleIDAlgScores chi2_proton;
-        chi2_proton.fAlgName = "Chi2";
-        chi2_proton.fVariableType = anab::kGOF;
-        chi2_proton.fAssumedPdg = 2212;
-        chi2_proton.fTrackDir = anab::kForward;
-        chi2_proton.fValue = onfile.fChi2Proton;
-        chi2_proton.fNdf = onfile.fNdf;
-        chi2_proton.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores chi2_muon;
-        chi2_muon.fAlgName = "Chi2";
-        chi2_muon.fVariableType = anab::kGOF;
-        chi2_muon.fAssumedPdg = 13;
-        chi2_muon.fTrackDir = anab::kForward;
-        chi2_muon.fValue = onfile.fChi2Muon;
-        chi2_muon.fNdf = onfile.fNdf;
-        chi2_muon.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores chi2_pion;
-        chi2_pion.fAlgName = "Chi2";
-        chi2_pion.fVariableType = anab::kGOF;
-        chi2_pion.fAssumedPdg = 211;
-        chi2_pion.fTrackDir = anab::kForward;
-        chi2_pion.fValue = onfile.fChi2Pion;
-        chi2_pion.fNdf = onfile.fNdf;
-        chi2_pion.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores chi2_kaon;
-        chi2_kaon.fAlgName = "Chi2";
-        chi2_kaon.fVariableType = anab::kGOF;
-        chi2_kaon.fAssumedPdg = 211;
-        chi2_kaon.fTrackDir = anab::kForward;
-        chi2_kaon.fValue = onfile.fChi2Pion;
-        chi2_kaon.fNdf = onfile.fNdf;
-        chi2_kaon.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores pida;
-        pida.fAlgName = "PIDA";
-        pida.fVariableType = anab::kPIDA;
-        pida.fAssumedPdg = 321;
-        pida.fTrackDir = anab::kForward;
-        pida.fValue = onfile.fPIDA;
-        pida.fNdf = onfile.fNdf;
-        pida.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores deltachi2;
-        deltachi2.fAlgName = "DeltaChi2";
-        deltachi2.fValue = onfile.fDeltaChi2;
-        deltachi2.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores minchi2;
-        minchi2.fAlgName = "MinChi2";
-        minchi2.fValue = onfile.fMinChi2;
-        minchi2.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores missinge;
-        missinge.fAlgName = "MissingE";
-        missinge.fValue = onfile.fMissingE;
-        missinge.fPlaneMask = bs;
-
-        anab::sParticleIDAlgScores avgmissinge;
-        avgmissinge.fAlgName = "MissingEavg";
-        avgmissinge.fValue = onfile.fMissingEavg;
-        avgmissinge.fPlaneMask = bs;
-
-        AlgScoresVec.push_back(chi2_proton);
-        AlgScoresVec.push_back(chi2_muon);
-        AlgScoresVec.push_back(chi2_pion);
-        AlgScoresVec.push_back(chi2_kaon);
-        AlgScoresVec.push_back(pida); 
-	AlgScoresVec.push_back(deltachi2);
-	AlgScoresVec.push_back(minchi2);
-	AlgScoresVec.push_back(missinge);
-	AlgScoresVec.push_back(avgmissinge);
-
-        fParticleIDAlgScores = AlgScoresVec;
-     ]]>
- </ioread> -->
 
 </lcgdict>
