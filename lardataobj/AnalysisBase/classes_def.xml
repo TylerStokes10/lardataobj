@@ -330,7 +330,7 @@
      target="fParticleIDAlgScores"
      include="lardataobj/AnalysisBase/ParticleID_VariableTypeEnums.h,larcoreobj/SimpleTypesAndConstants/geo_types.h">
      <![CDATA[
-        const geo::PlaneID& fPlaneID = newObj->fPlaneID;
+        const geo::PlaneID& fPlaneID = newObj->PlaneID();
 
         //std::cout << "[classes_def] Reading an old version of anab::ParticleID. Constructing new class" << std::endl;
 	//std::cout << "Old plane id = "<< (fPlaneID.isValid ? 1 : 0) << ' ' << fPlaneID << std::endl;

@@ -18,9 +18,11 @@ namespace anab{
   }
 
   //----------------------------------------------------------------------
-  ParticleID::ParticleID(std::vector<anab::sParticleIDAlgScores> &ParticleIDAlgScores)
+  ParticleID::ParticleID(const std::vector<anab::sParticleIDAlgScores> &ParticleIDAlgScores,
+                         const geo::PlaneID& planeID)
   {
     fParticleIDAlgScores = ParticleIDAlgScores;
+    fPlaneID = planeID;
   }
 
   //----------------------------------------------------------------------
@@ -37,6 +39,7 @@ namespace anab{
 	<< "\n -- Value: " << a.fParticleIDAlgScores.at(i).fValue
 	<< "\n -- Using planeMask: " << a.fParticleIDAlgScores.at(i).fPlaneMask;
     }
+    o << "\n -- Plane id: " << a.fPlaneID;
     o <<std::endl;
 
     return o;

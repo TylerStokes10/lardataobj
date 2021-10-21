@@ -41,25 +41,29 @@ struct sParticleIDAlgScores { ///< determined particle ID
 };
 
   class ParticleID{
+  private:
+    
+    std::vector<sParticleIDAlgScores> fParticleIDAlgScores; ///< Vector of structs to hold outputs from generic PID algorithms
+    geo::PlaneID fPlaneID;   ///< Plane id.
+
   public:
 
     ParticleID();
-    
-    std::vector<sParticleIDAlgScores> fParticleIDAlgScores; ///< Vector of structs to hold outputs from generic PID algorithms
-    geo::PlaneID fPlaneID;
-
-  public:
-
-    ParticleID(std::vector<anab::sParticleIDAlgScores> &ParticleIDAlgScores);
+    ParticleID(const std::vector<anab::sParticleIDAlgScores> &ParticleIDAlgScores, 
+               const geo::PlaneID& planeID);
 
     friend std::ostream& operator << (std::ostream &o, ParticleID const& a);
 
     const std::vector<anab::sParticleIDAlgScores> & ParticleIDAlgScores() const;
+
+    const geo::PlaneID& PlaneID() const;
 
   };
 
 }
 
 inline const std::vector<anab::sParticleIDAlgScores> & anab::ParticleID::ParticleIDAlgScores() const { return fParticleIDAlgScores; }
+
+inline const geo::PlaneID& anab::ParticleID::PlaneID() const {return fPlaneID;}
 
 #endif //ANAB_PARTICLEID_H
