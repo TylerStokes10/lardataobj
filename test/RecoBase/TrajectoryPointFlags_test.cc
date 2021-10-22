@@ -24,8 +24,7 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( trajectorypointflags_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "lardataobj/RecoBase/TrajectoryPointFlags.h"
@@ -49,7 +48,7 @@ void CheckFlagsByIndex(
   /*
    * FlagIndex_t nFlags() const
    */
-  BOOST_CHECK_EQUAL(flags.nFlags(), trkflag::maxFlags());
+  BOOST_TEST(flags.nFlags() == trkflag::maxFlags());
 
   for(
     recob::TrajectoryPointFlags::FlagIndex_t i = 0;
@@ -65,7 +64,7 @@ void CheckFlagsByIndex(
     /*
      * constexpr bool isAllocated(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isAllocated(i), allocated);
+    BOOST_TEST(flags.isAllocated(i) == allocated);
 
     // for unallocated flag indices, most of the flag interface has
     // undefined behaviour
@@ -82,12 +81,12 @@ void CheckFlagsByIndex(
     /*
      * constexpr bool isFlag(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isFlag(i), allocated);
+    BOOST_TEST(flags.isFlag(i) == allocated);
 
     /*
      * constexpr bool isDefined(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isDefined(i), defined);
+    BOOST_TEST(flags.isDefined(i) == defined);
 
     /*
      * bool test(FlagIndex_t flag) const
@@ -98,22 +97,22 @@ void CheckFlagsByIndex(
         );
       continue;
     }
-    BOOST_CHECK_EQUAL(flags.test(i), set);
+    BOOST_TEST(flags.test(i) == set);
 
     /*
      * get(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.get(i), set);
+    BOOST_TEST(flags.get(i) == set);
 
     /*
      * bool isSet(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isSet(i), set);
+    BOOST_TEST(flags.isSet(i) == set);
 
     /*
      * bool isUnset(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isUnset(i), !set);
+    BOOST_TEST(flags.isUnset(i) == !set);
 
   } // for
 
@@ -156,88 +155,88 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
   /*
    * Mask_t mask() const
    */
-  BOOST_CHECK_EQUAL
-    (flags.mask(), recob::TrajectoryPointFlags::DefaultFlagsMask());
+  BOOST_TEST
+    (flags.mask() == recob::TrajectoryPointFlags::DefaultFlagsMask());
 
   /*
    * bool isHitIgnored() const
    */
-  BOOST_CHECK(!flags.isHitIgnored());
+  BOOST_TEST(!flags.isHitIgnored());
 
   /*
    * bool isPointValid() const
    */
-  BOOST_CHECK(flags.isPointValid());
+  BOOST_TEST(flags.isPointValid());
 
   /*
    * bool isMerged() const
    */
-  BOOST_CHECK(!flags.isMerged());
+  BOOST_TEST(!flags.isMerged());
 
   /*
    * bool isShared() const
    */
-  BOOST_CHECK(!flags.isShared());
+  BOOST_TEST(!flags.isShared());
 
   /*
    * bool isDeltaRay() const
    */
-  BOOST_CHECK(!flags.isDeltaRay());
+  BOOST_TEST(!flags.isDeltaRay());
 
   /*
    * bool hasDetectorIssues() const
    */
-  BOOST_CHECK(!flags.hasDetectorIssues());
+  BOOST_TEST(!flags.hasDetectorIssues());
 
   /*
    * bool isOtherwiseSuspicious() const
    */
-  BOOST_CHECK(!flags.isOtherwiseSuspicious());
+  BOOST_TEST(!flags.isOtherwiseSuspicious());
 
   /*
    * bool isExclusive() const
    */
-  BOOST_CHECK(flags.isExclusive());
+  BOOST_TEST(flags.isExclusive());
 
   /*
    * bool isExcludedFromFit() const
    */
-  BOOST_CHECK(!flags.isExcludedFromFit());
+  BOOST_TEST(!flags.isExcludedFromFit());
 
   /*
    * bool belongsToTrack() const
    */
-  BOOST_CHECK(flags.belongsToTrack());
+  BOOST_TEST(flags.belongsToTrack());
 
   /*
    * bool isHitReinterpreted() const
    */
-  BOOST_CHECK(!flags.isHitReinterpreted());
+  BOOST_TEST(!flags.isHitReinterpreted());
 
   /*
    * bool isIncludedInFit() const
    */
-  BOOST_CHECK(flags.isIncludedInFit());
+  BOOST_TEST(flags.isIncludedInFit());
 
   /*
    * bool isPointFlawed() const
    */
-  BOOST_CHECK(!flags.isPointFlawed());
+  BOOST_TEST(!flags.isPointFlawed());
 
   /*
    * bool isPointFlawless() const
    */
-  BOOST_CHECK(flags.isPointFlawless());
+  BOOST_TEST(flags.isPointFlawless());
 
   /*
    * hasOriginalHitIndex() const
    */
-  BOOST_CHECK(!flags.hasOriginalHitIndex());
+  BOOST_TEST(!flags.hasOriginalHitIndex());
 
   /*
    * HitIndex_t fromHit() const
    */
-  BOOST_CHECK_EQUAL(flags.fromHit(), InvalidHitIndex);
+  BOOST_TEST(flags.fromHit() == InvalidHitIndex);
 
 } // TrajectoryPointFlagsTest_DefaultConstructor()
 
@@ -282,17 +281,17 @@ void TrajectoryPointFlagsTest_FlagsConstructor() {
   /*
    * Mask_t mask() const
    */
-  BOOST_CHECK_EQUAL(flags.mask(), flagbitmask);
+  BOOST_TEST(flags.mask() == flagbitmask);
 
   /*
    * hasOriginalHitIndex() const
    */
-  BOOST_CHECK(!flags.hasOriginalHitIndex());
+  BOOST_TEST(!flags.hasOriginalHitIndex());
 
   /*
    * HitIndex_t fromHit() const
    */
-  BOOST_CHECK_EQUAL(flags.fromHit(), InvalidHitIndex);
+  BOOST_TEST(flags.fromHit() == InvalidHitIndex);
 
 
 } // TrajectoryPointFlagsTest_FlagsConstructor()
@@ -325,7 +324,7 @@ void TrajectoryPointFlagsTest_BitmaskConstructor() {
    */
   constexpr recob::TrajectoryPointFlags flags(12, flagbitmask);
 
-  BOOST_CHECK_EQUAL(flags, recob::TrajectoryPointFlags(12,
+  BOOST_TEST(flags == recob::TrajectoryPointFlags(12,
     trkflag::NoPoint + trkflag::Rejected + -trkflag::HitIgnored));
 /*
   static_assert(flags == recob::TrajectoryPointFlags(12,
@@ -351,29 +350,29 @@ void TrajectoryPointFlagsTest_BitmaskConstructor() {
   /*
    * Mask_t mask() const
    */
-  BOOST_CHECK_EQUAL(flags.mask(), flagbitmask);
+  BOOST_TEST(flags.mask() == flagbitmask);
 
   /*
    * bool isHitIgnored() const
    */
-  BOOST_CHECK_EQUAL
-    (flags.isHitIgnored(), (expectedValues.count(trkflag::HitIgnored) > 0));
+  BOOST_TEST
+    (flags.isHitIgnored() == (expectedValues.count(trkflag::HitIgnored) > 0));
 
   /*
    * bool isPointValid() const
    */
-  BOOST_CHECK_EQUAL
-    (flags.isPointValid(), (expectedValues.count(trkflag::NoPoint) == 0));
+  BOOST_TEST
+    (flags.isPointValid() == (expectedValues.count(trkflag::NoPoint) == 0));
 
   /*
    * hasOriginalHitIndex() const
    */
-  BOOST_CHECK(flags.hasOriginalHitIndex());
+  BOOST_TEST(flags.hasOriginalHitIndex());
 
   /*
    * HitIndex_t fromHit() const
    */
-  BOOST_CHECK_EQUAL(flags.fromHit(), 12U);
+  BOOST_TEST(flags.fromHit() == 12U);
 
 
 } // TrajectoryPointFlagsTest_BitmaskConstructor()

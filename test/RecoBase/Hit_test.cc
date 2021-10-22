@@ -28,9 +28,8 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( hit_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
-#include <boost/test/tools/floating_point_comparison.hpp> // BOOST_CHECK_CLOSE()
+#include "boost/test/unit_test.hpp"
+
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t, raw::TDCtick_t
@@ -68,23 +67,23 @@ void CheckHit(
 
   // verify that the values are as expected
   // - channel ID
-  BOOST_CHECK_EQUAL(hit.Channel(), channel);
+  BOOST_TEST(hit.Channel() == channel);
 
   // - view
-  BOOST_CHECK_EQUAL(hit.View(), view);
+  BOOST_TEST(hit.View() == view);
 
   // - signal type
-  BOOST_CHECK_EQUAL(hit.SignalType(), signal_type);
+  BOOST_TEST(hit.SignalType() == signal_type);
 
   // - start and end tick
-  BOOST_CHECK_EQUAL(hit.StartTick(), start_tick);
-  BOOST_CHECK_EQUAL(hit.EndTick(), end_tick);
+  BOOST_TEST(hit.StartTick() == start_tick);
+  BOOST_TEST(hit.EndTick() == end_tick);
 
   // - peak
-  BOOST_CHECK_EQUAL(hit.PeakTime(), peak_time);
-  BOOST_CHECK_EQUAL(hit.SigmaPeakTime(), sigma_peak_time);
-  BOOST_CHECK_EQUAL(hit.PeakAmplitude(), peak_amplitude);
-  BOOST_CHECK_EQUAL(hit.SigmaPeakAmplitude(), sigma_peak_amplitude);
+  BOOST_TEST(hit.PeakTime() == peak_time);
+  BOOST_TEST(hit.SigmaPeakTime() == sigma_peak_time);
+  BOOST_TEST(hit.PeakAmplitude() == peak_amplitude);
+  BOOST_TEST(hit.SigmaPeakAmplitude() == sigma_peak_amplitude);
 
   // the following comparisons are at 0.01%
   BOOST_CHECK_CLOSE(hit.PeakTimePlusRMS(), peak_time + rms, 0.01);
@@ -127,25 +126,25 @@ void CheckHit(
   } // for
 
   // - width
-  BOOST_CHECK_EQUAL(hit.RMS(), rms);
+  BOOST_TEST(hit.RMS() == rms);
 
   // - charge
-  BOOST_CHECK_EQUAL(hit.SummedADC(), summedADC);
-  BOOST_CHECK_EQUAL(hit.Integral(), hit_integral);
-  BOOST_CHECK_EQUAL(hit.SigmaIntegral(), hit_sigma_integral);
+  BOOST_TEST(hit.SummedADC() == summedADC);
+  BOOST_TEST(hit.Integral() == hit_integral);
+  BOOST_TEST(hit.SigmaIntegral() == hit_sigma_integral);
 
   // - multiplicity
-  BOOST_CHECK_EQUAL(hit.Multiplicity(), multiplicity);
-  BOOST_CHECK_EQUAL(hit.LocalIndex(), local_index);
-  BOOST_CHECK
+  BOOST_TEST(hit.Multiplicity() == multiplicity);
+  BOOST_TEST(hit.LocalIndex() == local_index);
+  BOOST_TEST
     (((hit.LocalIndex() < hit.Multiplicity()) || (hit.LocalIndex() == -1)));
 
   // - fit quality
-  BOOST_CHECK_EQUAL(hit.GoodnessOfFit(), goodness_of_fit);
-  BOOST_CHECK_EQUAL(hit.DegreesOfFreedom(), dof);
+  BOOST_TEST(hit.GoodnessOfFit() == goodness_of_fit);
+  BOOST_TEST(hit.DegreesOfFreedom() == dof);
 
   // - wire ID
-  BOOST_CHECK_EQUAL(hit.WireID(), wireID);
+  BOOST_TEST(hit.WireID() == wireID);
 
 } // CheckHit()
 

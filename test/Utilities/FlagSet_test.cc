@@ -18,8 +18,7 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( trajectorypointflags_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "lardataobj/Utilities/FlagSet.h"
@@ -70,8 +69,8 @@ void CheckFlags(
     bool const isDefined = (defined.count(i) > 0);
     bool const isSet     = (set.count(i) > 0);
 
-    BOOST_CHECK_EQUAL(flags.isFlag(i), isFlag);
-    BOOST_CHECK_EQUAL(flags.isFlag(flag), isFlag);
+    BOOST_TEST(flags.isFlag(i) == isFlag);
+    BOOST_TEST(flags.isFlag(flag) == isFlag);
 
     // In fact, the fact that the flag is not supported does not mean it can't
     // be used. But not with test().
@@ -86,30 +85,30 @@ void CheckFlags(
         (flags.test(flag), typename FlagSet::FlagNotDefinedError);
     }
     else {
-      BOOST_CHECK_EQUAL(flags.test(i), isSet);
-      BOOST_CHECK_EQUAL(flags.test(flag), isSet);
+      BOOST_TEST(flags.test(i) == isSet);
+      BOOST_TEST(flags.test(flag) == isSet);
     }
 
-    BOOST_CHECK_EQUAL(flags.isUndefined(i), !isDefined);
-    BOOST_CHECK_EQUAL(flags.isDefined(i), isDefined);
-    BOOST_CHECK_EQUAL(flags.isUndefined(flag), !isDefined);
-    BOOST_CHECK_EQUAL(flags.isDefined(flag), isDefined);
+    BOOST_TEST(flags.isUndefined(i) == !isDefined);
+    BOOST_TEST(flags.isDefined(i) == isDefined);
+    BOOST_TEST(flags.isUndefined(flag) == !isDefined);
+    BOOST_TEST(flags.isDefined(flag) == isDefined);
 
     if (isDefined) {
       // if the flag is undefined, so it the result of get()
-      BOOST_CHECK_EQUAL(flags.get(i), isSet);
-      BOOST_CHECK_EQUAL(flags.get(flag), isSet);
+      BOOST_TEST(flags.get(i) == isSet);
+      BOOST_TEST(flags.get(flag) == isSet);
 
-      BOOST_CHECK_EQUAL(flags.isSet(i), isSet);
-      BOOST_CHECK_EQUAL(flags.isUnset(i), !isSet);
-      BOOST_CHECK_EQUAL(flags.isSet(flag), isSet);
-      BOOST_CHECK_EQUAL(flags.isUnset(flag), !isSet);
+      BOOST_TEST(flags.isSet(i) == isSet);
+      BOOST_TEST(flags.isUnset(i) == !isSet);
+      BOOST_TEST(flags.isSet(flag) == isSet);
+      BOOST_TEST(flags.isUnset(flag) == !isSet);
     }
     else {
-      BOOST_CHECK(!flags.isSet(i));
-      BOOST_CHECK(!flags.isUnset(i));
-      BOOST_CHECK(!flags.isSet(flag));
-      BOOST_CHECK(!flags.isUnset(flag));
+      BOOST_TEST(!flags.isSet(i));
+      BOOST_TEST(!flags.isUnset(i));
+      BOOST_TEST(!flags.isSet(flag));
+      BOOST_TEST(!flags.isUnset(flag));
     }
   } // for
 
@@ -297,54 +296,54 @@ void FlagSetTest() {
 
   // Reminder: undefined flags will always contribute a "false".
   // flag 1 is set
-  BOOST_CHECK( flags.all (MyFlags::F1));
-  BOOST_CHECK( flags.any (MyFlags::F1));
-  BOOST_CHECK(!flags.none(MyFlags::F1));
+  BOOST_TEST( flags.all (MyFlags::F1));
+  BOOST_TEST( flags.any (MyFlags::F1));
+  BOOST_TEST(!flags.none(MyFlags::F1));
 
   // flag 1 is set, flag 4 is unset
-  BOOST_CHECK(!flags.all (MyFlags::F1 + MyFlags::F4));
-  BOOST_CHECK( flags.any (MyFlags::F1 + MyFlags::F4));
-  BOOST_CHECK(!flags.none(MyFlags::F1 + MyFlags::F4));
+  BOOST_TEST(!flags.all (MyFlags::F1 + MyFlags::F4));
+  BOOST_TEST( flags.any (MyFlags::F1 + MyFlags::F4));
+  BOOST_TEST(!flags.none(MyFlags::F1 + MyFlags::F4));
 
   // flag 1 is set, flag 3 is undefined (had been defined and set though)
-  BOOST_CHECK(!flags.all (MyFlags::F1 + MyFlags::F3));
-  BOOST_CHECK( flags.any (MyFlags::F1 + MyFlags::F3));
-  BOOST_CHECK(!flags.none(MyFlags::F1 + MyFlags::F3));
+  BOOST_TEST(!flags.all (MyFlags::F1 + MyFlags::F3));
+  BOOST_TEST( flags.any (MyFlags::F1 + MyFlags::F3));
+  BOOST_TEST(!flags.none(MyFlags::F1 + MyFlags::F3));
 
   // flag 4 is unset, flag 3 is undefined (had been defined though)
-  BOOST_CHECK(!flags.all (MyFlags::F3 + MyFlags::F4));
-  BOOST_CHECK(!flags.any (MyFlags::F3 + MyFlags::F4));
-  BOOST_CHECK(!flags.none(MyFlags::F3 + MyFlags::F4));
+  BOOST_TEST(!flags.all (MyFlags::F3 + MyFlags::F4));
+  BOOST_TEST(!flags.any (MyFlags::F3 + MyFlags::F4));
+  BOOST_TEST(!flags.none(MyFlags::F3 + MyFlags::F4));
 
   // flag 3 is undefined (had been defined though)
-  BOOST_CHECK(!flags.all (MyFlags::F3));
-  BOOST_CHECK(!flags.any (MyFlags::F3));
-  BOOST_CHECK(!flags.none(MyFlags::F3));
+  BOOST_TEST(!flags.all (MyFlags::F3));
+  BOOST_TEST(!flags.any (MyFlags::F3));
+  BOOST_TEST(!flags.none(MyFlags::F3));
 
   // flag 4 is unset
-  BOOST_CHECK(!flags.all (MyFlags::F4));
-  BOOST_CHECK(!flags.any (MyFlags::F4));
-  BOOST_CHECK( flags.none(MyFlags::F4));
+  BOOST_TEST(!flags.all (MyFlags::F4));
+  BOOST_TEST(!flags.any (MyFlags::F4));
+  BOOST_TEST( flags.none(MyFlags::F4));
 
   /*
    * constexpr bool anySet(Mask_t const& mask) const
    * constexpr bool match(Mask_t const& mask) const
    */
-  BOOST_CHECK( flags.match  (flags.mask()));
-  BOOST_CHECK(!flags.match  (flags.mask() - MyFlags::F6)); // also unset F6
-  BOOST_CHECK(!flags.match  (flags.mask() + MyFlags::F5)); // set F5
-  BOOST_CHECK(!flags.match  (flags.mask() + MyFlags::F6)); // also set F6
-  BOOST_CHECK(!flags.match  (flags.mask() - MyFlags::F1 + MyFlags::F6));
-  BOOST_CHECK( flags.anySet (flags.mask()));
-  BOOST_CHECK( flags.anySet (flags.mask() - MyFlags::F6));
-  BOOST_CHECK( flags.anySet (flags.mask() + MyFlags::F5));
-  BOOST_CHECK( flags.anySet (flags.mask() + MyFlags::F6));
-  BOOST_CHECK(!flags.anySet (flags.mask() - MyFlags::F1 + MyFlags::F6));
-  BOOST_CHECK(!flags.noneSet(flags.mask()));
-  BOOST_CHECK(!flags.noneSet(flags.mask() - MyFlags::F6));
-  BOOST_CHECK(!flags.noneSet(flags.mask() + MyFlags::F5));
-  BOOST_CHECK(!flags.noneSet(flags.mask() + MyFlags::F6));
-  BOOST_CHECK( flags.noneSet(flags.mask() - MyFlags::F1 + MyFlags::F6));
+  BOOST_TEST( flags.match  (flags.mask()));
+  BOOST_TEST(!flags.match  (flags.mask() - MyFlags::F6)); // also unset F6
+  BOOST_TEST(!flags.match  (flags.mask() + MyFlags::F5)); // set F5
+  BOOST_TEST(!flags.match  (flags.mask() + MyFlags::F6)); // also set F6
+  BOOST_TEST(!flags.match  (flags.mask() - MyFlags::F1 + MyFlags::F6));
+  BOOST_TEST( flags.anySet (flags.mask()));
+  BOOST_TEST( flags.anySet (flags.mask() - MyFlags::F6));
+  BOOST_TEST( flags.anySet (flags.mask() + MyFlags::F5));
+  BOOST_TEST( flags.anySet (flags.mask() + MyFlags::F6));
+  BOOST_TEST(!flags.anySet (flags.mask() - MyFlags::F1 + MyFlags::F6));
+  BOOST_TEST(!flags.noneSet(flags.mask()));
+  BOOST_TEST(!flags.noneSet(flags.mask() - MyFlags::F6));
+  BOOST_TEST(!flags.noneSet(flags.mask() + MyFlags::F5));
+  BOOST_TEST(!flags.noneSet(flags.mask() + MyFlags::F6));
+  BOOST_TEST( flags.noneSet(flags.mask() - MyFlags::F1 + MyFlags::F6));
 
 } // FlagSetTest()
 
@@ -534,20 +533,20 @@ void SetUnsetTest() {
 
   std::cout << "Testing Set()/Unset() on " << mask << std::endl;
 
-  BOOST_CHECK(!mask.isDefined(0));
-  BOOST_CHECK( mask.isDefined(1));
-  BOOST_CHECK( mask.isDefined(2));
-  BOOST_CHECK(!mask.isDefined(3));
+  BOOST_TEST(!mask.isDefined(0));
+  BOOST_TEST( mask.isDefined(1));
+  BOOST_TEST( mask.isDefined(2));
+  BOOST_TEST(!mask.isDefined(3));
 
-  BOOST_CHECK(!mask.isSet(0));
-  BOOST_CHECK( mask.isSet(1));
-  BOOST_CHECK(!mask.isSet(2));
-  BOOST_CHECK(!mask.isSet(3));
+  BOOST_TEST(!mask.isSet(0));
+  BOOST_TEST( mask.isSet(1));
+  BOOST_TEST(!mask.isSet(2));
+  BOOST_TEST(!mask.isSet(3));
 
-  BOOST_CHECK(!mask.isUnset(0));
-  BOOST_CHECK(!mask.isUnset(1));
-  BOOST_CHECK( mask.isUnset(2));
-  BOOST_CHECK(!mask.isUnset(3));
+  BOOST_TEST(!mask.isUnset(0));
+  BOOST_TEST(!mask.isUnset(1));
+  BOOST_TEST( mask.isUnset(2));
+  BOOST_TEST(!mask.isUnset(3));
 
 
 } // SetUnsetTest()

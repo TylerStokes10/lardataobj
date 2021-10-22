@@ -24,9 +24,8 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( tracktrajectory_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
-#include <boost/test/tools/floating_point_comparison.hpp> // BOOST_CHECK_CLOSE()
+#include "boost/test/unit_test.hpp"
+
 
 // LArSoft libraries
 #include "lardataobj/RecoBase/Trajectory.h"
@@ -67,9 +66,9 @@ void CheckValue(T v, T exp, T tol, std::string tag = "") {
 
 template <typename VectA, typename VectB>
 void CheckVectorsEqual(VectA const& v, VectB const& exp) {
-  BOOST_CHECK_EQUAL(v.X(), exp.X());
-  BOOST_CHECK_EQUAL(v.Y(), exp.Y());
-  BOOST_CHECK_EQUAL(v.Z(), exp.Z());
+  BOOST_TEST(v.X() == exp.X());
+  BOOST_TEST(v.Y() == exp.Y());
+  BOOST_TEST(v.Z() == exp.Z());
 } // CheckVectorsEqual()
 
 template <typename VectA, typename VectB>
@@ -95,20 +94,20 @@ void TestTrajectory(
 
   //----------------------------------------------------------------------------
   const size_t NPoints = traj.NumberTrajectoryPoints();
-  BOOST_CHECK_EQUAL(NPoints, expected.positions.size());
-  BOOST_CHECK_EQUAL(traj.NumberTrajectoryPoints(), expected.positions.size());
+  BOOST_TEST(NPoints == expected.positions.size());
+  BOOST_TEST(traj.NumberTrajectoryPoints() == expected.positions.size());
 
   for (size_t i = 0; i <= NPoints + 1; ++i) {
     BOOST_TEST_MESSAGE("HasPoint() position #" << i);
-    BOOST_CHECK_EQUAL(traj.HasPoint(i), (i < NPoints));
+    BOOST_TEST(traj.HasPoint(i) == (i < NPoints));
   } // for
 
   if (NPoints == 0) return; // nothing else is defined
 
-  BOOST_CHECK_EQUAL(traj.HasMomentum(), expected.hasMomenta);
+  BOOST_TEST(traj.HasMomentum() == expected.hasMomenta);
 
   //----------------------------------------------------------------------------
-  BOOST_CHECK_EQUAL(traj.LastPoint(), NPoints - 1);
+  BOOST_TEST(traj.LastPoint() == NPoints - 1);
 
   //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("Vertex()");
@@ -132,12 +131,12 @@ void TestTrajectory(
   //----------------------------------------------------------------------------
   TVector3 Vstart, Vend;
   std::tie(Vstart, Vend) = traj.Extent<TVector3>();
-  BOOST_CHECK_EQUAL(Vstart[0], expected.positions[0].X());
-  BOOST_CHECK_EQUAL(Vstart[1], expected.positions[0].Y());
-  BOOST_CHECK_EQUAL(Vstart[2], expected.positions[0].Z());
-  BOOST_CHECK_EQUAL(Vend[0], expected.positions[NPoints - 1].X());
-  BOOST_CHECK_EQUAL(Vend[1], expected.positions[NPoints - 1].Y());
-  BOOST_CHECK_EQUAL(Vend[2], expected.positions[NPoints - 1].Z());
+  BOOST_TEST(Vstart[0] == expected.positions[0].X());
+  BOOST_TEST(Vstart[1] == expected.positions[0].Y());
+  BOOST_TEST(Vstart[2] == expected.positions[0].Z());
+  BOOST_TEST(Vend[0] == expected.positions[NPoints - 1].X());
+  BOOST_TEST(Vend[1] == expected.positions[NPoints - 1].Y());
+  BOOST_TEST(Vend[2] == expected.positions[NPoints - 1].Z());
 
 
   recob::Trajectory::Point_t start, end;

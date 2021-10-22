@@ -35,8 +35,7 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( raw_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
@@ -60,26 +59,26 @@ constexpr unsigned int RandomSeed = 12345;
 
 /// Interface of an object creating data to be tested on
 class DataCreatorBase {
-		public:
-	typedef std::vector<short> InputData_t;
+                public:
+        typedef std::vector<short> InputData_t;
 
-	/// Random engine shared by all the data creators
-	static std::default_random_engine random_engine;
+        /// Random engine shared by all the data creators
+        static std::default_random_engine random_engine;
 
-	/// Constructor: just assigns a name to this data set
-	DataCreatorBase(std::string new_name): test_name(new_name) {}
+        /// Constructor: just assigns a name to this data set
+        DataCreatorBase(std::string new_name): test_name(new_name) {}
 
-	/// Returns the name of this set
-	std::string name() const { return test_name; }
+        /// Returns the name of this set
+        std::string name() const { return test_name; }
 
-	/// Virtual destructor
-	virtual ~DataCreatorBase() {}
+        /// Virtual destructor
+        virtual ~DataCreatorBase() {}
 
-	/// Creates and returns the data sample; pure virtual
-	virtual InputData_t create(size_t size) = 0;
+        /// Creates and returns the data sample; pure virtual
+        virtual InputData_t create(size_t size) = 0;
 
-		private:
-	std::string test_name; ///< internal storage for test name
+                private:
+        std::string test_name; ///< internal storage for test name
 }; // class DataCreatorBase
 
 // Initialized with a hard-coded seed
@@ -89,102 +88,102 @@ std::default_random_engine DataCreatorBase::random_engine(RandomSeed);
 
 /// Data creator: uniformly random data, specified range plus offset (pedestal)
 class UniformNoiseCreator: public DataCreatorBase {
-		public:
-	float baseline; ///< pedestal
-	float width; ///< (half)width of the uniform distribution
+                public:
+        float baseline; ///< pedestal
+        float width; ///< (half)width of the uniform distribution
 
-	/// Constructor: assigns data set name and noise parameters
-	UniformNoiseCreator
-		(std::string name, float RMS, float pedestal = 0.):
-		DataCreatorBase(name),
-		baseline(pedestal), width(RMS * std::sqrt(12.))
-		{}
+        /// Constructor: assigns data set name and noise parameters
+        UniformNoiseCreator
+                (std::string name, float RMS, float pedestal = 0.):
+                DataCreatorBase(name),
+                baseline(pedestal), width(RMS * std::sqrt(12.))
+                {}
 
-	/// Creates and returns the data sample
-	virtual InputData_t create(size_t size) override
-		{
-			std::uniform_real_distribution<float> noise
-				(baseline - width, baseline + width);
-			InputData_t data(size);
-			for (auto& item: data)
-				item = InputData_t::size_type(noise(random_engine));
-			return data;
-		} // create()
+        /// Creates and returns the data sample
+        virtual InputData_t create(size_t size) override
+                {
+                        std::uniform_real_distribution<float> noise
+                                (baseline - width, baseline + width);
+                        InputData_t data(size);
+                        for (auto& item: data)
+                                item = InputData_t::size_type(noise(random_engine));
+                        return data;
+                } // create()
 
 }; // class UniformNoiseCreator
 
 
 /// Data creator: Gaussian random data
 class GaussianNoiseCreator: public DataCreatorBase {
-		public:
-	float mean; ///< mean of the noise Gaussian (pedestal)
-	float stdev; ///< standard deviation of the noise Gaussian (RMS)
+                public:
+        float mean; ///< mean of the noise Gaussian (pedestal)
+        float stdev; ///< standard deviation of the noise Gaussian (RMS)
 
-	/// Constructor: assigns data set name and noise parameters
-	GaussianNoiseCreator
-		(std::string name, float sigma, float mu = 0.):
-		DataCreatorBase(name),
-		mean(mu), stdev(sigma)
-		{}
+        /// Constructor: assigns data set name and noise parameters
+        GaussianNoiseCreator
+                (std::string name, float sigma, float mu = 0.):
+                DataCreatorBase(name),
+                mean(mu), stdev(sigma)
+                {}
 
-	/// Creates and returns the data sample
-	virtual InputData_t create(size_t size) override
-		{
-			std::normal_distribution<float> noise(mean, stdev);
-			InputData_t data(size);
-			for (auto& item: data)
-				item = InputData_t::size_type(noise(random_engine));
-			return data;
-		} // create()
+        /// Creates and returns the data sample
+        virtual InputData_t create(size_t size) override
+                {
+                        std::normal_distribution<float> noise(mean, stdev);
+                        InputData_t data(size);
+                        for (auto& item: data)
+                                item = InputData_t::size_type(noise(random_engine));
+                        return data;
+                } // create()
 
 }; // class GaussianNoiseCreator
 
 
 /// Data creator: sine wave data
 class SineWaveCreator: public DataCreatorBase {
-		public:
-	float period; ///< period of the wave [ticks]
-	float amplitude; ///< amplitude of the wave [ADC counts]
+                public:
+        float period; ///< period of the wave [ticks]
+        float amplitude; ///< amplitude of the wave [ADC counts]
 
-	/// Constructor: assigns data set name and noise parameters
-	SineWaveCreator
-		(std::string name, float new_period, float new_amplitude):
-		DataCreatorBase(name),
-		period(new_period), amplitude(new_amplitude)
-		{}
+        /// Constructor: assigns data set name and noise parameters
+        SineWaveCreator
+                (std::string name, float new_period, float new_amplitude):
+                DataCreatorBase(name),
+                period(new_period), amplitude(new_amplitude)
+                {}
 
-	/// Creates and returns the data sample
-	virtual InputData_t create(size_t size) override
-		{
+        /// Creates and returns the data sample
+        virtual InputData_t create(size_t size) override
+                {
         // for c2: constexpr variable 'two_pi' must be initialized by a constant expression
-			//constexpr float two_pi = float(2. * std::acos(-1.));
-			constexpr float two_pi = 2.0F * util::pi<float>();
-			InputData_t data;
-			data.reserve(size);
-			for (size_t i = 0; i < size; ++i)
-			  data.push_back(amplitude * std::sin(i / period * two_pi));
-			return data;
-		} // create()
+                        //constexpr float two_pi = float(2. * std::acos(-1.));
+                        constexpr float two_pi = 2.0F * util::pi<float>();
+                        InputData_t data;
+                        data.reserve(size);
+                        for (size_t i = 0; i < size; ++i)
+                          data.push_back(amplitude * std::sin(i / period * two_pi));
+                        return data;
+                } // create()
 
 }; // class SineWaveCreator
 
 
 /// Data creator: uniformly random data, full range
 class RandomDataCreator: public DataCreatorBase {
-		public:
+                public:
 
-	/// Creates and returns the data sample
-	virtual InputData_t create(size_t size) override
-		{
-			std::uniform_int_distribution<short> uniform(
-				std::numeric_limits<short>::min(),
-				std::numeric_limits<short>::max()
-				);
-			InputData_t data(size);
-			for (auto& item: data)
-				item = InputData_t::value_type(uniform(random_engine));
-			return data;
-		} // create()
+        /// Creates and returns the data sample
+        virtual InputData_t create(size_t size) override
+                {
+                        std::uniform_int_distribution<short> uniform(
+                                std::numeric_limits<short>::min(),
+                                std::numeric_limits<short>::max()
+                                );
+                        InputData_t data(size);
+                        for (auto& item: data)
+                                item = InputData_t::value_type(uniform(random_engine));
+                        return data;
+                } // create()
 
 }; // class RandomDataCreator
 
@@ -212,24 +211,24 @@ class RandomDataCreator: public DataCreatorBase {
  * RunDataCompressionTests.
  */
 void RunDataCompressionTest
-	(std::string id, const std::vector<short>& data, raw::Compress_t mode)
+        (std::string id, const std::vector<short>& data, raw::Compress_t mode)
 {
-	// working a copy of the original data:
-	std::vector<short> buffer(data);
+        // working a copy of the original data:
+        std::vector<short> buffer(data);
 
-	// compress
-	raw::Compress(buffer, mode);
-	std::cout << id << ": compressed data size: " << buffer.size() << std::endl;
+        // compress
+        raw::Compress(buffer, mode);
+        std::cout << id << ": compressed data size: " << buffer.size() << std::endl;
 
-	// decompress (on an already allocated buffer)
-	std::vector<short> data_again(data.size());
-	raw::Uncompress(buffer, data_again, mode);
+        // decompress (on an already allocated buffer)
+        std::vector<short> data_again(data.size());
+        raw::Uncompress(buffer, data_again, mode);
 
-	// Boost provides facilities to compare data and print if it does not match:
-	BOOST_CHECK_EQUAL(data_again.size(), data.size());
+        // Boost provides facilities to compare data and print if it does not match:
+        BOOST_TEST(data_again.size() == data.size());
 
-	BOOST_CHECK_EQUAL_COLLECTIONS
-	  (data.begin(), data.end(), data_again.begin(), data_again.end());
+        BOOST_CHECK_EQUAL_COLLECTIONS
+          (data.begin(), data.end(), data_again.begin(), data_again.end());
 
 } // RunDataCompressionTest()
 
@@ -246,36 +245,36 @@ void RunDataCompressionTest
  */
 void RunDataCompressionTests(DataCreatorBase* pDataCreator) {
 
-	// the compression modes we are going to use, with a human-readable label
-	std::map<raw::Compress_t, std::string> CompressionModes;
-	CompressionModes[raw::kNone] = "uncompressed";
-	CompressionModes[raw::kHuffman] = "Huffman";
+        // the compression modes we are going to use, with a human-readable label
+        std::map<raw::Compress_t, std::string> CompressionModes;
+        CompressionModes[raw::kNone] = "uncompressed";
+        CompressionModes[raw::kHuffman] = "Huffman";
 //	CompressionModes[raw::kZeroSuppression] = "zero suppression";
 //	CompressionModes[raw::kZeroHuffman] = "zero suppression plus Huffman";
 //	CompressionModes[raw::kDynamicDec] = "dynamic";
 
-	// the data sizes we are going to try, with a human-confusing label
-	std::map<size_t, std::string> DataSizes;
-	DataSizes[64] = "small size";
-	DataSizes[9600] = "medium size";
-	DataSizes[1048576] = "large size";
+        // the data sizes we are going to try, with a human-confusing label
+        std::map<size_t, std::string> DataSizes;
+        DataSizes[64] = "small size";
+        DataSizes[9600] = "medium size";
+        DataSizes[1048576] = "large size";
 
-	for (const auto size_info: DataSizes) {
-		// create the original data:
-		const std::vector<short> data(pDataCreator->create(size_info.first));
+        for (const auto size_info: DataSizes) {
+                // create the original data:
+                const std::vector<short> data(pDataCreator->create(size_info.first));
 
-		// test the same data with different compression algorithms:
-		for (const auto test_info: CompressionModes) {
-			// a "nice" label to make output vaguely meaningful...
-			std::string test_id = pDataCreator->name()
-				+ " (" + size_info.second + " " + test_info.second + ")";
+                // test the same data with different compression algorithms:
+                for (const auto test_info: CompressionModes) {
+                        // a "nice" label to make output vaguely meaningful...
+                        std::string test_id = pDataCreator->name()
+                                + " (" + size_info.second + " " + test_info.second + ")";
 
-			// ... and run the test
-			RunDataCompressionTest(test_id, data, test_info.first);
-		} // for compression modes
-	} // for data sizes
+                        // ... and run the test
+                        RunDataCompressionTest(test_id, data, test_info.first);
+                } // for compression modes
+        } // for data sizes
 
-	// that's it; Boost keeps records of successes and failures
+        // that's it; Boost keeps records of successes and failures
 } // RunDataCompressionTests()
 
 
@@ -290,52 +289,51 @@ void RunDataCompressionTests(DataCreatorBase* pDataCreator) {
 //
 
 BOOST_AUTO_TEST_CASE(NullData) {
-	UniformNoiseCreator InputData("null input data", 0.);
-	RunDataCompressionTests(&InputData);
+        UniformNoiseCreator InputData("null input data", 0.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(ConstantData) {
-	UniformNoiseCreator InputData("constant input data", 0., 41.);
-	RunDataCompressionTests(&InputData);
+        UniformNoiseCreator InputData("constant input data", 0., 41.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(SmallUniformNoiseData) {
-	UniformNoiseCreator InputData("uniform small noise", 5.);
-	RunDataCompressionTests(&InputData);
+        UniformNoiseCreator InputData("uniform small noise", 5.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(SmallUniformNoiseOffsetData) {
-	UniformNoiseCreator InputData("uniform small noise and offset", 5., 123.2);
-	RunDataCompressionTests(&InputData);
+        UniformNoiseCreator InputData("uniform small noise and offset", 5., 123.2);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(LargeUniformNoiseData) {
-	UniformNoiseCreator InputData("uniform large noise", 40.);
-	RunDataCompressionTests(&InputData);
+        UniformNoiseCreator InputData("uniform large noise", 40.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(SmallGaussianNoiseOffsetData) {
-	GaussianNoiseCreator InputData("Gaussian small noise and offset", 5., 123.2);
-	RunDataCompressionTests(&InputData);
+        GaussianNoiseCreator InputData("Gaussian small noise and offset", 5., 123.2);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(LargeGaussianNoiseData) {
-	GaussianNoiseCreator InputData("Gaussian large noise and offset", 40., 194.);
-	RunDataCompressionTests(&InputData);
+        GaussianNoiseCreator InputData("Gaussian large noise and offset", 40., 194.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(VeryLowFrequencySineWaveData) {
-	SineWaveCreator InputData("Very low frequency pure sine wave", 1024., 50.);
-	RunDataCompressionTests(&InputData);
+        SineWaveCreator InputData("Very low frequency pure sine wave", 1024., 50.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(LowFrequencySineWaveData) {
-	SineWaveCreator InputData("Low frequency pure sine wave", 128., 100.);
-	RunDataCompressionTests(&InputData);
+        SineWaveCreator InputData("Low frequency pure sine wave", 128., 100.);
+        RunDataCompressionTests(&InputData);
 }
 
 BOOST_AUTO_TEST_CASE(HighFrequencySineWaveData) {
-	SineWaveCreator InputData("High frequency pure sine wave", 16., 100.);
-	RunDataCompressionTests(&InputData);
+        SineWaveCreator InputData("High frequency pure sine wave", 16., 100.);
+        RunDataCompressionTests(&InputData);
 }
-

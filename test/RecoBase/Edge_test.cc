@@ -31,9 +31,8 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( hit_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
-#include <boost/test/tools/floating_point_comparison.hpp> // BOOST_CHECK_CLOSE()
+#include "boost/test/unit_test.hpp"
+
 
 // LArSoft libraries
 #include "lardataobj/RecoBase/Edge.h"
@@ -83,14 +82,14 @@ void EdgeTestDefaultConstructor() {
   constexpr auto EinvID = recob::Edge::InvalidID;
   constexpr auto PinvID = recob::SpacePoint::InvalidID;
 
-  BOOST_CHECK_EQUAL(e.ID(), EinvID);
-  BOOST_CHECK_EQUAL(e.FirstPointID(), PinvID);
-  BOOST_CHECK_EQUAL(e.SecondPointID(), PinvID);
-  BOOST_CHECK_EQUAL(e.Length(), 0.0); // exactly so
+  BOOST_TEST(e.ID() == EinvID);
+  BOOST_TEST(e.FirstPointID() == PinvID);
+  BOOST_TEST(e.SecondPointID() == PinvID);
+  BOOST_TEST(e.Length() == 0.0); // exactly so
 
-  BOOST_CHECK(!(e      < e));
-  BOOST_CHECK(!(e      < e.ID()));
-  BOOST_CHECK(!(e.ID() < e));
+  BOOST_TEST(!(e      < e));
+  BOOST_TEST(!(e      < e.ID()));
+  BOOST_TEST(!(e.ID() < e));
 
   std::cout << "Printout of a default-constructed edge: " << e << std::endl;
 
@@ -137,23 +136,23 @@ void EdgeTestValueConstructor() {
 
   recob::Edge const e(3.0, 5, 10, 3);
 
-  BOOST_CHECK_EQUAL(e.ID(), 3);
-  BOOST_CHECK_EQUAL(e.FirstPointID(), 5);
-  BOOST_CHECK_EQUAL(e.SecondPointID(), 10);
-  BOOST_CHECK_EQUAL(e.Length(), 3.0); // exactly so
+  BOOST_TEST(e.ID() == 3);
+  BOOST_TEST(e.FirstPointID() == 5);
+  BOOST_TEST(e.SecondPointID() == 10);
+  BOOST_TEST(e.Length() == 3.0); // exactly so
 
-  BOOST_CHECK(!(e      < e));
-  BOOST_CHECK(!(e      < e.ID()));
-  BOOST_CHECK(!(e.ID() < e));
+  BOOST_TEST(!(e      < e));
+  BOOST_TEST(!(e      < e.ID()));
+  BOOST_TEST(!(e.ID() < e));
 
   std::cout << "Printout of a value-constructed edge: " << e << std::endl;
 
   recob::Edge o(3.0, 5, 10, 4);
 
-  BOOST_CHECK( (e      < o));
-  BOOST_CHECK(!(o      < e));
-  BOOST_CHECK( (e      < o.ID()));
-  BOOST_CHECK(!(o.ID() < e));
+  BOOST_TEST( (e      < o));
+  BOOST_TEST(!(o      < e));
+  BOOST_TEST( (e      < o.ID()));
+  BOOST_TEST(!(o.ID() < e));
 
 } // EdgeTestValueConstructor()
 
@@ -222,9 +221,9 @@ void EdgeTestSpacePointConstructor() {
 
   recob::Edge const e(p1, p2, 0);
 
-  BOOST_CHECK_EQUAL(e.ID(), 0);
-  BOOST_CHECK_EQUAL(e.FirstPointID(), 0);
-  BOOST_CHECK_EQUAL(e.SecondPointID(), 1);
+  BOOST_TEST(e.ID() == 0);
+  BOOST_TEST(e.FirstPointID() == 0);
+  BOOST_TEST(e.SecondPointID() == 1);
   BOOST_CHECK_CLOSE(e.Length(), 13.0, 1e-4); // tolerance: 10^-6
 
   std::cout << "Printout of a spacepoint-constructed edge: " << e << std::endl;
@@ -272,8 +271,8 @@ void EdgeClassDocumentationTest() {
   recob::SpacePoint const& secondPoint = *iSecondPoint;
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  BOOST_CHECK_EQUAL(&firstPoint, &points[3]);
-  BOOST_CHECK_EQUAL(&secondPoint, &points[6]);
+  BOOST_TEST(&firstPoint == &points[3]);
+  BOOST_TEST(&secondPoint == &points[6]);
 
 
 } // EdgeClassDocumentationTest()

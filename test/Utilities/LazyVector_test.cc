@@ -12,8 +12,7 @@
 #include "lardataobj/Utilities/LazyVector.h"
 
 #define BOOST_TEST_MODULE ( LazyVector_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // C/C++ standard libraries
 #include <stdexcept> // std::out_of_range
@@ -25,12 +24,12 @@ void TestLazyVector_defaultConstructed() {
   using Vector_t = util::LazyVector<int>;
   Vector_t v;
 
-  BOOST_CHECK(v.empty());
-  BOOST_CHECK_EQUAL(v.size(), 0U);
-  BOOST_CHECK(v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), 0U);
+  BOOST_TEST(v.empty());
+  BOOST_TEST(v.size() == 0U);
+  BOOST_TEST(v.data_empty());
+  BOOST_TEST(v.data_size() == 0U);
 
-  BOOST_CHECK_EQUAL(v.data_defvalue(), 0);
+  BOOST_TEST(v.data_defvalue() == 0);
 
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -51,29 +50,29 @@ void TestLazyVector_defaultConstructed() {
   iBegin =  6U;
   iEnd   =  7U;
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), 10U);
-  BOOST_CHECK(!v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
-  BOOST_CHECK_EQUAL(v.data_begin_index(), iBegin);
-  BOOST_CHECK_EQUAL(v.data_end_index(), iEnd);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == 10U);
+  BOOST_TEST(!v.data_empty());
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
+  BOOST_TEST(v.data_begin_index() == iBegin);
+  BOOST_TEST(v.data_end_index() == iEnd);
 
-  BOOST_CHECK_EQUAL(v.at       (6), -6);
-  BOOST_CHECK_EQUAL(v.const_at (6), -6);
-  BOOST_CHECK_EQUAL(v.get      (6), -6);
-  BOOST_CHECK_EQUAL(v.const_get(6), -6);
-  BOOST_CHECK_EQUAL(v          [6], -6);
-  BOOST_CHECK_EQUAL(v.data_address(6), &(v[6]));
+  BOOST_TEST(v.at       (6) == -6);
+  BOOST_TEST(v.const_at (6) == -6);
+  BOOST_TEST(v.get      (6) == -6);
+  BOOST_TEST(v.const_get(6) == -6);
+  BOOST_TEST(v          [6] == -6);
+  BOOST_TEST(v.data_address(6) == &(v[6]));
 
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -81,7 +80,7 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_THROW(v.const_at(v.size() + 1U), std::out_of_range);
 
   // meta-test: have we changed storage size with the non-const test?
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
   //
   // assign another value (at position 8): { ... [6]: -6, [7]: <def>, [8]: -8 }
@@ -90,43 +89,43 @@ void TestLazyVector_defaultConstructed() {
   iBegin =  6U;
   iEnd   =  9U;
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), 10U);
-  BOOST_CHECK(!v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
-  BOOST_CHECK_EQUAL(v.data_begin_index(), iBegin);
-  BOOST_CHECK_EQUAL(v.data_end_index(), iEnd);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == 10U);
+  BOOST_TEST(!v.data_empty());
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
+  BOOST_TEST(v.data_begin_index() == iBegin);
+  BOOST_TEST(v.data_end_index() == iEnd);
 
-  BOOST_CHECK_EQUAL(v.at       (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_at (6U), -6);
-  BOOST_CHECK_EQUAL(v.get      (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_get(6U), -6);
-  BOOST_CHECK_EQUAL(v          [6U], -6);
-  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
+  BOOST_TEST(v.at       (6U) == -6);
+  BOOST_TEST(v.const_at (6U) == -6);
+  BOOST_TEST(v.get      (6U) == -6);
+  BOOST_TEST(v.const_get(6U) == -6);
+  BOOST_TEST(v          [6U] == -6);
+  BOOST_TEST(v.data_address(6U) == &(v[6U]));
 
-  BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
+  BOOST_TEST(v.at       (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (7U) == v.data_defvalue());
+  BOOST_TEST(v.get      (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(7U) == v.data_defvalue());
+  BOOST_TEST(v          [7U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(7U) == &(v[7U]));
 
-  BOOST_CHECK_EQUAL(v.at       (8U), -8);
-  BOOST_CHECK_EQUAL(v.const_at (8U), -8);
-  BOOST_CHECK_EQUAL(v.get      (8U), -8);
-  BOOST_CHECK_EQUAL(v.const_get(8U), -8);
-  BOOST_CHECK_EQUAL(v          [8U], -8);
-  BOOST_CHECK_EQUAL(v.data_address(8U), &(v[8U]));
+  BOOST_TEST(v.at       (8U) == -8);
+  BOOST_TEST(v.const_at (8U) == -8);
+  BOOST_TEST(v.get      (8U) == -8);
+  BOOST_TEST(v.const_get(8U) == -8);
+  BOOST_TEST(v          [8U] == -8);
+  BOOST_TEST(v.data_address(8U) == &(v[8U]));
 
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -134,7 +133,7 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_THROW(v.const_at(v.size() + 1U), std::out_of_range);
 
   // meta-test: have we changed storage size with the non-const test?
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
 
   //
@@ -145,57 +144,57 @@ void TestLazyVector_defaultConstructed() {
   iBegin =  4U;
   iEnd   =  9U;
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), 10U);
-  BOOST_CHECK(!v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
-  BOOST_CHECK_EQUAL(v.data_begin_index(), iBegin);
-  BOOST_CHECK_EQUAL(v.data_end_index(), iEnd);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == 10U);
+  BOOST_TEST(!v.data_empty());
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
+  BOOST_TEST(v.data_begin_index() == iBegin);
+  BOOST_TEST(v.data_end_index() == iEnd);
 
-  BOOST_CHECK_EQUAL(v.at       (4U), -4);
-  BOOST_CHECK_EQUAL(v.const_at (4U), -4);
-  BOOST_CHECK_EQUAL(v.get      (4U), -4);
-  BOOST_CHECK_EQUAL(v.const_get(4U), -4);
-  BOOST_CHECK_EQUAL(v          [4U], -4);
-  BOOST_CHECK_EQUAL(v.data_address(4U), &(v[4U]));
+  BOOST_TEST(v.at       (4U) == -4);
+  BOOST_TEST(v.const_at (4U) == -4);
+  BOOST_TEST(v.get      (4U) == -4);
+  BOOST_TEST(v.const_get(4U) == -4);
+  BOOST_TEST(v          [4U] == -4);
+  BOOST_TEST(v.data_address(4U) == &(v[4U]));
 
-  BOOST_CHECK_EQUAL(v.at       (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [5U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(5U), &(v[5U]));
+  BOOST_TEST(v.at       (5U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (5U) == v.data_defvalue());
+  BOOST_TEST(v.get      (5U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(5U) == v.data_defvalue());
+  BOOST_TEST(v          [5U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(5U) == &(v[5U]));
 
-  BOOST_CHECK_EQUAL(v.at       (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_at (6U), -6);
-  BOOST_CHECK_EQUAL(v.get      (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_get(6U), -6);
-  BOOST_CHECK_EQUAL(v          [6U], -6);
-  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
+  BOOST_TEST(v.at       (6U) == -6);
+  BOOST_TEST(v.const_at (6U) == -6);
+  BOOST_TEST(v.get      (6U) == -6);
+  BOOST_TEST(v.const_get(6U) == -6);
+  BOOST_TEST(v          [6U] == -6);
+  BOOST_TEST(v.data_address(6U) == &(v[6U]));
 
-  BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
+  BOOST_TEST(v.at       (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (7U) == v.data_defvalue());
+  BOOST_TEST(v.get      (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(7U) == v.data_defvalue());
+  BOOST_TEST(v          [7U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(7U) == &(v[7U]));
 
-  BOOST_CHECK_EQUAL(v.at       (8U), -8);
-  BOOST_CHECK_EQUAL(v.const_at (8U), -8);
-  BOOST_CHECK_EQUAL(v.get      (8U), -8);
-  BOOST_CHECK_EQUAL(v.const_get(8U), -8);
-  BOOST_CHECK_EQUAL(v          [8U], -8);
-  BOOST_CHECK_EQUAL(v.data_address(8U), &(v[8U]));
+  BOOST_TEST(v.at       (8U) == -8);
+  BOOST_TEST(v.const_at (8U) == -8);
+  BOOST_TEST(v.get      (8U) == -8);
+  BOOST_TEST(v.const_get(8U) == -8);
+  BOOST_TEST(v          [8U] == -8);
+  BOOST_TEST(v.data_address(8U) == &(v[8U]));
 
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -203,7 +202,7 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_THROW(v.const_at(v.size() + 1U), std::out_of_range);
 
   // meta-test: have we changed storage size with the non-const test?
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
 
   //
@@ -212,50 +211,50 @@ void TestLazyVector_defaultConstructed() {
   v.resize(iEnd - 1U);
   iEnd -= 1U;
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), iEnd);
-  BOOST_CHECK(!v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
-  BOOST_CHECK_EQUAL(v.data_begin_index(), iBegin);
-  BOOST_CHECK_EQUAL(v.data_end_index(), iEnd);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == iEnd);
+  BOOST_TEST(!v.data_empty());
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
+  BOOST_TEST(v.data_begin_index() == iBegin);
+  BOOST_TEST(v.data_end_index() == iEnd);
 
-  BOOST_CHECK_EQUAL(v.at       (4U), -4);
-  BOOST_CHECK_EQUAL(v.const_at (4U), -4);
-  BOOST_CHECK_EQUAL(v.get      (4U), -4);
-  BOOST_CHECK_EQUAL(v.const_get(4U), -4);
-  BOOST_CHECK_EQUAL(v          [4U], -4);
-  BOOST_CHECK_EQUAL(v.data_address(4U), &(v[4U]));
+  BOOST_TEST(v.at       (4U) == -4);
+  BOOST_TEST(v.const_at (4U) == -4);
+  BOOST_TEST(v.get      (4U) == -4);
+  BOOST_TEST(v.const_get(4U) == -4);
+  BOOST_TEST(v          [4U] == -4);
+  BOOST_TEST(v.data_address(4U) == &(v[4U]));
 
-  BOOST_CHECK_EQUAL(v.at       (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [5U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(5U), &(v[5U]));
+  BOOST_TEST(v.at       (5U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (5U) == v.data_defvalue());
+  BOOST_TEST(v.get      (5U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(5U) == v.data_defvalue());
+  BOOST_TEST(v          [5U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(5U) == &(v[5U]));
 
-  BOOST_CHECK_EQUAL(v.at       (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_at (6U), -6);
-  BOOST_CHECK_EQUAL(v.get      (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_get(6U), -6);
-  BOOST_CHECK_EQUAL(v          [6U], -6);
-  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
+  BOOST_TEST(v.at       (6U) == -6);
+  BOOST_TEST(v.const_at (6U) == -6);
+  BOOST_TEST(v.get      (6U) == -6);
+  BOOST_TEST(v.const_get(6U) == -6);
+  BOOST_TEST(v          [6U] == -6);
+  BOOST_TEST(v.data_address(6U) == &(v[6U]));
 
-  BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
+  BOOST_TEST(v.at       (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (7U) == v.data_defvalue());
+  BOOST_TEST(v.get      (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(7U) == v.data_defvalue());
+  BOOST_TEST(v          [7U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(7U) == &(v[7U]));
 
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -263,7 +262,7 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_THROW(v.const_at(v.size() + 1U), std::out_of_range);
 
   // meta-test: have we changed storage size with the non-const test?
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
 
   //
@@ -271,50 +270,50 @@ void TestLazyVector_defaultConstructed() {
   //
   v.resize(v.size() + 10U);
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), iEnd + 10U);
-  BOOST_CHECK(!v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
-  BOOST_CHECK_EQUAL(v.data_begin_index(), iBegin);
-  BOOST_CHECK_EQUAL(v.data_end_index(), iEnd);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == iEnd + 10U);
+  BOOST_TEST(!v.data_empty());
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
+  BOOST_TEST(v.data_begin_index() == iBegin);
+  BOOST_TEST(v.data_end_index() == iEnd);
 
-  BOOST_CHECK_EQUAL(v.at       (4U), -4);
-  BOOST_CHECK_EQUAL(v.const_at (4U), -4);
-  BOOST_CHECK_EQUAL(v.get      (4U), -4);
-  BOOST_CHECK_EQUAL(v.const_get(4U), -4);
-  BOOST_CHECK_EQUAL(v          [4U], -4);
-  BOOST_CHECK_EQUAL(v.data_address(4U), &(v[4U]));
+  BOOST_TEST(v.at       (4U) == -4);
+  BOOST_TEST(v.const_at (4U) == -4);
+  BOOST_TEST(v.get      (4U) == -4);
+  BOOST_TEST(v.const_get(4U) == -4);
+  BOOST_TEST(v          [4U] == -4);
+  BOOST_TEST(v.data_address(4U) == &(v[4U]));
 
-  BOOST_CHECK_EQUAL(v.at       (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [5U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(5U), &(v[5U]));
+  BOOST_TEST(v.at       (5U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (5U) == v.data_defvalue());
+  BOOST_TEST(v.get      (5U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(5U) == v.data_defvalue());
+  BOOST_TEST(v          [5U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(5U) == &(v[5U]));
 
-  BOOST_CHECK_EQUAL(v.at       (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_at (6U), -6);
-  BOOST_CHECK_EQUAL(v.get      (6U), -6);
-  BOOST_CHECK_EQUAL(v.const_get(6U), -6);
-  BOOST_CHECK_EQUAL(v          [6U], -6);
-  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
+  BOOST_TEST(v.at       (6U) == -6);
+  BOOST_TEST(v.const_at (6U) == -6);
+  BOOST_TEST(v.get      (6U) == -6);
+  BOOST_TEST(v.const_get(6U) == -6);
+  BOOST_TEST(v          [6U] == -6);
+  BOOST_TEST(v.data_address(6U) == &(v[6U]));
 
-  BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
+  BOOST_TEST(v.at       (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_at (7U) == v.data_defvalue());
+  BOOST_TEST(v.get      (7U) == v.data_defvalue());
+  BOOST_TEST(v.const_get(7U) == v.data_defvalue());
+  BOOST_TEST(v          [7U] == v.data_defvalue());
+  BOOST_TEST(v.data_address(7U) == &(v[7U]));
 
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -322,7 +321,7 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_THROW(v.const_at(v.size() + 1U), std::out_of_range);
 
   // meta-test: have we changed storage size with the non-const test?
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
 
   //
@@ -331,20 +330,20 @@ void TestLazyVector_defaultConstructed() {
   v.resize(iBegin);
   iEnd = iBegin;
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), iEnd);
-  BOOST_CHECK(v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == iEnd);
+  BOOST_TEST(v.data_empty());
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
+    BOOST_TEST(v.data_address(i) == nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -352,7 +351,7 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_THROW(v.const_at(v.size() + 1U), std::out_of_range);
 
   // meta-test: have we changed storage size with the non-const test?
-  BOOST_CHECK_EQUAL(v.data_size(), iEnd - iBegin);
+  BOOST_TEST(v.data_size() == iEnd - iBegin);
 
 
   //
@@ -360,10 +359,10 @@ void TestLazyVector_defaultConstructed() {
   //
   v.clear();
 
-  BOOST_CHECK(v.empty());
-  BOOST_CHECK_EQUAL(v.size(), 0U);
-  BOOST_CHECK(v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), 0U);
+  BOOST_TEST(v.empty());
+  BOOST_TEST(v.size() == 0U);
+  BOOST_TEST(v.data_empty());
+  BOOST_TEST(v.data_size() == 0U);
 
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -386,16 +385,16 @@ void TestLazyVector_sizeConstructed() {
   using Vector_t = util::LazyVector<int>;
   Vector_t v(12, 5); // 12 elements, default value is 5
 
-  BOOST_CHECK(!v.empty());
-  BOOST_CHECK_EQUAL(v.size(), 12U);
-  BOOST_CHECK(v.data_empty());
-  BOOST_CHECK_EQUAL(v.data_size(), 0U);
+  BOOST_TEST(!v.empty());
+  BOOST_TEST(v.size() == 12U);
+  BOOST_TEST(v.data_empty());
+  BOOST_TEST(v.data_size() == 0U);
 
-  BOOST_CHECK_EQUAL(v.data_defvalue(), 5);
+  BOOST_TEST(v.data_defvalue() == 5);
 
   for (Vector_t::size_type i = 0; i < v.size(); ++i) {
-    BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
-    BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_TEST(v.const_at(i) == v.data_defvalue());
+    BOOST_TEST(v.const_get(i) == v.data_defvalue());
   }
 
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
@@ -418,8 +417,8 @@ void TestLazyVector_documentation_class() {
 
   util::LazyVector<double> v(6U);
 
-  BOOST_CHECK_EQUAL(v.size(), 6U);
-  BOOST_CHECK(v.data_empty());
+  BOOST_TEST(v.size() == 6U);
+  BOOST_TEST(v.data_empty());
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -431,9 +430,9 @@ void TestLazyVector_documentation_class() {
    */
   v[4] = -4.0;
 
-  BOOST_CHECK_EQUAL(v.size(), 6U);
-  BOOST_CHECK_EQUAL(v.data_size(), 1U);
-  BOOST_CHECK_EQUAL(v.at(4U), -4.0);
+  BOOST_TEST(v.size() == 6U);
+  BOOST_TEST(v.data_size() == 1U);
+  BOOST_TEST(v.at(4U) == -4.0);
 
   /*
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -445,11 +444,11 @@ void TestLazyVector_documentation_class() {
    */
   v[2] = -2.0;
 
-  BOOST_CHECK_EQUAL(v.size(), 6U);
-  BOOST_CHECK_EQUAL(v.data_size(), 3U);
-  BOOST_CHECK_EQUAL(v.at(2U), -2.0);
-  BOOST_CHECK_EQUAL(v.at(3U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.at(4U), -4.0);
+  BOOST_TEST(v.size() == 6U);
+  BOOST_TEST(v.data_size() == 3U);
+  BOOST_TEST(v.at(2U) == -2.0);
+  BOOST_TEST(v.at(3U) == v.data_defvalue());
+  BOOST_TEST(v.at(4U) == -4.0);
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
    *
@@ -463,13 +462,13 @@ void TestLazyVector_documentation_class() {
   v.resize(7U); // barely enough for element #6
   v[6] = -6.0;
 
-  BOOST_CHECK_EQUAL(v.size(), 7U);
-  BOOST_CHECK_EQUAL(v.data_size(), 5U);
-  BOOST_CHECK_EQUAL(v.at(2U), -2.0);
-  BOOST_CHECK_EQUAL(v.at(3U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.at(4U), -4.0);
-  BOOST_CHECK_EQUAL(v.at(5U), v.data_defvalue());
-  BOOST_CHECK_EQUAL(v.at(6U), -6.0);
+  BOOST_TEST(v.size() == 7U);
+  BOOST_TEST(v.data_size() == 5U);
+  BOOST_TEST(v.at(2U) == -2.0);
+  BOOST_TEST(v.at(3U) == v.data_defvalue());
+  BOOST_TEST(v.at(4U) == -4.0);
+  BOOST_TEST(v.at(5U) == v.data_defvalue());
+  BOOST_TEST(v.at(6U) == -6.0);
 
 
 } // TestLazyVector_documentation_class()
@@ -490,7 +489,7 @@ void TestLazyVector_documentation_constructor_size() {
   v[0] =  0;
   v[2] = -2;
 
-  BOOST_CHECK_EQUAL(v.const_get(1U), 5);
+  BOOST_TEST(v.const_get(1U) == 5);
 
 } // TestLazyVector_documentation_constructor_size()
 

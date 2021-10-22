@@ -24,9 +24,8 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( tracktrajectory_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
-#include <boost/test/tools/floating_point_comparison.hpp> // BOOST_CHECK_CLOSE()
+#include "boost/test/unit_test.hpp"
+
 
 // LArSoft libraries
 #include "lardataobj/RecoBase/TrackTrajectory.h"
@@ -71,9 +70,9 @@ void CheckValue(T v, T exp, T tol, std::string tag = "") {
 
 template <typename VectA, typename VectB>
 void CheckVectorsEqual(VectA const& v, VectB const& exp) {
-  BOOST_CHECK_EQUAL(v.X(), exp.X());
-  BOOST_CHECK_EQUAL(v.Y(), exp.Y());
-  BOOST_CHECK_EQUAL(v.Z(), exp.Z());
+  BOOST_TEST(v.X() == exp.X());
+  BOOST_TEST(v.Y() == exp.Y());
+  BOOST_TEST(v.Z() == exp.Z());
 } // CheckVectorsEqual()
 
 template <typename VectA, typename VectB>
@@ -99,17 +98,17 @@ void TestTrackTrajectory(
 
   //----------------------------------------------------------------------------
   const size_t NPoints = expected.positions.size();
-  BOOST_CHECK_EQUAL(traj.NPoints(), NPoints);
-  BOOST_CHECK_EQUAL(traj.NumberTrajectoryPoints(), NPoints);
+  BOOST_TEST(traj.NPoints() == NPoints);
+  BOOST_TEST(traj.NumberTrajectoryPoints() == NPoints);
 
   for (size_t i = 0; i <= NPoints + 1; ++i) {
     BOOST_TEST_MESSAGE("HasPoint() position #" << i);
-    BOOST_CHECK_EQUAL(traj.HasPoint(i), (i < NPoints));
+    BOOST_TEST(traj.HasPoint(i) == (i < NPoints));
   } // for
 
   if (NPoints == 0) return; // nothing else is defined
 
-  BOOST_CHECK_EQUAL(traj.HasMomentum(), expected.hasMomenta);
+  BOOST_TEST(traj.HasMomentum() == expected.hasMomenta);
 
   //----------------------------------------------------------------------------
   // some preparation:
@@ -125,44 +124,44 @@ void TestTrackTrajectory(
     ? recob::TrackTrajectory::InvalidIndex: *(validPoints.rbegin());
 
   //----------------------------------------------------------------------------
-  BOOST_CHECK_EQUAL(traj.LastPoint(), NPoints - 1);
+  BOOST_TEST(traj.LastPoint() == NPoints - 1);
 
   //----------------------------------------------------------------------------
   for (size_t i = 0; i < NPoints; ++i) {
 
     bool const isValid = (validPoints.count(i) > 0);
     BOOST_TEST_MESSAGE("HasValidPoint() position #" << i);
-    BOOST_CHECK_EQUAL(traj.HasValidPoint(i), isValid);
+    BOOST_TEST(traj.HasValidPoint(i) == isValid);
 
     if (isValid) {
-      BOOST_CHECK_EQUAL(traj.NextValidPoint(i), i);
-      BOOST_CHECK_EQUAL(traj.PreviousValidPoint(i), i);
+      BOOST_TEST(traj.NextValidPoint(i) == i);
+      BOOST_TEST(traj.PreviousValidPoint(i) == i);
     }
     else { // if not a valid point
       constexpr auto InvalidIndex = recob::TrackTrajectory::InvalidIndex;
       auto iNext = validPoints.upper_bound(i);
       if (iNext == validPoints.end()) { // after last valid point
-        BOOST_CHECK_EQUAL(traj.PreviousValidPoint(i), lastValidPoint);
-        BOOST_CHECK_EQUAL(traj.NextValidPoint(i), InvalidIndex);
+        BOOST_TEST(traj.PreviousValidPoint(i) == lastValidPoint);
+        BOOST_TEST(traj.NextValidPoint(i) == InvalidIndex);
       }
       else if (iNext == validPoints.begin()) { // before first valid point
-        BOOST_CHECK_EQUAL(traj.PreviousValidPoint(i), InvalidIndex);
-        BOOST_CHECK_EQUAL(traj.NextValidPoint(i), firstValidPoint);
+        BOOST_TEST(traj.PreviousValidPoint(i) == InvalidIndex);
+        BOOST_TEST(traj.NextValidPoint(i) == firstValidPoint);
       }
       else { // in the middle of the trajectory
-        BOOST_CHECK_EQUAL(traj.PreviousValidPoint(i), *(std::prev(iNext)));
-        BOOST_CHECK_EQUAL(traj.NextValidPoint(i), *iNext);
+        BOOST_TEST(traj.PreviousValidPoint(i) == *(std::prev(iNext)));
+        BOOST_TEST(traj.NextValidPoint(i) == *iNext);
       }
     }
 
   } // for
 
   if (!validPoints.empty()) {
-    BOOST_CHECK_EQUAL(traj.FirstValidPoint(), firstValidPoint);
-    BOOST_CHECK_EQUAL(traj.LastValidPoint(), lastValidPoint);
+    BOOST_TEST(traj.FirstValidPoint() == firstValidPoint);
+    BOOST_TEST(traj.LastValidPoint() == lastValidPoint);
   }
 
-  BOOST_CHECK_EQUAL(traj.CountValidPoints(), validPoints.size());
+  BOOST_TEST(traj.CountValidPoints() == validPoints.size());
 
   //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("Vertex()");
@@ -186,12 +185,12 @@ void TestTrackTrajectory(
   //----------------------------------------------------------------------------
   TVector3 Vstart, Vend;
   std::tie(Vstart, Vend) = traj.Extent<TVector3>();
-  BOOST_CHECK_EQUAL(Vstart[0], expected.positions[firstValidPoint].X());
-  BOOST_CHECK_EQUAL(Vstart[1], expected.positions[firstValidPoint].Y());
-  BOOST_CHECK_EQUAL(Vstart[2], expected.positions[firstValidPoint].Z());
-  BOOST_CHECK_EQUAL(Vend[0], expected.positions[lastValidPoint].X());
-  BOOST_CHECK_EQUAL(Vend[1], expected.positions[lastValidPoint].Y());
-  BOOST_CHECK_EQUAL(Vend[2], expected.positions[lastValidPoint].Z());
+  BOOST_TEST(Vstart[0] == expected.positions[firstValidPoint].X());
+  BOOST_TEST(Vstart[1] == expected.positions[firstValidPoint].Y());
+  BOOST_TEST(Vstart[2] == expected.positions[firstValidPoint].Z());
+  BOOST_TEST(Vend[0] == expected.positions[lastValidPoint].X());
+  BOOST_TEST(Vend[1] == expected.positions[lastValidPoint].Y());
+  BOOST_TEST(Vend[2] == expected.positions[lastValidPoint].Z());
 
 
   recob::Trajectory::Point_t start, end;

@@ -29,8 +29,7 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( cluster_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t
@@ -73,164 +72,164 @@ void CheckCluster(
 
   // verify that the values are as expected
   // - NHits
-  BOOST_CHECK_EQUAL(cluster.NHits(), n_hits);
+  BOOST_TEST(cluster.NHits() == n_hits);
 
   // - start wire
-  BOOST_CHECK_EQUAL(cluster.StartWire(), start_wire);
+  BOOST_TEST(cluster.StartWire() == start_wire);
 
   // - start wire uncertainty
-  BOOST_CHECK_EQUAL(cluster.SigmaStartWire(), sigma_start_wire);
+  BOOST_TEST(cluster.SigmaStartWire() == sigma_start_wire);
 
   // - start tick
-  BOOST_CHECK_EQUAL(cluster.StartTick(), start_tick);
+  BOOST_TEST(cluster.StartTick() == start_tick);
 
   // - start tick uncertainty
-  BOOST_CHECK_EQUAL(cluster.SigmaStartTick(), sigma_start_tick);
+  BOOST_TEST(cluster.SigmaStartTick() == sigma_start_tick);
 
   // - end wire
-  BOOST_CHECK_EQUAL(cluster.EndWire(), end_wire);
+  BOOST_TEST(cluster.EndWire() == end_wire);
 
   // - end wire uncertainty
-  BOOST_CHECK_EQUAL(cluster.SigmaEndWire(), sigma_end_wire);
+  BOOST_TEST(cluster.SigmaEndWire() == sigma_end_wire);
 
   // - end tick
-  BOOST_CHECK_EQUAL(cluster.EndTick(), end_tick);
+  BOOST_TEST(cluster.EndTick() == end_tick);
 
   // - end tick uncertainty
-  BOOST_CHECK_EQUAL(cluster.SigmaEndTick(), sigma_end_tick);
+  BOOST_TEST(cluster.SigmaEndTick() == sigma_end_tick);
 
   // - wire coordinates
-  BOOST_CHECK_EQUAL
-    (cluster.WireCoord(recob::Cluster::clStart), start_wire);
-  BOOST_CHECK_EQUAL
-    (cluster.WireCoord((unsigned int) recob::Cluster::clStart), start_wire);
-  BOOST_CHECK_EQUAL
-    (cluster.WireCoord(recob::Cluster::clEnd), end_wire);
-  BOOST_CHECK_EQUAL
-    (cluster.WireCoord((unsigned int) recob::Cluster::clEnd), end_wire);
+  BOOST_TEST
+    (cluster.WireCoord(recob::Cluster::clStart) == start_wire);
+  BOOST_TEST
+    (cluster.WireCoord((unsigned int) recob::Cluster::clStart) == start_wire);
+  BOOST_TEST
+    (cluster.WireCoord(recob::Cluster::clEnd) == end_wire);
+  BOOST_TEST
+    (cluster.WireCoord((unsigned int) recob::Cluster::clEnd) == end_wire);
 
   // - tick coordinates
-  BOOST_CHECK_EQUAL
-    (cluster.TickCoord(recob::Cluster::clStart), start_tick);
-  BOOST_CHECK_EQUAL
-    (cluster.TickCoord((unsigned int) recob::Cluster::clStart), start_tick);
-  BOOST_CHECK_EQUAL
-    (cluster.TickCoord(recob::Cluster::clEnd), end_tick);
-  BOOST_CHECK_EQUAL
-    (cluster.TickCoord((unsigned int) recob::Cluster::clEnd), end_tick);
+  BOOST_TEST
+    (cluster.TickCoord(recob::Cluster::clStart) == start_tick);
+  BOOST_TEST
+    (cluster.TickCoord((unsigned int) recob::Cluster::clStart) == start_tick);
+  BOOST_TEST
+    (cluster.TickCoord(recob::Cluster::clEnd) == end_tick);
+  BOOST_TEST
+    (cluster.TickCoord((unsigned int) recob::Cluster::clEnd) == end_tick);
 
   // - start charge
-  BOOST_CHECK_EQUAL(cluster.StartCharge(), start_charge);
+  BOOST_TEST(cluster.StartCharge() == start_charge);
 
   // - start angle
-  BOOST_CHECK_EQUAL(cluster.StartAngle(), start_angle);
+  BOOST_TEST(cluster.StartAngle() == start_angle);
 
   // - start opening angle
-  BOOST_CHECK_EQUAL(cluster.StartOpeningAngle(), start_opening);
+  BOOST_TEST(cluster.StartOpeningAngle() == start_opening);
 
   // - end charge
-  BOOST_CHECK_EQUAL(cluster.EndCharge(), end_charge);
+  BOOST_TEST(cluster.EndCharge() == end_charge);
 
   // - end angle
-  BOOST_CHECK_EQUAL(cluster.EndAngle(), end_angle);
+  BOOST_TEST(cluster.EndAngle() == end_angle);
 
   // - end opening angle
-  BOOST_CHECK_EQUAL(cluster.EndOpeningAngle(), end_opening);
+  BOOST_TEST(cluster.EndOpeningAngle() == end_opening);
 
   // - edge charge
-  BOOST_CHECK_EQUAL
-    (cluster.EdgeCharge(recob::Cluster::clStart), start_charge);
-  BOOST_CHECK_EQUAL
-    (cluster.EdgeCharge((unsigned int) recob::Cluster::clStart), start_charge);
-  BOOST_CHECK_EQUAL
-    (cluster.EdgeCharge(recob::Cluster::clEnd), end_charge);
-  BOOST_CHECK_EQUAL
-    (cluster.EdgeCharge((unsigned int) recob::Cluster::clEnd), end_charge);
+  BOOST_TEST
+    (cluster.EdgeCharge(recob::Cluster::clStart) == start_charge);
+  BOOST_TEST
+    (cluster.EdgeCharge((unsigned int) recob::Cluster::clStart) == start_charge);
+  BOOST_TEST
+    (cluster.EdgeCharge(recob::Cluster::clEnd) == end_charge);
+  BOOST_TEST
+    (cluster.EdgeCharge((unsigned int) recob::Cluster::clEnd) == end_charge);
 
   // - angle
-  BOOST_CHECK_EQUAL
-    (cluster.Angle(recob::Cluster::clStart), start_angle);
-  BOOST_CHECK_EQUAL
-    (cluster.Angle((unsigned int) recob::Cluster::clStart), start_angle);
-  BOOST_CHECK_EQUAL
-    (cluster.Angle(recob::Cluster::clEnd), end_angle);
-  BOOST_CHECK_EQUAL
-    (cluster.Angle((unsigned int) recob::Cluster::clEnd), end_angle);
+  BOOST_TEST
+    (cluster.Angle(recob::Cluster::clStart) == start_angle);
+  BOOST_TEST
+    (cluster.Angle((unsigned int) recob::Cluster::clStart) == start_angle);
+  BOOST_TEST
+    (cluster.Angle(recob::Cluster::clEnd) == end_angle);
+  BOOST_TEST
+    (cluster.Angle((unsigned int) recob::Cluster::clEnd) == end_angle);
 
   // - edge opening angle
-  BOOST_CHECK_EQUAL
-    (cluster.OpeningAngle(recob::Cluster::clStart), start_opening);
-  BOOST_CHECK_EQUAL
-    (cluster.OpeningAngle((unsigned int) recob::Cluster::clStart), start_opening);
-  BOOST_CHECK_EQUAL
-    (cluster.OpeningAngle(recob::Cluster::clEnd), end_opening);
-  BOOST_CHECK_EQUAL
-    (cluster.OpeningAngle((unsigned int) recob::Cluster::clEnd), end_opening);
+  BOOST_TEST
+    (cluster.OpeningAngle(recob::Cluster::clStart) == start_opening);
+  BOOST_TEST
+    (cluster.OpeningAngle((unsigned int) recob::Cluster::clStart) == start_opening);
+  BOOST_TEST
+    (cluster.OpeningAngle(recob::Cluster::clEnd) == end_opening);
+  BOOST_TEST
+    (cluster.OpeningAngle((unsigned int) recob::Cluster::clEnd) == end_opening);
 
   // - integral
-  BOOST_CHECK_EQUAL(cluster.Integral(), integral);
+  BOOST_TEST(cluster.Integral() == integral);
 
   // - integral standard deviation
-  BOOST_CHECK_EQUAL(cluster.IntegralStdDev(), integral_stddev);
+  BOOST_TEST(cluster.IntegralStdDev() == integral_stddev);
 
   // - integral average
   const float integral_average = (n_hits != 0)? integral / n_hits: 0.;
-  BOOST_CHECK_EQUAL(cluster.IntegralAverage(), integral_average);
+  BOOST_TEST(cluster.IntegralAverage() == integral_average);
 
   // - summed ADC
-  BOOST_CHECK_EQUAL(cluster.SummedADC(), summedADC);
+  BOOST_TEST(cluster.SummedADC() == summedADC);
 
   // - summed ADC standard deviation
-  BOOST_CHECK_EQUAL(cluster.SummedADCstdDev(), summedADC_stddev);
+  BOOST_TEST(cluster.SummedADCstdDev() == summedADC_stddev);
 
   // - summed ADC average
   const float summedADC_average = (n_hits != 0)? summedADC / n_hits: 0.;
-  BOOST_CHECK_EQUAL(cluster.SummedADCaverage(), summedADC_average);
+  BOOST_TEST(cluster.SummedADCaverage() == summedADC_average);
 
   // - charge
-  BOOST_CHECK_EQUAL(cluster.Charge(recob::Cluster::cmFit), integral);
-  BOOST_CHECK_EQUAL
-    (cluster.Charge((unsigned int) recob::Cluster::cmFit), integral);
-  BOOST_CHECK_EQUAL
-    (cluster.Charge(recob::Cluster::cmADC), summedADC);
-  BOOST_CHECK_EQUAL
-    (cluster.Charge((unsigned int) recob::Cluster::cmADC), summedADC);
+  BOOST_TEST(cluster.Charge(recob::Cluster::cmFit) == integral);
+  BOOST_TEST
+    (cluster.Charge((unsigned int) recob::Cluster::cmFit) == integral);
+  BOOST_TEST
+    (cluster.Charge(recob::Cluster::cmADC) == summedADC);
+  BOOST_TEST
+    (cluster.Charge((unsigned int) recob::Cluster::cmADC) == summedADC);
 
   // - charge standard deviation
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeStdDev(recob::Cluster::cmFit), integral_stddev);
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeStdDev((unsigned int) recob::Cluster::cmFit), integral_stddev);
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeStdDev(recob::Cluster::cmADC), summedADC_stddev);
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeStdDev((unsigned int) recob::Cluster::cmADC), summedADC_stddev);
+  BOOST_TEST
+    (cluster.ChargeStdDev(recob::Cluster::cmFit) == integral_stddev);
+  BOOST_TEST
+    (cluster.ChargeStdDev((unsigned int) recob::Cluster::cmFit) == integral_stddev);
+  BOOST_TEST
+    (cluster.ChargeStdDev(recob::Cluster::cmADC) == summedADC_stddev);
+  BOOST_TEST
+    (cluster.ChargeStdDev((unsigned int) recob::Cluster::cmADC) == summedADC_stddev);
 
   // - charge standard deviation
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeAverage(recob::Cluster::cmFit), integral_average);
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeAverage((unsigned int) recob::Cluster::cmFit), integral_average);
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeAverage(recob::Cluster::cmADC), summedADC_average);
-  BOOST_CHECK_EQUAL
-    (cluster.ChargeAverage((unsigned int) recob::Cluster::cmADC), summedADC_average);
+  BOOST_TEST
+    (cluster.ChargeAverage(recob::Cluster::cmFit) == integral_average);
+  BOOST_TEST
+    (cluster.ChargeAverage((unsigned int) recob::Cluster::cmFit) == integral_average);
+  BOOST_TEST
+    (cluster.ChargeAverage(recob::Cluster::cmADC) == summedADC_average);
+  BOOST_TEST
+    (cluster.ChargeAverage((unsigned int) recob::Cluster::cmADC) == summedADC_average);
 
   // - wires over hits
-  BOOST_CHECK_EQUAL(cluster.MultipleHitDensity(), multiple_hit_density);
+  BOOST_TEST(cluster.MultipleHitDensity() == multiple_hit_density);
 
   // - width
-  BOOST_CHECK_EQUAL(cluster.Width(), width);
+  BOOST_TEST(cluster.Width() == width);
 
   // - ID
-  BOOST_CHECK_EQUAL(cluster.ID(), ID);
+  BOOST_TEST(cluster.ID() == ID);
 
   // - view
-  BOOST_CHECK_EQUAL(cluster.View(), view);
+  BOOST_TEST(cluster.View() == view);
 
   // - plane
-  BOOST_CHECK_EQUAL(cluster.Plane(), plane);
-  BOOST_CHECK_EQUAL(cluster.hasPlane(), plane.isValid);
+  BOOST_TEST(cluster.Plane() == plane);
+  BOOST_TEST(cluster.hasPlane() == plane.isValid);
 
 } // CheckCluster()
 

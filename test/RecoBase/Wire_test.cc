@@ -29,8 +29,7 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( wire_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
@@ -54,25 +53,25 @@ void CheckWire(
 
   // verify that the values are as expected
   // - channel ID
-  BOOST_CHECK_EQUAL(wire.Channel(), channel);
+  BOOST_TEST(wire.Channel() == channel);
 
   // - view
-  BOOST_CHECK_EQUAL(wire.View(), view);
+  BOOST_TEST(wire.View() == view);
 
   // - region of interest
-  BOOST_CHECK_EQUAL(wire.NSignal(), sigROIlist.size());
+  BOOST_TEST(wire.NSignal() == sigROIlist.size());
 
   recob::Wire::RegionsOfInterest_t const& wireROI = wire.SignalROI();
-  BOOST_CHECK_EQUAL(wireROI.n_ranges(), sigROIlist.n_ranges());
+  BOOST_TEST(wireROI.n_ranges() == sigROIlist.n_ranges());
 
   unsigned int index = 0;
   for (auto sample: wireROI) {
-    BOOST_CHECK_EQUAL(sample, sigROIlist[index++]);
+    BOOST_TEST(sample == sigROIlist[index++]);
   }
 
   // - other elements of interface
   auto const& wire_signal = wire.Signal();
-  BOOST_CHECK
+  BOOST_TEST
     (std::equal(wire_signal.begin(), wire_signal.end(), sigROIlist.cbegin()));
 
 } // CheckWire()
@@ -116,11 +115,11 @@ void WireTestCustomConstructors() {
     (11, recob::Wire::RegionsOfInterest_t::vector_t({ 11., 12., 13., 14. }));
 
   // this is not a recob::Wire test, but I want to make sure anyway...
-  BOOST_CHECK_EQUAL(sigROIlist.size(), 20U);
-  BOOST_CHECK_EQUAL(sigROIlist.n_ranges(), 2U);
+  BOOST_TEST(sigROIlist.size() == 20U);
+  BOOST_TEST(sigROIlist.n_ranges() == 2U);
   size_t index = 0;
   for (auto sample: sigROIlist) {
-    BOOST_CHECK(((sample == (float) index) || (sample == 0.)));
+    BOOST_TEST(((sample == (float) index) || (sample == 0.)));
     ++index;
   } // for
 
@@ -147,7 +146,7 @@ void WireTestCustomConstructors() {
   CheckWire(wire2, sigROIlist, channel, view);
 
   // step III.3: verify that the values were actually moved
-  BOOST_CHECK(sigROIlistCopy.empty());
+  BOOST_TEST(sigROIlistCopy.empty());
 
 } // WireTestCustomConstructors()
 

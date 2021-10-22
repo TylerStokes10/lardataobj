@@ -29,8 +29,7 @@
  * (for example, a random seed).
  */
 #define BOOST_TEST_MODULE ( rawdigit_test )
-#include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
-#include <boost/test/test_tools.hpp> // BOOST_CHECK()
+#include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
@@ -53,18 +52,18 @@ void CheckRawDigit(
 ) {
 
   // this is a parameters validation check
-  BOOST_CHECK_EQUAL(samples, uncompressed_adclist.size());
+  BOOST_TEST(samples == uncompressed_adclist.size());
 
   // verify that the values are as expected
   // - channel ID
-  BOOST_CHECK_EQUAL(digits.Channel(), channel);
+  BOOST_TEST(digits.Channel() == channel);
 
   // - compression mode
-  BOOST_CHECK_EQUAL(digits.Compression(), compression);
+  BOOST_TEST(digits.Compression() == compression);
 
   // - uncompressed size
-  BOOST_CHECK_EQUAL(digits.Samples(), samples);
-  BOOST_CHECK_EQUAL(digits.Samples(), uncompressed_adclist.size());
+  BOOST_TEST(digits.Samples() == samples);
+  BOOST_TEST(digits.Samples() == uncompressed_adclist.size());
 
   // - digits
 
@@ -73,12 +72,12 @@ void CheckRawDigit(
   raw::Uncompress(digits.ADCs(), ADCs, digits.Compression());
 
   BOOST_WARN(digits.NADC() <= samples); // is this always the case?
-  BOOST_CHECK
+  BOOST_TEST
     (std::equal(ADCs.begin(), ADCs.end(), uncompressed_adclist.begin()));
 
   // - others
-  BOOST_CHECK_EQUAL(digits.GetPedestal(), 0.);
-  BOOST_CHECK_EQUAL(digits.GetSigma(), 0.);
+  BOOST_TEST(digits.GetPedestal() == 0.);
+  BOOST_TEST(digits.GetSigma() == 0.);
 
 } // CheckRawDigit()
 
@@ -148,7 +147,7 @@ void RawDigitTestCustomConstructors() {
   CheckRawDigit(digits2, channel, samples, adclist, compression);
 
   // step III.3: verify that the data was actually moved
-  BOOST_CHECK(buffer_copy.empty());
+  BOOST_TEST(buffer_copy.empty());
 
 } // RawDigitTestCustomConstructors()
 
