@@ -34,7 +34,9 @@ namespace sim{
   IDE::IDE(sim::IDE const& ide, int offset)
     : IDE(ide)
   {
-    trackID += offset;
+
+    trackID = trackID>=0? trackID+offset : trackID-offset;
+    
   }
 
   // Default constructor
@@ -305,10 +307,11 @@ namespace sim{
 
       for(auto const& ide : ides){
         curIDEVec->emplace_back(ide, offset);
-        if( ide.trackID+offset < range_trackID.first  )
-          range_trackID.first = ide.trackID+offset;
-        if( ide.trackID+offset > range_trackID.second )
-          range_trackID.second = ide.trackID+offset;
+	auto tid = std::abs(ide.trackID)+offset;
+        if( tid < range_trackID.first  )
+          range_trackID.first = tid;
+        if( tid > range_trackID.second )
+          range_trackID.second = tid;
       }//end loop over IDEs
 
     }//end loop over TDCIDEMap
