@@ -36,7 +36,7 @@ namespace sim{
   {
 
     trackID = trackID>=0? trackID+offset : trackID-offset;
-    
+
   }
 
   // Default constructor
