@@ -8,6 +8,8 @@
 
 #include "lardataobj/Simulation/BeamTypes.h"
 
+#include <functional> // std::less
+
 namespace sim {
 
   class BeamGateInfo
@@ -22,8 +24,6 @@ namespace sim {
       , fm_width(width)
       , fm_beam_type(type)
     {}
-
-    ~BeamGateInfo() {};
 
     // No "setters" for beam-gate start or width; you have to assign
     // them when you create a BeamGateInfo object.
