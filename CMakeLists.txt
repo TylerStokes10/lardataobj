@@ -31,7 +31,7 @@ find_package(canvas REQUIRED PUBLIC)
 find_package(canvas_root_io REQUIRED)
 find_package(nusimdata REQUIRED PUBLIC)
 find_package(Boost REQUIRED)
-find_package(ROOT COMPONENTS Core Physics GenVector Matrix REQUIRED)
+find_package(ROOT COMPONENTS Core Physics GenVector Matrix REQUIRED PUBLIC)
 # these are minimum required versions, not the actual product versions
 find_ups_product( larcoreobj )
 find_ups_product( larcorealg )
