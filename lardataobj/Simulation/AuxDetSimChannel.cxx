@@ -40,7 +40,7 @@ namespace sim{
   // Copy with offset constructor
   //-------------------------------------------------
   AuxDetIDE::AuxDetIDE(AuxDetIDE const& ide, int offset)
-    : trackID        (ide.trackID+offset)
+    : trackID        (ide.trackID>=0? ide.trackID+offset : ide.trackID-offset)
     , energyDeposited(ide.energyDeposited)
     , entryX         (ide.entryX)
     , entryY         (ide.entryY)
@@ -100,10 +100,12 @@ namespace sim{
     for(auto const& ide : AuxDetIDEs()){
       this->fAuxDetIDEs.emplace_back(ide,offset);
 
-      if( ide.trackID+offset < range_trackID.first  )
-	range_trackID.first = ide.trackID+offset;
-      if( ide.trackID+offset > range_trackID.second )
-	range_trackID.second = ide.trackID+offset;
+      auto tid = std::abs(ide.trackID)+offset;
+
+      if( tid < range_trackID.first  )
+	range_trackID.first = tid;
+      if( tid > range_trackID.second )
+	range_trackID.second = tid;
     }
 
     return range_trackID;

@@ -1,6 +1,6 @@
 cet_make(NO_DICTIONARY
          LIBRARIES
-           nusimdata_SimulationBase
+           nusimdata::SimulationBase
            ROOT::Core
            ROOT::Physics
          )
