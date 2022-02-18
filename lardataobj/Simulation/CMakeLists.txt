@@ -1,4 +1,10 @@
-cet_make(NO_DICTIONARY
+cet_make_library(
+         SOURCE
+           AuxDetSimChannel.cxx
+           OpDetBacktrackerRecord.cxx
+           SimChannel.cxx
+           SimPhotons.cxx
+           SupernovaTruth.cxx
          LIBRARIES
            nusimdata::SimulationBase
            canvas::canvas
@@ -6,9 +12,9 @@ cet_make(NO_DICTIONARY
            ROOT::GenVector
            ROOT::Core
            ROOT::Physics
-         ) ### MIGRATE-ACTION-RECOMMENDED (migrate-3.05.03) - deprecated: use cet_make_library(), build_dictonary(), cet_plugin() with explicit source lists and plugin base types
+         )
 
-art_dictionary(DICTIONARY_LIBRARIES lardataobj_Simulation)
+build_dictionary(DICTIONARY_LIBRARIES lardataobj_Simulation)
 
 install_headers()
 install_source()

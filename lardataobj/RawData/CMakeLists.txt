@@ -1,12 +1,21 @@
-cet_make(NO_DICTIONARY
+cet_make_library(
+         SOURCE
+           AuxDetDigit.cxx
+           BeamInfo.cxx
+           DAQHeader.cxx
+           ExternalTrigger.cxx
+           OpDetPulse.cxx
+           raw.cxx
+           RawDigit.cxx
+           TriggerData.cxx
          LIBRARIES
-           larcoreobj_SummaryData
+           larcoreobj::SummaryData
            canvas::canvas
            messagefacility::MF_MessageLogger
            cetlib_except::cetlib_except
-           ROOT::Core) ### MIGRATE-ACTION-RECOMMENDED (migrate-3.05.03) - deprecated: use cet_make_library(), build_dictonary(), cet_plugin() with explicit source lists and plugin base types
+           ROOT::Core)
 
-art_dictionary(DICTIONARY_LIBRARIES lardataobj_RawData)
+build_dictionary(DICTIONARY_LIBRARIES lardataobj_RawData)
 
 install_headers()
 install_source()

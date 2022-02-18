@@ -1,13 +1,35 @@
-cet_make(LIBRARIES lardataobj_RawData
+cet_make_library(
+  SOURCE
+    Cluster.cxx
+    Edge.cxx
+    EndPoint2D.cxx
+    Event.cxx
+    Hit.cxx
+    OpFlash.cxx
+    OpHit.cxx
+    PCAxis.cxx
+    PFParticle.cxx
+    PFParticleMetadata.cxx
+    Seed.cxx
+    Shower.cxx
+    Slice.cxx
+    SpacePoint.cxx
+    Track.cxx
+    TrackingPlane.cxx
+    TrackTrajectory.cxx
+    Trajectory.cxx
+    TrajectoryPointFlags.cxx
+    Vertex.cxx
+    Wire.cxx
+  LIBRARIES lardataobj_RawData
                    canvas::canvas
                    messagefacility::MF_MessageLogger
                    cetlib_except::cetlib_except
                    ROOT::Physics
                    ROOT::Matrix
-                   ROOT::GenVector
-                   NO_DICTIONARY) ### MIGRATE-ACTION-RECOMMENDED (migrate-3.05.03) - deprecated: use cet_make_library(), build_dictonary(), cet_plugin() with explicit source lists and plugin base types
+                   ROOT::GenVector)
 
-art_dictionary(DICTIONARY_LIBRARIES lardataobj_RecoBase)
+build_dictionary(DICTIONARY_LIBRARIES lardataobj_RecoBase)
 
 add_subdirectory(AssnsDicts)
 add_subdirectory(TrackingDicts)
