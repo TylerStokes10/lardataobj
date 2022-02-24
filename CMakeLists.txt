@@ -30,8 +30,8 @@ find_package(canvas_root_io REQUIRED)
 find_package(nusimdata REQUIRED EXPORT)
 find_package(Boost REQUIRED)
 find_package(ROOT COMPONENTS Core Physics GenVector Matrix REQUIRED EXPORT)
-find_package( larcoreobj REQUIRED )
-find_package( larcorealg REQUIRED )
+find_package( larcoreobj REQUIRED EXPORT)
+find_package( larcorealg REQUIRED EXPORT)
 
 include(BuildDictionary)
 
