@@ -9,7 +9,11 @@ cet_make_library(
       LIBRARIES
         canvas::canvas
         cetlib_except::cetlib_except
-        ROOT::Core)
+        ROOT::Core
+        PUBLIC
+           larcoreobj::headers
+           larcorealg::geoVectorUtils
+)
 
 build_dictionary(DICTIONARY_LIBRARIES lardataobj_AnalysisBase nusimdata::SimulationBase)
 

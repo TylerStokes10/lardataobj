@@ -21,13 +21,17 @@ cet_make_library(
     TrajectoryPointFlags.cxx
     Vertex.cxx
     Wire.cxx
-  LIBRARIES lardataobj_RawData
+  LIBRARIES
                    canvas::canvas
                    messagefacility::MF_MessageLogger
                    cetlib_except::cetlib_except
                    ROOT::Physics
                    ROOT::Matrix
-                   ROOT::GenVector)
+                   ROOT::GenVector
+  PUBLIC
+     lardataobj::RawData
+     larcorealg::geoVectorUtils
+)
 
 build_dictionary(DICTIONARY_LIBRARIES lardataobj_RecoBase)
 
