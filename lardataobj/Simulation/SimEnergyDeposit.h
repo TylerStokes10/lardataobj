@@ -101,6 +101,7 @@ namespace sim
     geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
     double Time() const { return (startTime+endTime)/2.; }
     int TrackID() const { return trackID; }
+    void setTrackID(int id) { trackID = id; }
     int PdgCode() const { return pdgCode; }
 
     // While it's clear how a SimEnergyDeposit will be created by its
