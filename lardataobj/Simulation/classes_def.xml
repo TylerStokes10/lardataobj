@@ -96,6 +96,7 @@
  <class name="std::vector<sim::OpDetBacktrackerRecord>"/>
  <class name="std::vector<sim::SupernovaTruth>"/>
  <class name="std::vector<sim::SimDriftedElectronCluster>"/>
+ <class name="std::pair<int,std::set<int>>"/>
  <class name="std::map<int,std::set<int>>"/>
  <class name="sim::TDCIDE"/>
  <class name="std::vector<sim::TDCIDE>"/>
@@ -112,6 +113,7 @@
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>>"/>
  <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord>>"/>
  <class name="art::Wrapper< std::vector<sim::SupernovaTruth>>"/>
+ <class name="art::Wrapper< std::pair<int,std::set<int>>>"/>
  <class name="art::Wrapper< std::map<int,std::set<int>>>"/>
  <class name="art::Wrapper< std::vector<sim::SimDriftedElectronCluster>>"/>
  <class name="art::Wrapper< art::Assns<sim::SupernovaTruth, simb::MCTruth, void>>"/>
