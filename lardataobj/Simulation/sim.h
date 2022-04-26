@@ -3,13 +3,6 @@
 /// \brief Tools and modules for checking out the basics of the Monte Carlo
 ///
 /// \author brebel@fnal.gov
-///
-///
-/// Coding note: Never put `#include "sim.h"` in your code. It would
-/// force a dependency in your class on every other class in the
-/// Simulation directory; e.g., if I changed the MCTruth code, your
-/// code that generates Electrons would re-compile.  This class exists
-/// solely as a bookkeeping tool.
 
 #ifndef LARDATAOBJ_SIMULATION_SIM_H
 #define LARDATAOBJ_SIMULATION_SIM_H

@@ -1,22 +1,36 @@
-cet_make_library(
-         SOURCE
-           AuxDetSimChannel.cxx
-           OpDetBacktrackerRecord.cxx
-           SimChannel.cxx
-           SimPhotons.cxx
-           SupernovaTruth.cxx
-         LIBRARIES
-           canvas::canvas
-           messagefacility::MF_MessageLogger
-           ROOT::GenVector
-           ROOT::Core
-           ROOT::Physics
-           PUBLIC
-           nusimdata::SimulationBase
-           larcoreobj::headers
-         )
+cet_make_library(LIBRARY_NAME sim INTERFACE
+  SOURCE sim.h
+  LIBRARIES INTERFACE
+  ROOT::MathCore
+)
 
-build_dictionary(DICTIONARY_LIBRARIES lardataobj_Simulation)
+cet_make_library(LIBRARY_NAME GeneratedParticleInfo INTERFACE
+  SOURCE GeneratedParticleInfo.h
+  LIBRARIES INTERFACE
+  nusimdata::SimulationBase
+)
+
+cet_make_library(SOURCE
+  AuxDetSimChannel.cxx
+  SimDriftedElectronCluster.h
+  SimEnergyDeposit.h
+  OpDetBacktrackerRecord.cxx
+  SimChannel.cxx
+  SimPhotons.cxx
+  SupernovaTruth.cxx
+  LIBRARIES
+  PUBLIC
+  larcoreobj::geo_vectors
+  PRIVATE
+  lardataobj::sim
+  messagefacility::MF_MessageLogger
+)
+
+build_dictionary(DICTIONARY_LIBRARIES
+  lardataobj::Simulation
+  lardataobj::GeneratedParticleInfo
+  canvas::canvas
+)
 
 install_headers()
 install_source()

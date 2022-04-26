@@ -1,21 +1,30 @@
-cet_make_library(
-      SOURCE
-        Calorimetry.cxx
-        CosmicTag.cxx
-        FlashMatch.cxx
-        MVAOutput.cxx
-        ParticleID.cxx
-        T0.cxx
-      LIBRARIES
-        canvas::canvas
-        cetlib_except::cetlib_except
-        ROOT::Core
-        PUBLIC
-           larcoreobj::headers
-           larcorealg::geoVectorUtils
+cet_make_library(LIBRARY_NAME RDTimeStamp INTERFACE
+  SOURCE RDTimeStamp.h
+  LIBRARIES INTERFACE
+  ROOT::Core
 )
 
-build_dictionary(DICTIONARY_LIBRARIES lardataobj_AnalysisBase nusimdata::SimulationBase)
+cet_make_library(SOURCE
+  Calorimetry.cxx
+  CosmicTag.cxx
+  FlashMatch.cxx
+  MVAOutput.cxx
+  ParticleID.cxx
+  T0.cxx
+  LIBRARIES
+  PUBLIC
+  lardataobj::RawData
+  lardataobj::RecoBase
+  larcoreobj::SimpleTypesAndConstants
+  nusimdata::SimulationBase
+  canvas::canvas
+  cetlib_except::cetlib_except
+)
+
+build_dictionary(DICTIONARY_LIBRARIES
+  lardataobj::AnalysisBase
+  canvas::canvas
+)
 
 install_headers()
 install_source()

@@ -1,2 +1,2 @@
-install_headers(EXTRAS BitMask.tcc FlagSet.tcc)
+install_headers()
 install_source()
