@@ -125,7 +125,6 @@ namespace recob {
 
     private:
       raw::ChannelID_t    fChannel;   ///< ID of the associated channel.
-      geo::View_t         fView;      ///< View corresponding to the plane of this wire.
       RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
 
 
@@ -148,8 +147,7 @@ namespace recob {
        */
       OpWaveform(
         RegionsOfInterest_t const& sigROIlist,
-        raw::ChannelID_t channel,
-        geo::View_t view
+        raw::ChannelID_t channel
         );
 
       /**
@@ -177,8 +175,7 @@ namespace recob {
        */
       OpWaveform(
         RegionsOfInterest_t&& sigROIlist,
-        raw::ChannelID_t channel,
-        geo::View_t view
+        raw::ChannelID_t channel
         );
       // --- END -- Constructors -----------------------------------------------
 
@@ -195,9 +192,6 @@ namespace recob {
 
       /// Returns the number of time ticks, or samples, in the channel
       std::size_t                NSignal()    const;
-
-      /// Returns the view the channel belongs to
-      geo::View_t                View()       const;
 
       /// Returns the ID of the channel (or InvalidChannelID)
       raw::ChannelID_t           Channel()    const;
@@ -227,7 +221,6 @@ namespace recob {
 inline const recob::OpWaveform::RegionsOfInterest_t&
                                   recob::OpWaveform::SignalROI()  const { return fSignalROI;        }
 inline std::size_t                recob::OpWaveform::NSignal()    const { return fSignalROI.size(); }
-inline geo::View_t                recob::OpWaveform::View()       const { return fView;             }
 inline raw::ChannelID_t           recob::OpWaveform::Channel()    const { return fChannel;          }
 inline bool                       recob::OpWaveform::operator< (const OpWaveform& than) const
   { return Channel() < than.Channel(); }

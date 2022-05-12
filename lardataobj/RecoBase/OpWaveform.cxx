@@ -16,29 +16,24 @@ namespace recob{
   //----------------------------------------------------------------------
   OpWaveform::OpWaveform()
     : fChannel(raw::InvalidChannelID)
-    , fView(geo::kUnknown)
     , fSignalROI()
     {}
 
   //----------------------------------------------------------------------
   OpWaveform::OpWaveform(
     RegionsOfInterest_t const& sigROIlist,
-    raw::ChannelID_t channel,
-    geo::View_t view
+    raw::ChannelID_t channel
     )
     : fChannel(channel)
-    , fView(view)
     , fSignalROI(sigROIlist)
     {}
 
   //----------------------------------------------------------------------
   OpWaveform::OpWaveform(
     RegionsOfInterest_t&& sigROIlist,
-    raw::ChannelID_t channel,
-    geo::View_t view
+    raw::ChannelID_t channel
     )
     : fChannel(channel)
-    , fView(view)
     , fSignalROI(std::move(sigROIlist))
     {}
 
