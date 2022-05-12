@@ -18,8 +18,8 @@
  *
  * ****************************************************************************/
 
-#ifndef LARDATAOBJ_RECOBASE_WIRE_H
-#define LARDATAOBJ_RECOBASE_WIRE_H
+#ifndef LARDATAOBJ_RECOBASE_OPWAVEFORM_H
+#define LARDATAOBJ_RECOBASE_OPWAVEFORM_H
 
 
 // LArSoft libraries
@@ -228,6 +228,6 @@ inline bool                       recob::OpWaveform::operator< (const OpWaveform
 //------------------------------------------------------------------------------
 
 
-#endif // LARDATAOBJ_RECOBASE_WIRE_H
+#endif // LARDATAOBJ_RECOBASE_OPWAVEFORM_H
 
 ////////////////////////////////////////////////////////////////////////
