@@ -24,6 +24,7 @@
 
 // LArSoft libraries
 #include "lardataobj/Utilities/sparse_vector.h"
+#include "lardataobj/RawData/RDTimeStamp.h"
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 
@@ -115,6 +116,7 @@ namespace recob {
    * 
    * In both cases, please read the documentation of `recob::OpWaveform` constructors.
    */
+
   class OpWaveform {
     public:
       /// a region of interest is a pair (TDC offset, readings)
@@ -124,9 +126,9 @@ namespace recob {
       OpWaveform();
 
     private:
+      raw::RDTimeStamp    fTimeStamp; ///< Time stamp
       raw::ChannelID_t    fChannel;   ///< ID of the associated channel.
       RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
-
 
       //friend class OpWaveformCreator; // helper to create wires in art
 
@@ -146,8 +148,9 @@ namespace recob {
        * For more details, see the other constructor documentation.
        */
       OpWaveform(
-        RegionsOfInterest_t const& sigROIlist,
-        raw::ChannelID_t channel
+        raw::RDTimeStamp time,
+        raw::ChannelID_t channel,
+        RegionsOfInterest_t const& sigROIlist
         );
 
       /**
@@ -174,8 +177,9 @@ namespace recob {
        * `sigROIlist`.
        */
       OpWaveform(
-        RegionsOfInterest_t&& sigROIlist,
-        raw::ChannelID_t channel
+        raw::RDTimeStamp time,
+        raw::ChannelID_t channel,
+        RegionsOfInterest_t&& sigROIlist
         );
       // --- END -- Constructors -----------------------------------------------
 
@@ -195,6 +199,9 @@ namespace recob {
 
       /// Returns the ID of the channel (or InvalidChannelID)
       raw::ChannelID_t           Channel()    const;
+
+      /// Returns the time stamp
+      raw::RDTimeStamp           TimeStamp()  const;
       
       ///@}
       // --- END -- Accessors --------------------------------------------------
@@ -222,6 +229,7 @@ inline const recob::OpWaveform::RegionsOfInterest_t&
                                   recob::OpWaveform::SignalROI()  const { return fSignalROI;        }
 inline std::size_t                recob::OpWaveform::NSignal()    const { return fSignalROI.size(); }
 inline raw::ChannelID_t           recob::OpWaveform::Channel()    const { return fChannel;          }
+inline raw::RDTimeStamp           recob::OpWaveform::TimeStamp()  const { return fTimeStamp;          }
 inline bool                       recob::OpWaveform::operator< (const OpWaveform& than) const
   { return Channel() < than.Channel(); }
 
