@@ -1,22 +1,9 @@
 /** ****************************************************************************
  * @file lardataobj/RecoBase/OpWaveform.h
- * @brief Declaration of basic channel signal object.
- * @author brebel@fnal.gov
+ * @brief Definition of calibrated photon detector waveform.
+ * @author tjyang@fnal.gov
  * @see  lardataobj/RecoBase/OpWaveform.cxx
  */
-
-/*
- * Changes
- * 20190510 Gianluca Petrillo (petrillo@slac.stanford.edu)
- *   updated documentation
- * 20141211 Gianluca Petrillo (petrillo@fnal.gov)
- *   data architecture revision changes:
- *   - fSignalType and SignalType() removed
- *   - fRawDigit and RawDigit() removed
- *   - fChannel and Channel() added
- *   - constructors now take directly a RawDigit, not its art::Ptr
- *
- * ****************************************************************************/
 
 #ifndef LARDATAOBJ_RECOBASE_OPWAVEFORM_H
 #define LARDATAOBJ_RECOBASE_OPWAVEFORM_H
@@ -36,9 +23,8 @@
 namespace recob {
 
   /**
-   * @brief Class holding the regions of interest of signal from a channel.
-   * @note Despite the name, this class is associated to a readout channel, not
-   *       just a wire
+   * @brief Class holding the regions of interest of signal from a photon detector channel.
+   * @note The class is designed based on recob::Wire.
    *
    * The channel content is expected to have been filtered from noise and
    * corrected for electronics response, a process often called in jargon
@@ -46,9 +32,7 @@ namespace recob {
    * 
    * The content is presented as calibrated ADC counts, pedestal removed, as
    * function of time in discrete TDC units. The time is expected to be the same
-   * as for the `raw::RawDigit` that originates it, i.e. starting from
-   * @ref DetectorClocksTPCelectronicsStartTime "TPC electronics start time"
-   * (use `detinfo::DetectorClocks` to discover the exact extent of each tick).
+   * as for the `raw::OpDetWaveform` that originates it.
    * 
    * The content is organized as time intervals where some signal is present
    * ("regions of interest", RoI), outside which we assume no signal.
@@ -70,11 +54,11 @@ namespace recob {
    * information either ignoring the regions of interest, and being potentially
    * flooded by zeroes from the non-signal regions:
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-   * for (float ADCcount: wire.Signal()) ...
+   * for (float ADCcount: opwf.Signal()) ...
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    * or they can analyze region by region:
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-   * for (auto iROI = wire.begin_range(); iROI != wire.end_range(); ++iROI) {
+   * for (auto iROI = opwf.begin_range(); iROI != opwf.end_range(); ++iROI) {
    *   const datarange_t& ROI = *iROI;
    *   const int FirstTick = ROI.begin_index();
    *   const int EndTick = ROI.end_index();
@@ -85,7 +69,7 @@ namespace recob {
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    * An alternative to the first form is:
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-   * for (float ADCcount: wire.SignalROI()) ...
+   * for (float ADCcount: opwf.SignalROI()) ...
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    * which does not create a temporary dense vector, as `Signal()` does instead.
    *
@@ -93,7 +77,7 @@ namespace recob {
    * More examples of the use of `SignalROI()` return value are documented in
    * `lar::sparse_vector`.
    *
-   * Each channel is associated with a `raw::RawDigit` object. These
+   * Each channel is associated with a `raw::OpDetWaveform` object. These
    * associations should be stored together with `recob::OpWaveform` by the producer
    * in a `art::Assns` data product.
    * 
@@ -103,18 +87,11 @@ namespace recob {
    * 
    * LArSoft "protocol" prescribes:
    * 
-   * * creation of an association of each `recob::OpWaveform` with the `raw::RawDigit`
+   * * creation of an association of each `recob::OpWaveform` with the `raw::OpDetWaveform`
    *   it comes from; the association should be created by the same _art_ module
    *   producing the `recob::OpWaveform` collection
-   * * `recob::OpWaveform` time span should be the same as its `raw::RawDigit`
-   * 
-   * Two patterns can be followed for creating a `recob::OpWaveform`:
-   * 
-   * 1. direct construction: see the constructor documentation
-   * 2. with `recob::OpWaveformCreator`, which extracts some relevant information from
-   *    the source `raw::RawDigit` but _does not help with their association_
-   * 
-   * In both cases, please read the documentation of `recob::OpWaveform` constructors.
+   * * `recob::OpWaveform` time span should be the same as its `raw::OpDetWaveform`
+   * Please read the documentation of `recob::OpWaveform` constructors.
    */
 
   class OpWaveform {
@@ -137,9 +114,9 @@ namespace recob {
       // --- BEGIN -- Constructors ---------------------------------------------
       /**
        * @brief Constructor: uses specified signal in regions of interest.
-       * @param sigROIlist signal organized in regions of interest
+       * @param time time stamp of the signal
        * @param channel the ID of the channel
-       * @param view the view the channel belongs to
+       * @param sigROIlist signal organized in regions of interest
        *
        * Signal is copied into the `recob::OpWaveform` object, including the sparse
        * region of interest structure within `sigROIlist`.
@@ -155,9 +132,9 @@ namespace recob {
 
       /**
        * @brief Constructor: uses specified signal in regions of interest.
-       * @param sigROIlist signal organized in regions of interest
+       * @param time time stamp of the signal
        * @param channel the ID of the channel
-       * @param view the view the channel belongs to
+       * @param sigROIlist signal organized in regions of interest
        *
        * The `recob::OpWaveform` object is constructed with the waveform information
        * in `sigROIlist` and assigned the specified `channel` and `view`.

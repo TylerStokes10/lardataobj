@@ -1,7 +1,7 @@
 /** ****************************************************************************
  * @file OpWaveform.cxx
- * @brief Definition of basic channel signal object.
- * @author brebel@fnal.gov
+ * @brief Definition of calibrated photon detector waveform.
+ * @author tjyang@fnal.gov
  * @see  OpWaveform.h
  *
  * ****************************************************************************/
