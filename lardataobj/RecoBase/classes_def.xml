@@ -111,7 +111,8 @@
   <class name="recob::Event" ClassVersion="11">
     <version ClassVersion="11" checksum="4046040025"/>
   </class>
-  <class name="recob::OpWaveform" ClassVersion="11">
+  <class name="recob::OpWaveform" ClassVersion="12">
+   <version ClassVersion="12" checksum="290846489"/>
     <version ClassVersion="11" checksum="352214401"/>
   </class>
   <class name="recob::OpHit" ClassVersion="14">
