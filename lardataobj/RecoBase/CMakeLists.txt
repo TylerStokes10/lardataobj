@@ -37,6 +37,7 @@ cet_make_library(SOURCE
   TrajectoryPointFlags.cxx
   Vertex.cxx
   Wire.cxx
+  OpWaveform.cxx
   LIBRARIES
   PUBLIC
   lardataobj::TrackingTypes
