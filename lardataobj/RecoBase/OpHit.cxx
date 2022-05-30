@@ -34,10 +34,10 @@ namespace recob{
   OpHit::OpHit(int opchannel,
 	       double peaktime,
 	       double peaktimeabs,
-         double starttime,
-         double starttimeabs,
-         double risetime,
-         double risetimeabs,
+	       double starttime,
+	       double starttimeabs,
+	       double risetime,
+	       double risetimeabs,
 	       unsigned short frame,
 	       double width,
 	       double area,
@@ -61,7 +61,7 @@ namespace recob{
 
   }
 
-
+  //----------------------------------------------------------------------
   OpHit::OpHit(int opchannel,
          double peaktime,
          double peaktimeabs,
