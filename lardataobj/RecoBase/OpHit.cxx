@@ -18,9 +18,7 @@ namespace recob{
     , fPeakTime      (0 )
     , fPeakTimeAbs   (0 )
     , fStartTime     (0 )
-    , fStartTimeAbs  (0 )
     , fRiseTime      (0 )
-    , fRiseTimeAbs   (0 )
     , fWidth         (0 )
     , fArea          (0 )
     , fAmplitude     (0.)
@@ -35,9 +33,7 @@ namespace recob{
 	       double peaktime,
 	       double peaktimeabs,
 	       double starttime,
-	       double starttimeabs,
 	       double risetime,
-	       double risetimeabs,
 	       unsigned short frame,
 	       double width,
 	       double area,
@@ -49,9 +45,7 @@ namespace recob{
     , fPeakTime      (peaktime      )
     , fPeakTimeAbs   (peaktimeabs   )
     , fStartTime     (starttime     )
-    , fStartTimeAbs  (starttimeabs  )
     , fRiseTime      (risetime      )
-    , fRiseTimeAbs   (risetimeabs   )
     , fWidth         (width         )
     , fArea          (area          )
     , fAmplitude     (amplitude     )
@@ -73,8 +67,8 @@ namespace recob{
          double fasttototal)
     : OpHit{
         opchannel, peaktime, peaktimeabs,
-        DefaultTime, DefaultTime, DefaultTime, DefaultTime,
-        frame, width, area, amplitude, pe, fasttototal
+        DefaultTime, DefaultTime, frame,
+        width, area, amplitude, pe, fasttototal
       }
     {}
 
