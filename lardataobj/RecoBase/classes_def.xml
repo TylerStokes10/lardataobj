@@ -111,8 +111,12 @@
   <class name="recob::Event" ClassVersion="11">
     <version ClassVersion="11" checksum="4046040025"/>
   </class>
+  <class name="recob::OpWaveform" ClassVersion="12">
+    <version ClassVersion="12" checksum="290846489"/>
+    <version ClassVersion="11" checksum="352214401"/>
+  </class>
   <class name="recob::OpHit" ClassVersion="16">
-   <version ClassVersion="16" checksum="1607873362"/>
+    <version ClassVersion="16" checksum="1607873362"/>
     <version ClassVersion="15" checksum="3210767731"/>
     <version ClassVersion="14" checksum="3730974187"/>
   </class>
@@ -147,6 +151,7 @@
   <class name="art::Ptr<recob::Slice>"/>
   <class name="art::Ptr<recob::Event>"/>
   <class name="art::Ptr<recob::Vertex>"/>
+  <class name="art::Ptr<recob::OpWaveform>"/>
   <class name="art::Ptr<recob::OpHit>"/>
   <class name="art::Ptr<recob::OpFlash>"/>
   <class name="art::PtrVector<recob::Edge>"/>
@@ -162,6 +167,7 @@
   <class name="art::PtrVector<recob::Seed>"/>
   <class name="art::PtrVector<recob::Shower>"/>
   <class name="art::PtrVector<recob::Vertex>"/>
+  <class name="art::PtrVector<recob::OpWaveform>"/>
   <class name="art::PtrVector<recob::OpHit>"/>
   <class name="art::PtrVector<recob::OpFlash>"/>
   <class name="art::PtrVector<recob::TrackFitHitInfo>"/>
@@ -171,6 +177,8 @@
   <class name="std::vector<art::Ptr<recob::Shower>>"/>
   <class name="std::vector<art::Ptr<recob::PFParticle>>"/>
   <class name="std::vector<art::Ptr<recob::Vertex>>"/>
+  <class name="std::vector<art::Ptr<recob::OpWaveform>>"/>
+  <class name="std::vector<art::Ptr<recob::OpHit>>"/>
   <class name="std::vector<art::Ptr<recob::OpFlash>>"/>
   <class name="std::vector< art::PtrVector<recob::Cluster>>"/>
   <class name="std::vector< art::PtrVector<recob::TrackFitHitInfo>>"/>
@@ -189,6 +197,7 @@
   <class name="std::vector<recob::Vertex>"/>
   <class name="std::vector<recob::Slice>"/>
   <class name="std::vector<recob::Event>"/>
+  <class name="std::vector<recob::OpWaveform>"/>
   <class name="std::vector<recob::OpHit>"/>
   <class name="std::vector<recob::OpFlash>"/>
   <class name="std::vector<recob::MCSFitResult>"/>
@@ -210,6 +219,7 @@
   <class name="art::Wrapper< std::vector< recob::Vertex>>"/>
   <class name="art::Wrapper< std::vector< recob::Slice>>"/>
   <class name="art::Wrapper< std::vector< recob::Event>>"/>
+  <class name="art::Wrapper< std::vector< recob::OpWaveform>>"/>
   <class name="art::Wrapper< std::vector< recob::OpHit>>"/>
   <class name="art::Wrapper< std::vector< recob::OpFlash>>"/>
   <class name="art::Wrapper< std::vector< recob::MCSFitResult>>"/>
