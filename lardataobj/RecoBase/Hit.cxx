@@ -115,8 +115,8 @@ namespace recob {
       return a.Channel() < b.Channel();
     if (a.View() != b.View())
       return a.View() < b.View();
-    if (a.StartTick() != b.StartTick())
-      return a.StartTick() < b.StartTick();
+    if (a.PeakTime() != b.PeakTime())
+      return a.PeakTime() < b.PeakTime();
 
     return false; //They are equal
   } // operator< (Hit, Hit)
