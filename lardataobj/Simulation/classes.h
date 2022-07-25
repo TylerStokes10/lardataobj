@@ -15,6 +15,7 @@
 
 // Simulation includes
 #include "lardataobj/Simulation/SimEnergyDeposit.h"
+#include "lardataobj/Simulation/SimEnergyDepositLite.h"
 #include "lardataobj/Simulation/AuxDetHit.h"
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/OpDetBacktrackerRecord.h"
