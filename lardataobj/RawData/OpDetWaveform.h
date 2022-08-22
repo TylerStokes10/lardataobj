@@ -78,7 +78,7 @@ namespace raw {
   {
       // Sort by channel, then time
       if ( lhs.ChannelNumber()  < rhs.ChannelNumber() ) return true;
-      if ( rhs.ChannelNumber()  > rhs.ChannelNumber() ) return false;
+      if ( lhs.ChannelNumber()  > rhs.ChannelNumber() ) return false;
 
       return ( lhs.TimeStamp() < rhs.TimeStamp() );
   }
