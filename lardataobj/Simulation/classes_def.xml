@@ -33,6 +33,11 @@
  </class>
  <class name="std::vector< sim::SimEnergyDeposit>"/>
  <class name="art::Wrapper< std::vector< sim::SimEnergyDeposit>>"/>
+ <class name="sim::SimEnergyDepositLite" ClassVersion="13" >
+  <version ClassVersion="13" checksum="3186052868"/>
+ </class>
+ <class name="std::vector< sim::SimEnergyDepositLite>"/>
+ <class name="art::Wrapper< std::vector< sim::SimEnergyDepositLite>>"/>
  <class name="std::vector< sim::AuxDetHit>"/>
  <class name="art::Wrapper< std::vector< sim::AuxDetHit>>"/>
  <class name="sim::SimPhotonsLite" ClassVersion="10">
@@ -84,6 +89,7 @@
  <class name="art::Assns<sim::SupernovaTruth, simb::MCTruth, void>"/>
  <class name="art::Assns<simb::MCTruth, sim::SupernovaTruth, void>"/>
  <class name="std::vector<sim::SimEnergyDeposit>"/>
+ <class name="std::vector<sim::SimEnergyDepositLite>"/>
  <class name="std::vector<sim::AuxDetHit>"/>
  <class name="std::vector<sim::OnePhoton>"/>
  <class name="std::vector<sim::SimPhotonsLite>"/>
@@ -108,6 +114,7 @@
  <class name="art::Wrapper< std::vector<sim::SimPhotonsLite>>"/>
  <class name="art::Wrapper< std::vector<sim::SimChannel>>"/>
  <class name="art::Wrapper< std::vector<sim::SimEnergyDeposit>>"/>
+ <class name="art::Wrapper< std::vector<sim::SimEnergyDepositLite>>"/>
  <class name="art::Wrapper< std::vector<sim::AuxDetHit>>"/>
  <class name="art::Wrapper< std::vector<sim::BeamGateInfo>>"/>
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>>"/>
