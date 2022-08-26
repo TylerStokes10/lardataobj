@@ -10,6 +10,7 @@
 // LArSoft includes
 // Define the LArSoft standard geometry types and methods.
 #include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
+#include "lardataobj/Simulation/SimEnergyDeposit.h"
 
 // C++ includes
 #include <vector>
@@ -43,6 +44,7 @@ namespace sim
 
 		double Energy() const { return edep; }
 		geo::Point_t Position() const { return { middlePos.X(), middlePos.Y(), middlePos.Z() }; }
+    geo::Point_t MidPoint() const { return Position();} ///< Just an alias for compatibility with SED
 		double Time() const { return middleTime; }
 		int TrackID() const { return trackID; }
 		void setTrackID(int id) { trackID = id; }
@@ -68,6 +70,22 @@ namespace sim
 			if (middlePos.X() > rhs.X()) return false;
 			return (edep > rhs.edep); // sort by _decreasing_ energy
 		}
+
+    // Explicit conversion operator to sim::SimEnergyDeposit
+    // (can be useful in some cases to avoid rewriting code)
+    //
+    // Need to be aware that information is obviously not complete
+    // (e.g. no exact start/end point or time, only middle point or time)
+    operator sim::SimEnergyDeposit() const {
+      return sim::SimEnergyDeposit(0, 0, 0,
+                                  edep,
+                                  middlePos,
+                                  middlePos,
+                                  middleTime,
+                                  middleTime,
+                                  trackID,
+                                  0);
+    }
 
 	private:
 		float        edep; ///< energy deposition (MeV)

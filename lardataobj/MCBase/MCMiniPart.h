@@ -50,20 +50,29 @@ namespace sim
     MCMiniPart(MCMiniPart&&) = default;
     MCMiniPart& operator= (MCMiniPart&&) = default;
 
+    void ScaleStartMom(double factor) { _start_mom *= factor; }
+    void ScaleEndMom(double factor)  { _end_mom *= factor; }
+    void AddDaughter(unsigned int d) {
+      if (!this->HasDaughter(d))
+        _daughters.push_back(d);
+    }
+    bool HasDaughter(unsigned int d) const {
+      return std::find(_daughters.begin(), _daughters.end(), d) != _daughters.end();
+    }
 
     // Getters
-    simb::Origin_t Origin () const { return _origin; }
+    const simb::Origin_t& Origin () const { return _origin; }
     int            PdgCode() const { return _pdgcode; }
     unsigned int   TrackID() const { return _track_id; }
     const std::string&    Process() const { return _process; }
     unsigned int   Mother()  const { return _mother; }
     unsigned int   Ancestor() const { return _ancestor; }
-    TLorentzVector StartVtx() const { return _start_vtx; }
-    TLorentzVector StartMom() const { return _start_mom; }
-    TLorentzVector EndVtx()   const { return _end_vtx; }
-    TLorentzVector EndMom()   const { return _end_mom; }
-    std::vector<std::pair<TLorentzVector,TLorentzVector> > DetPath() const { return _det_path; }
-    std::vector<unsigned int> Daughters() const { return _daughters; }
+    const TLorentzVector& StartVtx() const { return _start_vtx; }
+    const TLorentzVector& StartMom() const { return _start_mom; }
+    const TLorentzVector& EndVtx()   const { return _end_vtx; }
+    const TLorentzVector& EndMom()   const { return _end_mom; }
+    const std::vector<std::pair<TLorentzVector,TLorentzVector> >& DetPath() const { return _det_path; }
+    const std::vector<unsigned int>& Daughters() const { return _daughters; }
 
     // Setters
     void Origin (simb::Origin_t o) { _origin = o; }
