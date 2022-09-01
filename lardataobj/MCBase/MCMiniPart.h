@@ -17,7 +17,7 @@
 // LArSoft
 //#include "lardataobj/MCBase/MCStep.h"
 #include "lardataobj/MCBase/MCLimits.h" // kINVALID_X
-//#include "nusimdata/SimulationBase/MCParticle.h"
+#include "nusimdata/SimulationBase/MCParticle.h"
 #include "nusimdata/SimulationBase/MCTruth.h" // simb::Origin_t
 
 // ROOT libraries
@@ -90,6 +90,32 @@ namespace sim
     void Daughters(const std::vector<unsigned int>& d) { _daughters = d; }
     void Daughters(std::vector<unsigned int>&& d) { _daughters = std::move(d); }
 
+    /// Explicit conversion operator to simb::MCParticle
+    operator simb::MCParticle() const {
+      simb::MCParticle mcpart(_track_id,
+                              _pdgcode,
+                              _process,
+                              _mother);
+      // Also converting back from LArSoft units
+      mcpart.AddTrajectoryPoint(_start_vtx, 1.e-3 * _start_mom);
+      mcpart.AddTrajectoryPoint(_end_vtx, 1.e-3 * _end_mom);
+      for (auto const & d : _daughters) mcpart.AddDaughter(d);
+      return mcpart;
+    }
+
+    /// Explicit constructor from simb::MCParticle
+    MCMiniPart(const simb::MCParticle& p) {
+      Reset();
+      _track_id = (unsigned int) p.TrackId();
+      _pdgcode  = p.PdgCode();
+      _mother   = (unsigned int) p.Mother();
+      _process  = p.Process();
+      _start_vtx = p.Position();
+      _start_mom = 1.e3 * p.Momentum(); // Change units to LArSoft (MeV, cm, us)
+      _end_vtx = p.EndPosition();
+      _end_mom = 1.e3 * p.EndMomentum(); // idem as above
+    }
+
   protected:
     unsigned int   _track_id;
     std::string    _process;
@@ -97,8 +123,8 @@ namespace sim
     unsigned int   _ancestor;
     int            _pdgcode;
     TLorentzVector _start_vtx;
-    TLorentzVector _start_mom;
-    TLorentzVector _end_vtx;
+    TLorentzVector _start_mom; ///< Start momentum in MeV
+    TLorentzVector _end_vtx; ///< End momentum in MeV
     TLorentzVector _end_mom;
     std::vector<std::pair<TLorentzVector,TLorentzVector> > _det_path;
     std::vector<unsigned int> _daughters;

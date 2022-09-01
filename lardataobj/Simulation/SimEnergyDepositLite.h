@@ -49,6 +49,7 @@ namespace sim
 		int TrackID() const { return trackID; }
 		void setTrackID(int id) { trackID = id; }
 		void setEnergy(double e) { edep = e; }
+    void setTime(double t) { middleTime = t; }
 
 		geo::Length_t X() const { return middlePos.X(); }
 		geo::Length_t Y() const { return middlePos.Y(); }
