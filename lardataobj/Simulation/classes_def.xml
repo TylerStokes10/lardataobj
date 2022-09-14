@@ -33,8 +33,8 @@
  </class>
  <class name="std::vector< sim::SimEnergyDeposit>"/>
  <class name="art::Wrapper< std::vector< sim::SimEnergyDeposit>>"/>
- <class name="sim::SimEnergyDepositLite" ClassVersion="13" >
-  <version ClassVersion="13" checksum="3186052868"/>
+ <class name="sim::SimEnergyDepositLite" ClassVersion="10" >
+  <version ClassVersion="10" checksum="3186052868"/>
  </class>
  <class name="std::vector< sim::SimEnergyDepositLite>"/>
  <class name="art::Wrapper< std::vector< sim::SimEnergyDepositLite>>"/>

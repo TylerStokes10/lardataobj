@@ -37,18 +37,7 @@ namespace sim
 
   public:
 
-    /// Default constructor
-    MCMiniPart() {Reset();}
-
-    /// Default destructor
-    //virtual ~MCMiniPart() = default;
-
-    void Reset() { ResetData(); }
-
-    MCMiniPart(MCMiniPart const &) = default; // copy constructor
-    MCMiniPart& operator=( const MCMiniPart &) = default;
-    MCMiniPart(MCMiniPart&&) = default;
-    MCMiniPart& operator= (MCMiniPart&&) = default;
+    MCMiniPart(){};
 
     void ScaleStartMom(double factor) { _start_mom *= factor; }
     void ScaleEndMom(double factor)  { _end_mom *= factor; }
@@ -90,7 +79,6 @@ namespace sim
     void Daughters(const std::vector<unsigned int>& d) { _daughters = d; }
     void Daughters(std::vector<unsigned int>&& d) { _daughters = std::move(d); }
 
-    /// Explicit conversion operator to simb::MCParticle
     operator simb::MCParticle() const {
       simb::MCParticle mcpart(_track_id,
                               _pdgcode,
@@ -103,9 +91,9 @@ namespace sim
       return mcpart;
     }
 
-    /// Explicit constructor from simb::MCParticle
     MCMiniPart(const simb::MCParticle& p) {
-      Reset();
+      _daughters.clear();
+      _det_path.clear();
       _track_id = (unsigned int) p.TrackId();
       _pdgcode  = p.PdgCode();
       _mother   = (unsigned int) p.Mother();
@@ -117,36 +105,18 @@ namespace sim
     }
 
   protected:
-    unsigned int   _track_id;
-    std::string    _process;
-    unsigned int   _mother;
-    unsigned int   _ancestor;
-    int            _pdgcode;
-    TLorentzVector _start_vtx;
-    TLorentzVector _start_mom; ///< Start momentum in MeV
-    TLorentzVector _end_vtx; ///< End momentum in MeV
-    TLorentzVector _end_mom;
+    unsigned int   _track_id{kINVALID_UINT};
+    std::string    _process{};
+    unsigned int   _mother{kINVALID_UINT};
+    unsigned int   _ancestor{kINVALID_UINT};
+    int            _pdgcode{kINVALID_INT};
+    TLorentzVector _start_vtx{TLorentzVector(kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE)};
+    TLorentzVector _start_mom{TLorentzVector(kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE)}; ///< Start momentum in MeV
+    TLorentzVector _end_vtx{TLorentzVector(kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE)};
+    TLorentzVector _end_mom{TLorentzVector(kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE)}; ///< End momentum in MeV
     std::vector<std::pair<TLorentzVector,TLorentzVector> > _det_path;
     std::vector<unsigned int> _daughters;
-    ::simb::Origin_t _origin;
-
-    void ResetData(){
-      _track_id = _mother = _ancestor = kINVALID_UINT;
-      _pdgcode  = kINVALID_INT;
-      _process  = "";
-      _origin   = ::simb::kUnknown;
-
-      TLorentzVector invalid(kINVALID_DOUBLE,
-           kINVALID_DOUBLE,
-           kINVALID_DOUBLE,
-           kINVALID_DOUBLE);
-      _start_vtx = invalid;
-      _start_mom = invalid;
-      _end_vtx = invalid;
-      _end_mom = invalid;
-      _daughters.clear();
-      _det_path.clear();
-    }
+    ::simb::Origin_t _origin{::simb::kUnknown};
   };
 } // namespace sim
 
