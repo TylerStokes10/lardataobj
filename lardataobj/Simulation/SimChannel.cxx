@@ -14,7 +14,6 @@
 
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/sim.h"
-#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
@@ -28,6 +27,7 @@ namespace sim{
     , x           (util::kBogusD)
     , y		  (util::kBogusD)
     , z		  (util::kBogusD)
+    , groupID     (util::kBogusI)
   {}
 
   //-------------------------------------------------
@@ -36,6 +36,7 @@ namespace sim{
   {
 
     trackID = trackID>=0? trackID+offset : trackID-offset;
+    groupID = groupID>=0? groupID+offset : groupID-offset;
 
   }
 
@@ -55,7 +56,8 @@ namespace sim{
                                           TDC_t         tdc,
                                           double        numberElectrons,
                                           double const* xyz,
-                                          double        energy)
+                                          double        energy,
+                                          TrackID_t     groupID)
   {
     // look at the collection to see if the current TDC already
     // exists, if not, add it, if so, just add a new track id to the
@@ -91,7 +93,8 @@ namespace sim{
                            energy,
                            xyz[0],
                            xyz[1],
-                           xyz[2]
+                           xyz[2],
+                           groupID
                            );
       fTDCIDEs.emplace(itr, tdc, std::move(idelist) );
     }
@@ -122,7 +125,8 @@ namespace sim{
                                energy,
                                xyz[0],
                                xyz[1],
-                               xyz[2]
+                               xyz[2],
+                               groupID
                                );
 
     } // if new TDC ... else
@@ -267,7 +271,7 @@ namespace sim{
     // loop over the entries in the map and fill the input vectors
     for (auto const& ide : ides){
       if(ide.trackID == sim::NoParticleId) continue;
-      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons);
+      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons, ide.groupID);
     }
 
     return trackIDEs;
