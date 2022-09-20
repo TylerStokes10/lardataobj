@@ -28,12 +28,12 @@ namespace sim {
     float energyFrac; ///< fraction of hit energy from the particle with this trackID
     float energy;     ///< energy from the particle with this trackID [MeV]
     float numElectrons; ///< number of electrons from the particle detected on the wires
-    int groupID;      ///< Geant4 supplied trackID, including no modification for shower secondaries/tertiaries
+    int g4trackID;      ///< Geant4 supplied trackID, including no modification for shower secondaries/tertiaries
 
     TrackIDE() {}
 
 
-    TrackIDE(int id, float ef, float e, float ne, int gid = util::kBogusI) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne), groupID(gid) {}
+    TrackIDE(int id, float ef, float e, float ne, int gid = util::kBogusI) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne), g4trackID(gid) {}
 
 
   };
@@ -109,7 +109,7 @@ namespace sim {
     , x           (xpos)
     , y           (ypos)
     , z           (zpos)
-    , groupID     (gid)
+    , g4trackID     (gid)
     {}
 
 
@@ -119,7 +119,7 @@ namespace sim {
     float x;            ///< x position of ionization [cm]
     float y;            ///< y position of ionization [cm]
     float z;            ///< z position of ionization [cm]
-    TrackID_t groupID;  ///< Geant4 supplied track ID (remains true trackID even for shower secondaries/tertiaries etc)
+    TrackID_t g4trackID;  ///< Geant4 supplied track ID (remains true trackID even for shower secondaries/tertiaries etc)
   }; // struct IDE
 
 
@@ -189,7 +189,7 @@ namespace sim {
                                 double numberElectrons,
                                 double const* xyz,
                                 double energy,
-                                TrackID_t groupID = util::kBogusI);
+                                TrackID_t g4trackID = util::kBogusI);
 
     /// Returns the readout channel this object describes
     raw::ChannelID_t Channel() const;
