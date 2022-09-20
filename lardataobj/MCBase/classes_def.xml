@@ -30,10 +30,6 @@
  <version ClassVersion="11" checksum="1998549158"/>
  <version ClassVersion="10" checksum="1862388136"/>
 </class>
-<class name="sim::MCMiniPart" ClassVersion="11" >
- <version ClassVersion="11" checksum="3396563188"/>
- <version ClassVersion="10" checksum="924559196"/>
-</class>
 <class name="sim::MCParticleLite" ClassVersion="10" >
  <version ClassVersion="10" checksum="1468541834"/>
 </class>
@@ -58,10 +54,6 @@
 
 <class name="std::vector<sim::MCTrack>"/>
 <class name="art::Wrapper< std::vector<sim::MCTrack>>"/>
-
-<class name="std::vector<sim::MCMiniPart>"/>
-<class name="art::Wrapper< std::vector<sim::MCMiniPart>>"/>
-<class name="art::Ptr<sim::MCMiniPart>" />
 
 <class name="std::vector<sim::MCParticleLite>"/>
 <class name="art::Wrapper< std::vector<sim::MCParticleLite>>"/>
