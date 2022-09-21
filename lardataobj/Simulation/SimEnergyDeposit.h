@@ -71,7 +71,7 @@ namespace sim
                double t1 = 0.,
                int id = 0,
                int pdg = 0,
-               int g4trackID = 0)
+               int origTrackID = 0)
       : numPhotons(np)
 //      , numFPhotons(nfp)
 //      , numSPhotons(nsp)
@@ -84,7 +84,7 @@ namespace sim
       , endTime(t1)
       , trackID(id)
       , pdgCode(pdg)
-      , g4trackID(g4trackID)
+      , origTrackID(origTrackID)
     {
     }
 
@@ -103,7 +103,7 @@ namespace sim
     geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
     double Time() const { return (startTime+endTime)/2.; }
     int TrackID() const { return trackID; }
-    int G4TrackID() const { return g4trackID; }
+    int OrigTrackID() const { return origTrackID; }
     void setTrackID(int id) { trackID = id; }
     int PdgCode() const { return pdgCode; }
 
@@ -197,7 +197,7 @@ namespace sim
     double        endTime;      ///< (ns)
     int           trackID;      ///< simulation track id
     int           pdgCode;      ///< pdg code of particle to avoid lookup by particle type later
-    int           g4trackID;      ///< complementary simulation track id, kept true to G4 even for shower secondaries/tertiaries etc.
+    int           origTrackID;      ///< complementary simulation track id, kept true to G4 even for shower secondaries/tertiaries etc.
   };
   /*
   // Class utility functions.

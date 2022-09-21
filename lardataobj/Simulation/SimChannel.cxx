@@ -27,7 +27,7 @@ namespace sim{
     , x           (util::kBogusD)
     , y		  (util::kBogusD)
     , z		  (util::kBogusD)
-    , g4trackID     (util::kBogusI)
+    , origTrackID     (util::kBogusI)
   {}
 
   //-------------------------------------------------
@@ -36,7 +36,7 @@ namespace sim{
   {
 
     trackID = trackID>=0? trackID+offset : trackID-offset;
-    g4trackID = g4trackID>=0? g4trackID+offset : g4trackID-offset;
+    origTrackID = origTrackID>=0? origTrackID+offset : origTrackID-offset;
 
   }
 
@@ -57,7 +57,7 @@ namespace sim{
                                           double        numberElectrons,
                                           double const* xyz,
                                           double        energy,
-                                          TrackID_t     g4trackID)
+                                          TrackID_t     origTrackID)
   {
     // look at the collection to see if the current TDC already
     // exists, if not, add it, if so, just add a new track id to the
@@ -94,7 +94,7 @@ namespace sim{
                            xyz[0],
                            xyz[1],
                            xyz[2],
-                           g4trackID
+                           origTrackID
                            );
       fTDCIDEs.emplace(itr, tdc, std::move(idelist) );
     }
@@ -104,7 +104,7 @@ namespace sim{
       // to the entry with the same G4 track id
       for(auto& ide : itr->second){
 
-        if (ide.g4trackID != g4trackID) continue;
+        if (ide.origTrackID != origTrackID) continue;
 
         // make a weighted average for the location information
         double weight    = ide.numElectrons + numberElectrons;
@@ -126,7 +126,7 @@ namespace sim{
                                xyz[0],
                                xyz[1],
                                xyz[2],
-                               g4trackID
+                               origTrackID
                                );
 
     } // if new TDC ... else
@@ -271,7 +271,7 @@ namespace sim{
     // loop over the entries in the map and fill the input vectors
     for (auto const& ide : ides){
       if(ide.trackID == sim::NoParticleId) continue;
-      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons, ide.g4trackID);
+      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons, ide.origTrackID);
     }
 
     return trackIDEs;
