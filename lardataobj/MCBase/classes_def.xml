@@ -30,6 +30,9 @@
  <version ClassVersion="11" checksum="1998549158"/>
  <version ClassVersion="10" checksum="1862388136"/>
 </class>
+<class name="sim::MCParticleLite" ClassVersion="10" >
+ <version ClassVersion="10" checksum="1468541834"/>
+</class>
 
 <class name="std::vector<sim::MCHit>"/>
 <class name="art::Wrapper< std::vector<sim::MCHit>>"/>
@@ -52,20 +55,23 @@
 <class name="std::vector<sim::MCTrack>"/>
 <class name="art::Wrapper< std::vector<sim::MCTrack>>"/>
 
+<class name="std::vector<sim::MCParticleLite>"/>
+<class name="art::Wrapper< std::vector<sim::MCParticleLite>>"/>
+<class name="art::Ptr<sim::MCParticleLite>" />
 
-<ioread 
-  version="[10]" 
-  sourceClass="sim::MCHit" 
-  source="std::vector<double> fPartVertex" 
-  targetClass="sim::MCHit" 
-  target="fPartVertex" 
+<ioread
+  version="[10]"
+  sourceClass="sim::MCHit"
+  source="std::vector<double> fPartVertex"
+  targetClass="sim::MCHit"
+  target="fPartVertex"
   include="vector;lardataobj/MCBase/MCHit.h">
   <![CDATA[
     fPartVertex[0] = (onfile.fPartVertex.size()> 0 ? onfile.fPartVertex[0] : 0.);
     fPartVertex[1] = (onfile.fPartVertex.size()> 1 ? onfile.fPartVertex[1] : 0.);
     fPartVertex[2] = (onfile.fPartVertex.size()> 2 ? onfile.fPartVertex[2] : 0.);
   ]]>
-</ioread> 
+</ioread>
 
 
 </lcgdict>

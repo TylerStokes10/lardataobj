@@ -14,7 +14,6 @@
 
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/sim.h"
-#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
@@ -28,6 +27,7 @@ namespace sim{
     , x           (util::kBogusD)
     , y		  (util::kBogusD)
     , z		  (util::kBogusD)
+    , origTrackID     (util::kBogusI)
   {}
 
   //-------------------------------------------------
@@ -36,6 +36,7 @@ namespace sim{
   {
 
     trackID = trackID>=0? trackID+offset : trackID-offset;
+    origTrackID = origTrackID>=0? origTrackID+offset : origTrackID-offset;
 
   }
 
@@ -55,7 +56,8 @@ namespace sim{
                                           TDC_t         tdc,
                                           double        numberElectrons,
                                           double const* xyz,
-                                          double        energy)
+                                          double        energy,
+                                          TrackID_t     origTrackID)
   {
     // look at the collection to see if the current TDC already
     // exists, if not, add it, if so, just add a new track id to the
@@ -91,17 +93,18 @@ namespace sim{
                            energy,
                            xyz[0],
                            xyz[1],
-                           xyz[2]
+                           xyz[2],
+                           origTrackID
                            );
       fTDCIDEs.emplace(itr, tdc, std::move(idelist) );
     }
     else { // we have that TDC already; itr points to it
 
       // loop over the IDE vector for this tdc and add the electrons
-      // to the entry with the same track id
+      // to the entry with the same G4 track id
       for(auto& ide : itr->second){
 
-        if (ide.trackID != trackID ) continue;
+        if (ide.origTrackID != origTrackID) continue;
 
         // make a weighted average for the location information
         double weight    = ide.numElectrons + numberElectrons;
@@ -122,7 +125,8 @@ namespace sim{
                                energy,
                                xyz[0],
                                xyz[1],
-                               xyz[2]
+                               xyz[2],
+                               origTrackID
                                );
 
     } // if new TDC ... else
@@ -267,7 +271,7 @@ namespace sim{
     // loop over the entries in the map and fill the input vectors
     for (auto const& ide : ides){
       if(ide.trackID == sim::NoParticleId) continue;
-      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons);
+      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons, ide.origTrackID);
     }
 
     return trackIDEs;

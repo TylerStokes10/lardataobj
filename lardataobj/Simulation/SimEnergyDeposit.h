@@ -19,7 +19,7 @@ namespace sim
 {
   /**
    * @brief Energy deposition in the active material.
-   * 
+   *
    * The detector simulation (presently LArG4, which invokes Geant4)
    * propagates particles through the detector in intervals of "steps".
    * In Geant4, a step is normally defined by the smallest of the distance
@@ -51,26 +51,27 @@ namespace sim
     // construct a SimEnergyDeposit might be:
     //   sim::SimEnergyDeposit sed(numPhotons,
     //                             numElectrons,
-    //   		           stepEnergy,
-    //			           { startX, startY, startZ },
-    //			           { endX,   endY,   endZ   },
-    //			           startTime,
+    //                             stepEnergy,
+    //                             { startX, startY, startZ },
+    //                             { endX,   endY,   endZ   },
+    //                             startTime,
     //                             endTime,
-    //			           trackID,
+    //                             trackID,
     //                             pdgCode);
 
     SimEnergyDeposit(int np = 0,
 //             int nfp = 0,
 //             int nsp = 0,
-		     int ne = 0,
-		     double sy = 0,
-		     double e = 0.,
-		     geo::Point_t start = {0.,0.,0.},
-		     geo::Point_t end = {0.,0.,0.},
-		     double t0 = 0.,
-		     double t1 = 0.,
-		     int id = 0,
-		     int pdg = 0)
+               int ne = 0,
+               double sy = 0,
+               double e = 0.,
+               geo::Point_t start = {0.,0.,0.},
+               geo::Point_t end = {0.,0.,0.},
+               double t0 = 0.,
+               double t1 = 0.,
+               int id = 0,
+               int pdg = 0,
+               int origTrackID = 0)
       : numPhotons(np)
 //      , numFPhotons(nfp)
 //      , numSPhotons(nsp)
@@ -83,6 +84,7 @@ namespace sim
       , endTime(t1)
       , trackID(id)
       , pdgCode(pdg)
+      , origTrackID(origTrackID)
     {
     }
 
@@ -101,6 +103,7 @@ namespace sim
     geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
     double Time() const { return (startTime+endTime)/2.; }
     int TrackID() const { return trackID; }
+    int OrigTrackID() const { return origTrackID; }
     void setTrackID(int id) { trackID = id; }
     int PdgCode() const { return pdgCode; }
 
@@ -120,10 +123,10 @@ namespace sim
     // Step mid-point.
     geo::Point_t MidPoint() const {
       return {
-	  ( startPos.X() + endPos.X() )/2.
-	, ( startPos.Y() + endPos.Y() )/2.
-	, ( startPos.Z() + endPos.Z() )/2.
-	    };
+        ( startPos.X() + endPos.X() )/2.
+      , ( startPos.Y() + endPos.Y() )/2.
+      , ( startPos.Z() + endPos.Z() )/2.
+      };
     }
     geo::Length_t MidPointX() const { return ( startPos.X() + endPos.X() )/2.; }
     geo::Length_t MidPointY() const { return ( startPos.Y() + endPos.Y() )/2.; }
@@ -151,11 +154,11 @@ namespace sim
     bool operator<(const SimEnergyDeposit& rhs) const
     {
       return trackID < rhs.trackID
-	&& startTime < rhs.startTime
-	&& startPos.Z() < rhs.startPos.Z()
-	&& startPos.Y() < rhs.startPos.Y()
-	&& startPos.X() < rhs.startPos.X()
-	&& edep > rhs.edep; // sort by _decreasing_ energy
+      && startTime < rhs.startTime
+      && startPos.Z() < rhs.startPos.Z()
+      && startPos.Y() < rhs.startPos.Y()
+      && startPos.X() < rhs.startPos.X()
+      && edep > rhs.edep; // sort by _decreasing_ energy
     }
 
   private:
@@ -194,6 +197,7 @@ namespace sim
     double        endTime;      ///< (ns)
     int           trackID;      ///< simulation track id
     int           pdgCode;      ///< pdg code of particle to avoid lookup by particle type later
+    int           origTrackID;      ///< complementary simulation track id, kept true to G4 even for shower secondaries/tertiaries etc.
   };
   /*
   // Class utility functions.

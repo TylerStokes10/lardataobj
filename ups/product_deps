@@ -173,7 +173,8 @@ defaultqual	e20
 #     Wirecell data.
 #
 ####################################
-fcldir	product_dir	job
+fcldir  product_dir    job
+fwdir   product_dir    compatibility
 ####################################
 
 ####################################

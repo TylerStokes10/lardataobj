@@ -13,6 +13,7 @@
 
 // LArSoftObj libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
+#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::kBogusI
 
 // C/C++ standard libraries
 #include <string>
@@ -27,11 +28,12 @@ namespace sim {
     float energyFrac; ///< fraction of hit energy from the particle with this trackID
     float energy;     ///< energy from the particle with this trackID [MeV]
     float numElectrons; ///< number of electrons from the particle detected on the wires
+    int origTrackID;      ///< Geant4 supplied trackID, including no modification for shower secondaries/tertiaries
 
     TrackIDE() {}
 
 
-    TrackIDE(int id, float ef, float e, float ne ) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne) {}
+    TrackIDE(int id, float ef, float e, float ne, int gid = util::kBogusI) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne), origTrackID(gid) {}
 
 
   };
@@ -99,13 +101,15 @@ namespace sim {
         float e,
         float xpos,
         float ypos,
-        float zpos)
+        float zpos,
+        TrackID_t gid = util::kBogusI)
     : trackID     (tid)
     , numElectrons(nel)
     , energy      (e)
     , x           (xpos)
     , y           (ypos)
     , z           (zpos)
+    , origTrackID     (gid)
     {}
 
 
@@ -115,6 +119,7 @@ namespace sim {
     float x;            ///< x position of ionization [cm]
     float y;            ///< y position of ionization [cm]
     float z;            ///< z position of ionization [cm]
+    TrackID_t origTrackID;  ///< Geant4 supplied track ID (remains true trackID even for shower secondaries/tertiaries etc)
   }; // struct IDE
 
 
@@ -183,7 +188,8 @@ namespace sim {
                                 TDC_t tdc,
                                 double numberElectrons,
                                 double const* xyz,
-                                double energy);
+                                double energy,
+                                TrackID_t origTrackID = util::kBogusI);
 
     /// Returns the readout channel this object describes
     raw::ChannelID_t Channel() const;

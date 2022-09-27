@@ -6,3 +6,4 @@
 #include "lardataobj/MCBase/MCHitCollection.h"
 #include "lardataobj/MCBase/MCShower.h"
 #include "lardataobj/MCBase/MCTrack.h"
+#include "lardataobj/MCBase/MCParticleLite.h"

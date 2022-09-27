@@ -26,8 +26,11 @@ cet_make_library(SOURCE
   messagefacility::MF_MessageLogger
 )
 
+add_subdirectory(Compatibility)
+
 build_dictionary(DICTIONARY_LIBRARIES
   lardataobj::Simulation
+  lardataobj::Simulation_Compatibility
   lardataobj::GeneratedParticleInfo
   canvas::canvas
 )
