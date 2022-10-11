@@ -4,7 +4,7 @@
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 25, 2017
  * @see    FlagSet.h
- * 
+ *
  */
 
 #ifndef LARDATAOBJ_UTILITIES_FLAGSET_TCC

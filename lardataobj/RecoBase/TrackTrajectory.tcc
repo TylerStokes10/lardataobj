@@ -3,9 +3,9 @@
  * @brief  Template implementation for TrackTrajectory.h
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 3, 2016
- * 
+ *
  * This file is directly included in `Trajectory.h`.
- * 
+ *
  */
 
 #ifndef LARDATAOBJ_RECOBASE_TRACKTRAJECTORY_TCC
@@ -30,7 +30,7 @@ void recob::TrackTrajectory::Dump(Stream&& out,
 {
   /*
    * This implementation follows this table:
-   * 
+   *
    * * level `0`: start position, direction, momentum modulus and number of
    *     points
    * * level `1`: also end position, direction and momentum modulus

@@ -3,9 +3,9 @@
  * @brief  Template implementation for Trajectory.h
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 3, 2016
- * 
+ *
  * This file is directly included in `Trajectory.h`.
- * 
+ *
  */
 
 #ifndef LARDATAOBJ_RECOBASE_TRAJECTORY_TCC
@@ -31,8 +31,8 @@ void recob::Trajectory::Dump(Stream&& out,
 {
   /*
    * This implementation follows this table:
-   * 
-   * 
+   *
+   *
    * * level `0`: start position, direction, momentum modulus and number of
    *     points
    * * level `1`: also end position, direction and momentum modulus
@@ -41,7 +41,7 @@ void recob::Trajectory::Dump(Stream&& out,
    * * level `4`: also 9 intermediate trajectory points
    * * level `5`: also 10 more intermediate trajectory points (19 total)
    * * level `6`: all trajectory points
-   * 
+   *
    */
 
   if (NPoints() < 2) {

@@ -27,11 +27,11 @@ namespace recob {
    * The channel content is expected to have been filtered from noise and
    * corrected for electronics response, a process often called in jargon
    * "deconvolution".
-   * 
+   *
    * The content is presented as calibrated ADC counts, pedestal removed, as
    * function of time in discrete TDC units. The time is expected to be the same
    * as for the `raw::OpDetWaveform` that originates it.
-   * 
+   *
    * The content is organized as time intervals where some signal is present
    * ("regions of interest", RoI), outside which we assume no signal.
    * By principle, the definition of the regions of interest is a negative one:
@@ -78,13 +78,13 @@ namespace recob {
    * Each channel is associated with a `raw::OpDetWaveform` object. These
    * associations should be stored together with `recob::OpWaveform` by the producer
    * in a `art::Assns` data product.
-   * 
-   * 
+   *
+   *
    * Creating `recob::OpWaveform` objects
    * ===============================
-   * 
+   *
    * LArSoft "protocol" prescribes:
-   * 
+   *
    * * creation of an association of each `recob::OpWaveform` with the `raw::OpDetWaveform`
    *   it comes from; the association should be created by the same _art_ module
    *   producing the `recob::OpWaveform` collection
@@ -118,7 +118,7 @@ namespace recob {
        * Signal is copied into the `recob::OpWaveform` object, including the sparse
        * region of interest structure within `sigROIlist`.
        * If possible, use the other constructor that moves the data instead.
-       * 
+       *
        * For more details, see the other constructor documentation.
        */
     OpWaveform(raw::RDTimeStamp time,
@@ -133,7 +133,7 @@ namespace recob {
        *
        * The `recob::OpWaveform` object is constructed with the waveform information
        * in `sigROIlist` and assigned the specified `channel` and `view`.
-       * 
+       *
        * The signal is stored in a sparse vector, each entry corresponding to a
        * tick in the calibrated waveform. The tick range of the sparse vector
        * reflects the one in the wire, i.e. the first sample in `sigROIlist`
@@ -142,7 +142,7 @@ namespace recob {
        * also learned from the (nominal) size of `sigROIlist` (see also
        * `lar::sparse_vector::resize()`), which can and should extend beyond
        * the last region of interest.
-       * 
+       *
        * This constructor moves the signal information is moved `sigROIlist`,
        * that becomes invalid.
        * This also preserves the sparse region of interest structure within

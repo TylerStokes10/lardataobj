@@ -40,13 +40,13 @@ namespace recob {
    * The channel content is expected to have been filtered from noise and
    * corrected for electronics response, a process often called in jargon
    * "deconvolution".
-   * 
+   *
    * The content is presented as calibrated ADC counts, pedestal removed, as
    * function of time in discrete TDC units. The time is expected to be the same
    * as for the `raw::RawDigit` that originates it, i.e. starting from
    * @ref DetectorClocksTPCelectronicsStartTime "TPC electronics start time"
    * (use `detinfo::DetectorClocks` to discover the exact extent of each tick).
-   * 
+   *
    * The content is organized as time intervals where some signal is present
    * ("regions of interest", RoI), outside which we assume no signal.
    * By principle, the definition of the regions of interest is a negative one:
@@ -93,24 +93,24 @@ namespace recob {
    * Each channel is associated with a `raw::RawDigit` object. These
    * associations should be stored together with `recob::Wire` by the producer
    * in a `art::Assns` data product.
-   * 
-   * 
+   *
+   *
    * Creating `recob::Wire` objects
    * ===============================
-   * 
+   *
    * LArSoft "protocol" prescribes:
-   * 
+   *
    * * creation of an association of each `recob::Wire` with the `raw::RawDigit`
    *   it comes from; the association should be created by the same _art_ module
    *   producing the `recob::Wire` collection
    * * `recob::Wire` time span should be the same as its `raw::RawDigit`
-   * 
+   *
    * Two patterns can be followed for creating a `recob::Wire`:
-   * 
+   *
    * 1. direct construction: see the constructor documentation
    * 2. with `recob::WireCreator`, which extracts some relevant information from
    *    the source `raw::RawDigit` but _does not help with their association_
-   * 
+   *
    * In both cases, please read the documentation of `recob::Wire` constructors.
    */
   class Wire {
@@ -139,7 +139,7 @@ namespace recob {
        * Signal is copied into the `recob::Wire` object, including the sparse
        * region of interest structure within `sigROIlist`.
        * If possible, use the other constructor that moves the data instead.
-       * 
+       *
        * For more details, see the other constructor documentation.
        */
     Wire(RegionsOfInterest_t const& sigROIlist, raw::ChannelID_t channel, geo::View_t view);
@@ -152,7 +152,7 @@ namespace recob {
        *
        * The `recob::Wire` object is constructed with the waveform information
        * in `sigROIlist` and assigned the specified `channel` and `view`.
-       * 
+       *
        * The signal is stored in a sparse vector, each entry corresponding to a
        * tick in the calibrated waveform. The tick range of the sparse vector
        * reflects the one in the wire, i.e. the first sample in `sigROIlist`
@@ -161,7 +161,7 @@ namespace recob {
        * also learned from the (nominal) size of `sigROIlist` (see also
        * `lar::sparse_vector::resize()`), which can and should extend beyond
        * the last region of interest.
-       * 
+       *
        * This constructor moves the signal information is moved `sigROIlist`,
        * that becomes invalid.
        * This also preserves the sparse region of interest structure within

@@ -64,7 +64,7 @@ struct sim::OnePhoton {
 
   /**
    * @brief Where photon enters the optical detector in local coordinates [cm]
-   * 
+   *
    * The coordinates are in the local reference of the sensitive optical
    * detector, in centimeters.
    */

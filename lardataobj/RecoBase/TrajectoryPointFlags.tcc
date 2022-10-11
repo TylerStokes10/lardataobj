@@ -25,10 +25,10 @@ void recob::TrajectoryPointFlags::dump(Stream&& out,
   /*
    * Information printed out (`verbosity` argument)
    * -----------------------------------------------
-   * 
+   *
    * * level `0`: mask of the flags, and index
    * * level `1`: name of the flags set, and index
-   * 
+   *
    */
 
   //----------------------------------------------------------------------------

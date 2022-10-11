@@ -4,7 +4,7 @@
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 25, 2017
  * @see    lardataobj/Utilities/BitMask.h
- * 
+ *
  */
 
 #ifndef LARDATAOBJ_UTILITIES_BITMASK_TCC
