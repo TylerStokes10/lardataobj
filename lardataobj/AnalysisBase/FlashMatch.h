@@ -13,37 +13,43 @@
 
 namespace anab {
 
-  class FlashMatch{
+  class FlashMatch {
   public:
-
     FlashMatch();
 
     double fChi2;
-    int    fFlashID;
-    int    fSubjectID;
-    bool   fInBeam;
+    int fFlashID;
+    int fSubjectID;
+    bool fInBeam;
 
   public:
-
     FlashMatch(double Chi2, int FlashID, int SubjectID, bool InBeam);
 
-    friend std::ostream& operator << (std::ostream &o, FlashMatch const& a);
+    friend std::ostream& operator<<(std::ostream& o, FlashMatch const& a);
 
-    const double& Chi2()        const;
-    const int&    FlashID()     const;
-    const int&    SubjectID()   const;
-    const bool&   InBeam()      const;
-
+    const double& Chi2() const;
+    const int& FlashID() const;
+    const int& SubjectID() const;
+    const bool& InBeam() const;
   };
 
 }
 
-
-inline const double& anab::FlashMatch::Chi2()        const { return fChi2;        }
-inline const int&    anab::FlashMatch::FlashID()     const { return fFlashID;     }
-inline const int&    anab::FlashMatch::SubjectID()     const { return fSubjectID;     }
-inline const bool&   anab::FlashMatch::InBeam()     const { return fInBeam;     }
-
-
+inline const double& anab::FlashMatch::Chi2() const
+{
+  return fChi2;
+}
+inline const int& anab::FlashMatch::FlashID() const
+{
+  return fFlashID;
+}
+inline const int& anab::FlashMatch::SubjectID() const
+{
+  return fSubjectID;
+}
+inline const bool& anab::FlashMatch::InBeam() const
+{
+  return fInBeam;
+}
 
 #endif //ANAB_FLASHMATCH

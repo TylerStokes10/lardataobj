@@ -12,7 +12,6 @@
  *
  */
 
-
 // Boost libraries
 /*
  * Boost: define the name of the module;
@@ -23,23 +22,21 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( tracktrajectory_test )
+#define BOOST_TEST_MODULE (tracktrajectory_test)
 #include "boost/test/unit_test.hpp"
 
-
 // LArSoft libraries
-#include "lardataobj/RecoBase/Trajectory.h"
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
+#include "lardataobj/RecoBase/Trajectory.h"
 
 // ROOT libraries (for the legacy interface)
-#include "TVector3.h"
 #include "TMatrixD.h"
+#include "TVector3.h"
 
 // C/C++ standard libraries
 #include <algorithm> // std::equal(), std::accumulate()
-#include <tuple> // std::tie()
 #include <iostream>
-
+#include <tuple> // std::tie()
 
 //------------------------------------------------------------------------------
 //--- Test code
@@ -47,7 +44,7 @@
 struct Expected_t {
 
   recob::Trajectory::Positions_t positions;
-  recob::Trajectory::Momenta_t   momenta;
+  recob::Trajectory::Momenta_t momenta;
   bool hasMomenta;
   double length;
   double theta;
@@ -58,38 +55,39 @@ struct Expected_t {
 }; // struct Expected_t
 
 template <typename T>
-void CheckValue(T v, T exp, T tol, std::string tag = "") {
+void CheckValue(T v, T exp, T tol, std::string tag = "")
+{
   if (!tag.empty()) BOOST_TEST_MESSAGE(tag);
-  if (std::abs(exp) < (tol / 100.)) BOOST_CHECK_SMALL(v, tol);
-  else                              BOOST_CHECK_CLOSE(v, exp, tol);
+  if (std::abs(exp) < (tol / 100.))
+    BOOST_CHECK_SMALL(v, tol);
+  else
+    BOOST_CHECK_CLOSE(v, exp, tol);
 } // CheckValue()
 
 template <typename VectA, typename VectB>
-void CheckVectorsEqual(VectA const& v, VectB const& exp) {
+void CheckVectorsEqual(VectA const& v, VectB const& exp)
+{
   BOOST_TEST(v.X() == exp.X());
   BOOST_TEST(v.Y() == exp.Y());
   BOOST_TEST(v.Z() == exp.Z());
 } // CheckVectorsEqual()
 
 template <typename VectA, typename VectB>
-void CheckVectorsClose(VectA const& v, VectB const& exp, double tol = 0.01) {
+void CheckVectorsClose(VectA const& v, VectB const& exp, double tol = 0.01)
+{
   CheckValue(v.X(), exp.X(), tol, "  X()");
   CheckValue(v.Y(), exp.Y(), tol, "  Y()");
   CheckValue(v.Z(), exp.Z(), tol, "  Z()");
 } // CheckVectorsClose()
 
-
-recob::Trajectory::Rotation_t makeRotationMatrix(TMatrixD const& Tm) {
+recob::Trajectory::Rotation_t makeRotationMatrix(TMatrixD const& Tm)
+{
   recob::Trajectory::Rotation_t m;
   m.SetRotationMatrix(Tm);
   return m;
 } // makeRotationMatrix()
 
-
-void TestTrajectory(
-  recob::Trajectory const& traj,
-  Expected_t const& expected
-  )
+void TestTrajectory(recob::Trajectory const& traj, Expected_t const& expected)
 {
 
   //----------------------------------------------------------------------------
@@ -127,7 +125,6 @@ void TestTrajectory(
 
   } // for
 
-
   //----------------------------------------------------------------------------
   TVector3 Vstart, Vend;
   std::tie(Vstart, Vend) = traj.Extent<TVector3>();
@@ -138,7 +135,6 @@ void TestTrajectory(
   BOOST_TEST(Vend[1] == expected.positions[NPoints - 1].Y());
   BOOST_TEST(Vend[2] == expected.positions[NPoints - 1].Z());
 
-
   recob::Trajectory::Point_t start, end;
   std::tie(start, end) = traj.Extent(); // assign both start and end
   BOOST_TEST_MESSAGE("Extent() start");
@@ -146,16 +142,12 @@ void TestTrajectory(
   BOOST_TEST_MESSAGE("Extent() end");
   CheckVectorsEqual(end, expected.positions[NPoints - 1]);
 
-
   //----------------------------------------------------------------------------
   BOOST_CHECK_CLOSE(traj.Length(), expected.length, 0.01); // 0.01%
-  if (NPoints >= 2){
-    BOOST_CHECK_CLOSE(traj.Length(1),
-      expected.length - (expected.positions[1] - expected.positions[0]).R(),
-      0.01
-      );
+  if (NPoints >= 2) {
+    BOOST_CHECK_CLOSE(
+      traj.Length(1), expected.length - (expected.positions[1] - expected.positions[0]).R(), 0.01);
   } // if
-
 
   //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("VertexDirection()");
@@ -170,13 +162,11 @@ void TestTrajectory(
   CheckVectorsClose(traj.EndDirection(), expected.momenta[NPoints - 1].Unit());
   BOOST_CHECK_CLOSE(traj.EndDirection().Mag2(), 1.0, 0.01);
 
-
   //----------------------------------------------------------------------------
   BOOST_CHECK_CLOSE(traj.Theta(), expected.theta, 0.01);
   BOOST_CHECK_CLOSE(traj.Phi(), expected.phi, 0.01);
   BOOST_CHECK_CLOSE(traj.ZenithAngle(), expected.zenith, 0.01);
   BOOST_CHECK_CLOSE(traj.AzimuthAngle(), expected.azimuth, 0.01);
-
 
   //----------------------------------------------------------------------------
 
@@ -189,7 +179,6 @@ void TestTrajectory(
   BOOST_TEST_MESSAGE("EndMomentumVector()");
   CheckVectorsClose(traj.EndMomentumVector(), expected.momenta[NPoints - 1]);
 
-
   //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("VertexMomentum()");
   BOOST_CHECK_CLOSE(traj.VertexMomentum(), expected.momenta[0].R(), 0.01);
@@ -198,9 +187,7 @@ void TestTrajectory(
   BOOST_CHECK_CLOSE(traj.StartMomentum(), expected.momenta[0].R(), 0.01);
 
   BOOST_TEST_MESSAGE("EndMomentum()");
-  BOOST_CHECK_CLOSE
-    (traj.EndMomentum(), expected.momenta[NPoints - 1].R(), 0.01);
-
+  BOOST_CHECK_CLOSE(traj.EndMomentum(), expected.momenta[NPoints - 1].R(), 0.01);
 
   //----------------------------------------------------------------------------
   for (size_t i = 0; i < NPoints; ++i) {
@@ -210,7 +197,6 @@ void TestTrajectory(
 
   } // for
 
-
   //----------------------------------------------------------------------------
   for (size_t i = 0; i < NPoints; ++i) {
 
@@ -218,20 +204,17 @@ void TestTrajectory(
     if (traj.HasMomentum())
       CheckVectorsClose(traj.MomentumVectorAtPoint(i), expected.momenta[i]);
     else {
-      CheckVectorsClose
-        (traj.MomentumVectorAtPoint(i), expected.momenta[i].Unit());
+      CheckVectorsClose(traj.MomentumVectorAtPoint(i), expected.momenta[i].Unit());
     }
 
     BOOST_TEST_MESSAGE("MomentumAtPoint() position #" << i);
     if (traj.HasMomentum()) {
-      BOOST_CHECK_CLOSE
-        (traj.MomentumAtPoint(i), expected.momenta[i].R(), 0.01);
+      BOOST_CHECK_CLOSE(traj.MomentumAtPoint(i), expected.momenta[i].R(), 0.01);
     }
     else
       BOOST_CHECK_CLOSE(traj.MomentumAtPoint(i), 1.0, 0.01);
 
   } // for
-
 
   //----------------------------------------------------------------------------
   TVector3 AstartDir, AendDir;
@@ -249,7 +232,6 @@ void TestTrajectory(
   CheckVectorsClose(startDir, expected.momenta[0].Unit());
   BOOST_TEST_MESSAGE("Direction() end");
   CheckVectorsClose(endDir, expected.momenta[NPoints - 1].Unit());
-
 
   //----------------------------------------------------------------------------
 
@@ -290,9 +272,9 @@ void TestTrajectory(
 
 } // TestTrajectory()
 
-
 //------------------------------------------------------------------------------
-void TrajectoryTestDefaultConstructor() {
+void TrajectoryTestDefaultConstructor()
+{
 
   BOOST_TEST_MESSAGE("Testing the default recob::Trajectory constructor");
 
@@ -313,8 +295,8 @@ void TrajectoryTestDefaultConstructor() {
   recob::Trajectory traj;
 
   for (unsigned int v = 0; v <= recob::Trajectory::MaxDumpVerbosity; ++v) {
-    std::cout << "Default-constructed trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Default-constructed trajectory dump with verbosity level " << v << ":"
+              << std::endl;
     traj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -324,9 +306,9 @@ void TrajectoryTestDefaultConstructor() {
 
 } // TrajectoryTestDefaultConstructor()
 
-
 //------------------------------------------------------------------------------
-void TrajectoryTestMainConstructor() {
+void TrajectoryTestMainConstructor()
+{
 
   BOOST_TEST_MESSAGE("Testing the main recob::Trajectory constructor");
 
@@ -338,62 +320,35 @@ void TrajectoryTestMainConstructor() {
   // we describe a trajectory with uniform electric and magnetic fields aligned
   // on z; curvature is 1 on the x/y plane.
   expected.positions = {
-    recob::Trajectory::Point_t(  -1.0,   0.0,  0.0 ),
-    recob::Trajectory::Point_t( -V2_2, +V2_2,  1.0 ),
-    recob::Trajectory::Point_t(   0.0,  +1.0,  2.0 ),
-    recob::Trajectory::Point_t( +V2_2, +V2_2,  3.0 ),
-    recob::Trajectory::Point_t(  +1.0,   0.0,  4.0 ),
-    recob::Trajectory::Point_t( +V2_2, -V2_2,  5.0 ),
-    recob::Trajectory::Point_t(   0.0,  -1.0,  6.0 ),
-    recob::Trajectory::Point_t( -V2_2, -V2_2,  7.0 ),
-    recob::Trajectory::Point_t(  -1.0,   0.0,  8.0 ),
-    recob::Trajectory::Point_t( -V2_2, +V2_2,  9.0 ),
-    recob::Trajectory::Point_t(   0.0,  +1.0, 10.0 ),
-    recob::Trajectory::Point_t( +V2_2, +V2_2, 11.0 ),
-    recob::Trajectory::Point_t(  +1.0,   0.0, 12.0 ),
-    recob::Trajectory::Point_t( +V2_2, -V2_2, 13.0 ),
-    recob::Trajectory::Point_t(   0.0,  -1.0, 14.0 ),
-    recob::Trajectory::Point_t( -V2_2, -V2_2, 15.0 ),
-    recob::Trajectory::Point_t(  -1.0,   0.0, 16.0 ),
-    recob::Trajectory::Point_t( -V2_2, +V2_2, 17.0 ),
-    recob::Trajectory::Point_t(   0.0,  +1.0, 18.0 ),
-    recob::Trajectory::Point_t( +V2_2, +V2_2, 19.0 ),
-    recob::Trajectory::Point_t(  +1.0,   0.0, 20.0 ),
-    recob::Trajectory::Point_t( +V2_2, -V2_2, 21.0 ),
-    recob::Trajectory::Point_t(   0.0,  -1.0, 22.0 ),
-    recob::Trajectory::Point_t( -V2_2, -V2_2, 23.0 ),
-    recob::Trajectory::Point_t(  -1.0,   0.0, 24.0 )
-  };
+    recob::Trajectory::Point_t(-1.0, 0.0, 0.0),  recob::Trajectory::Point_t(-V2_2, +V2_2, 1.0),
+    recob::Trajectory::Point_t(0.0, +1.0, 2.0),  recob::Trajectory::Point_t(+V2_2, +V2_2, 3.0),
+    recob::Trajectory::Point_t(+1.0, 0.0, 4.0),  recob::Trajectory::Point_t(+V2_2, -V2_2, 5.0),
+    recob::Trajectory::Point_t(0.0, -1.0, 6.0),  recob::Trajectory::Point_t(-V2_2, -V2_2, 7.0),
+    recob::Trajectory::Point_t(-1.0, 0.0, 8.0),  recob::Trajectory::Point_t(-V2_2, +V2_2, 9.0),
+    recob::Trajectory::Point_t(0.0, +1.0, 10.0), recob::Trajectory::Point_t(+V2_2, +V2_2, 11.0),
+    recob::Trajectory::Point_t(+1.0, 0.0, 12.0), recob::Trajectory::Point_t(+V2_2, -V2_2, 13.0),
+    recob::Trajectory::Point_t(0.0, -1.0, 14.0), recob::Trajectory::Point_t(-V2_2, -V2_2, 15.0),
+    recob::Trajectory::Point_t(-1.0, 0.0, 16.0), recob::Trajectory::Point_t(-V2_2, +V2_2, 17.0),
+    recob::Trajectory::Point_t(0.0, +1.0, 18.0), recob::Trajectory::Point_t(+V2_2, +V2_2, 19.0),
+    recob::Trajectory::Point_t(+1.0, 0.0, 20.0), recob::Trajectory::Point_t(+V2_2, -V2_2, 21.0),
+    recob::Trajectory::Point_t(0.0, -1.0, 22.0), recob::Trajectory::Point_t(-V2_2, -V2_2, 23.0),
+    recob::Trajectory::Point_t(-1.0, 0.0, 24.0)};
   expected.momenta = {
-    recob::Trajectory::Vector_t(   0.0,  +1.0, 1.0 ),
-    recob::Trajectory::Vector_t( +V2_2, +V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(  +1.0,   0.0, 1.0 ),
-    recob::Trajectory::Vector_t( +V2_2, -V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(   0.0,  -1.0, 1.0 ),
-    recob::Trajectory::Vector_t( -V2_2, -V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(  -1.0,   0.0, 1.0 ),
-    recob::Trajectory::Vector_t( -V2_2, +V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(   0.0,  +1.0, 1.0 ),
-    recob::Trajectory::Vector_t( +V2_2, +V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(  +1.0,   0.0, 1.0 ),
-    recob::Trajectory::Vector_t( +V2_2, -V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(   0.0,  -1.0, 1.0 ),
-    recob::Trajectory::Vector_t( -V2_2, -V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(  -1.0,   0.0, 1.0 ),
-    recob::Trajectory::Vector_t( -V2_2, +V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(   0.0,  +1.0, 1.0 ),
-    recob::Trajectory::Vector_t( +V2_2, +V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(  +1.0,   0.0, 1.0 ),
-    recob::Trajectory::Vector_t( +V2_2, -V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(   0.0,  -1.0, 1.0 ),
-    recob::Trajectory::Vector_t( -V2_2, -V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(  -1.0,   0.0, 1.0 ),
-    recob::Trajectory::Vector_t( -V2_2, +V2_2, 1.0 ),
-    recob::Trajectory::Vector_t(   0.0,  +1.0, 1.0 )
-  };
+    recob::Trajectory::Vector_t(0.0, +1.0, 1.0), recob::Trajectory::Vector_t(+V2_2, +V2_2, 1.0),
+    recob::Trajectory::Vector_t(+1.0, 0.0, 1.0), recob::Trajectory::Vector_t(+V2_2, -V2_2, 1.0),
+    recob::Trajectory::Vector_t(0.0, -1.0, 1.0), recob::Trajectory::Vector_t(-V2_2, -V2_2, 1.0),
+    recob::Trajectory::Vector_t(-1.0, 0.0, 1.0), recob::Trajectory::Vector_t(-V2_2, +V2_2, 1.0),
+    recob::Trajectory::Vector_t(0.0, +1.0, 1.0), recob::Trajectory::Vector_t(+V2_2, +V2_2, 1.0),
+    recob::Trajectory::Vector_t(+1.0, 0.0, 1.0), recob::Trajectory::Vector_t(+V2_2, -V2_2, 1.0),
+    recob::Trajectory::Vector_t(0.0, -1.0, 1.0), recob::Trajectory::Vector_t(-V2_2, -V2_2, 1.0),
+    recob::Trajectory::Vector_t(-1.0, 0.0, 1.0), recob::Trajectory::Vector_t(-V2_2, +V2_2, 1.0),
+    recob::Trajectory::Vector_t(0.0, +1.0, 1.0), recob::Trajectory::Vector_t(+V2_2, +V2_2, 1.0),
+    recob::Trajectory::Vector_t(+1.0, 0.0, 1.0), recob::Trajectory::Vector_t(+V2_2, -V2_2, 1.0),
+    recob::Trajectory::Vector_t(0.0, -1.0, 1.0), recob::Trajectory::Vector_t(-V2_2, -V2_2, 1.0),
+    recob::Trajectory::Vector_t(-1.0, 0.0, 1.0), recob::Trajectory::Vector_t(-V2_2, +V2_2, 1.0),
+    recob::Trajectory::Vector_t(0.0, +1.0, 1.0)};
   expected.hasMomenta = true;
-  expected.length
-    = (expected.positions.size() - 1) * std::sqrt(3.0 - 2.0 * V2_2); //
+  expected.length = (expected.positions.size() - 1) * std::sqrt(3.0 - 2.0 * V2_2); //
   expected.theta = util::pi() / 4.0;
   expected.phi = util::pi() / 2.0;
   expected.zenith = 0.75 * util::pi();
@@ -408,8 +363,7 @@ void TrajectoryTestMainConstructor() {
   recob::Trajectory traj(std::move(positions), std::move(momenta), true);
 
   for (unsigned int v = 0; v <= recob::Trajectory::MaxDumpVerbosity; ++v) {
-    std::cout << "Trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Trajectory dump with verbosity level " << v << ":" << std::endl;
     traj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -422,8 +376,10 @@ void TrajectoryTestMainConstructor() {
   //
 
   // step III.1: amend the expectation for a momentumless track
-  std::transform(expected.momenta.begin(), expected.momenta.end(),
-    expected.momenta.begin(), [](auto const& v){ return v.unit(); });
+  std::transform(expected.momenta.begin(),
+                 expected.momenta.end(),
+                 expected.momenta.begin(),
+                 [](auto const& v) { return v.unit(); });
   expected.hasMomenta = false;
 
   // step III.2: create a track with no momentum information
@@ -432,8 +388,7 @@ void TrajectoryTestMainConstructor() {
   recob::Trajectory mltraj(std::move(positions), std::move(directions), false);
 
   for (unsigned int v = 0; v <= recob::Trajectory::MaxDumpVerbosity; ++v) {
-    std::cout << "Momentumless trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Momentumless trajectory dump with verbosity level " << v << ":" << std::endl;
     mltraj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -442,7 +397,6 @@ void TrajectoryTestMainConstructor() {
   TestTrajectory(mltraj, expected);
 
 } // TrajectoryTestMainConstructor()
-
 
 //------------------------------------------------------------------------------
 //--- registration of tests
@@ -453,11 +407,12 @@ void TrajectoryTestMainConstructor() {
 // number of checks and it will fail if any of them does.
 //
 
-BOOST_AUTO_TEST_CASE(TrajectoryTestDefaultConstructorTestCase) {
+BOOST_AUTO_TEST_CASE(TrajectoryTestDefaultConstructorTestCase)
+{
   TrajectoryTestDefaultConstructor();
 }
 
-BOOST_AUTO_TEST_CASE(TrajectoryTestMainConstructorTestCase) {
+BOOST_AUTO_TEST_CASE(TrajectoryTestMainConstructorTestCase)
+{
   TrajectoryTestMainConstructor();
 }
-

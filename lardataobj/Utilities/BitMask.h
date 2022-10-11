@@ -14,11 +14,10 @@
 #ifndef LARDATAOBJ_UTILITIES_BITMASK_H
 #define LARDATAOBJ_UTILITIES_BITMASK_H
 
-
 // C/C++ standard library
+#include <exception>
 #include <ostream>
 #include <string>
-#include <exception>
 
 namespace util {
 
@@ -77,11 +76,11 @@ namespace util {
       /// Returns a set of bits with only the one at the specified index set.
       template <typename Storage>
       constexpr Storage makeBits(Index_t index)
-        { return Storage(1) << index; }
+      {
+        return Storage(1) << index;
+      }
 
     } // namespace details
-
-
 
     //--------------------------------------------------------------------------
     /// Type identifying a flag. Operations are implemented as free functions.
@@ -93,9 +92,7 @@ namespace util {
       Storage_t bits; ///< The bits representing this flag (only one is set)
 
       /// Constructs from the flag index.
-      constexpr Flag_t(Index_t flagIndex)
-        : bits(details::makeBits<Storage_t>(flagIndex))
-        {}
+      constexpr Flag_t(Index_t flagIndex) : bits(details::makeBits<Storage_t>(flagIndex)) {}
 
       /// Returns the index of the (first) bit set.
       constexpr Index_t index() const;
@@ -113,80 +110,101 @@ namespace util {
       /// @{
       /// @name Comparison operators for flags
 
-      constexpr bool operator== (This_t other) const
-        { return bits == other.bits; }
-      constexpr bool operator!= (This_t other) const
-        { return bits != other.bits; }
-      constexpr bool operator< (This_t other) const
-        { return bits < other.bits; }
-      constexpr bool operator> (This_t other) const
-        { return bits > other.bits; }
-      constexpr bool operator<= (This_t other) const
-        { return bits <= other.bits; }
-      constexpr bool operator>= (This_t other) const
-        { return bits >= other.bits; }
+      constexpr bool operator==(This_t other) const { return bits == other.bits; }
+      constexpr bool operator!=(This_t other) const { return bits != other.bits; }
+      constexpr bool operator<(This_t other) const { return bits < other.bits; }
+      constexpr bool operator>(This_t other) const { return bits > other.bits; }
+      constexpr bool operator<=(This_t other) const { return bits <= other.bits; }
+      constexpr bool operator>=(This_t other) const { return bits >= other.bits; }
 
       /// @}
 
     }; // Flag_t
 
-
     /// @{
     /// @name Comparison operators for flags (based on the index)
     template <typename Storage>
-    constexpr bool operator== (Index_t left, Flag_t<Storage> right)
-      { return left == right.index(); }
+    constexpr bool operator==(Index_t left, Flag_t<Storage> right)
+    {
+      return left == right.index();
+    }
     template <typename Storage>
-    constexpr bool operator== (Flag_t<Storage> left, Index_t right)
-      { return left.index() == right; }
+    constexpr bool operator==(Flag_t<Storage> left, Index_t right)
+    {
+      return left.index() == right;
+    }
 
     template <typename Storage>
-    constexpr bool operator!= (Index_t left, Flag_t<Storage> right)
-      { return left != right.index(); }
+    constexpr bool operator!=(Index_t left, Flag_t<Storage> right)
+    {
+      return left != right.index();
+    }
     template <typename Storage>
-    constexpr bool operator!= (Flag_t<Storage> left, Index_t right)
-      { return left.index() != right; }
+    constexpr bool operator!=(Flag_t<Storage> left, Index_t right)
+    {
+      return left.index() != right;
+    }
 
     template <typename Storage>
-    constexpr bool operator< (Index_t left, Flag_t<Storage> right)
-      { return left < right.index(); }
+    constexpr bool operator<(Index_t left, Flag_t<Storage> right)
+    {
+      return left < right.index();
+    }
     template <typename Storage>
-    constexpr bool operator< (Flag_t<Storage> left, Index_t right)
-      { return left.index() < right; }
+    constexpr bool operator<(Flag_t<Storage> left, Index_t right)
+    {
+      return left.index() < right;
+    }
 
     template <typename Storage>
-    constexpr bool operator> (Index_t left, Flag_t<Storage> right)
-      { return left > right.index(); }
+    constexpr bool operator>(Index_t left, Flag_t<Storage> right)
+    {
+      return left > right.index();
+    }
     template <typename Storage>
-    constexpr bool operator> (Flag_t<Storage> left, Index_t right)
-      { return left.index() > right; }
+    constexpr bool operator>(Flag_t<Storage> left, Index_t right)
+    {
+      return left.index() > right;
+    }
 
     template <typename Storage>
-    constexpr bool operator<= (Index_t left, Flag_t<Storage> right)
-      { return left <= right.index(); }
+    constexpr bool operator<=(Index_t left, Flag_t<Storage> right)
+    {
+      return left <= right.index();
+    }
     template <typename Storage>
-    constexpr bool operator<= (Flag_t<Storage> left, Index_t right)
-      { return left.index() <= right; }
+    constexpr bool operator<=(Flag_t<Storage> left, Index_t right)
+    {
+      return left.index() <= right;
+    }
 
     template <typename Storage>
-    constexpr bool operator>= (Index_t left, Flag_t<Storage> right)
-      { return left >= right.index(); }
+    constexpr bool operator>=(Index_t left, Flag_t<Storage> right)
+    {
+      return left >= right.index();
+    }
     template <typename Storage>
-    constexpr bool operator>= (Flag_t<Storage> left, Index_t right)
-      { return left.index() >= right; }
+    constexpr bool operator>=(Flag_t<Storage> left, Index_t right)
+    {
+      return left.index() >= right;
+    }
 
     /// @}
 
     /// Output of a flag into a stream (prints its index).
     template <typename Storage>
-    std::ostream& operator<< (std::ostream& out, Flag_t<Storage> flag)
-      { out << '[' << flag.index() << ']'; return out; }
+    std::ostream& operator<<(std::ostream& out, Flag_t<Storage> flag)
+    {
+      out << '[' << flag.index() << ']';
+      return out;
+    }
 
     /// Convert a flag into a stream (shows its index).
     template <typename Storage>
     std::string to_string(Flag_t<Storage> const flag)
-      { return std::to_string(flag.index()); }
-
+    {
+      return std::to_string(flag.index());
+    }
 
     //--------------------------------------------------------------------------
     /// Type identifying a set of bits.
@@ -198,27 +216,22 @@ namespace util {
       /// Type of flag matching our storage.
       using Flag_t = util::flags::Flag_t<Storage_t>;
 
-      Storage_t data = { 0 }; ///< The bits representing all set bits
+      Storage_t data = {0}; ///< The bits representing all set bits
 
       /// Default constructor: no bit set.
       constexpr Bits_t() = default;
 
       /// Constructs from a single flag.
-      constexpr Bits_t(Flag_t flag)
-        : data(flag.bits)
-        {}
+      constexpr Bits_t(Flag_t flag) : data(flag.bits) {}
 
       /// Constructs from a set of bits.
-      explicit constexpr Bits_t(Storage_t bits)
-        : data(bits)
-        {}
+      explicit constexpr Bits_t(Storage_t bits) : data(bits) {}
 
       /// @{
       /// @name Bit query operations
 
       /// Returns whether there is no bit set at all.
-      constexpr bool empty() const
-        { return data == Storage_t(0); }
+      constexpr bool empty() const { return data == Storage_t(0); }
 
       /// Returns wether all bits are set.
       constexpr bool all(This_t bits) const;
@@ -234,7 +247,6 @@ namespace util {
 
       /// @}
 
-
       /// @{
       /// @name Bit change operations
 
@@ -248,11 +260,9 @@ namespace util {
       void keepOnly(This_t bits);
 
       /// Unsets all bits.
-      void clear()
-        { data = 0; }
+      void clear() { data = 0; }
 
       /// @}
-
 
       /// @{
       /// @name Bit manipulation operations returning a new object
@@ -271,22 +281,15 @@ namespace util {
 
       /// @}
 
-
       /// @{
       /// @name Comparison operators for bits
 
-      constexpr bool operator== (This_t other) const
-        { return data == other.data; }
-      constexpr bool operator!= (This_t other) const
-        { return data != other.data; }
-      constexpr bool operator< (This_t other) const
-        { return data < other.data; }
-      constexpr bool operator> (This_t other) const
-        { return data > other.data; }
-      constexpr bool operator<= (This_t other) const
-        { return data <= other.data; }
-      constexpr bool operator>= (This_t other) const
-        { return data >= other.data; }
+      constexpr bool operator==(This_t other) const { return data == other.data; }
+      constexpr bool operator!=(This_t other) const { return data != other.data; }
+      constexpr bool operator<(This_t other) const { return data < other.data; }
+      constexpr bool operator>(This_t other) const { return data > other.data; }
+      constexpr bool operator<=(This_t other) const { return data <= other.data; }
+      constexpr bool operator>=(This_t other) const { return data >= other.data; }
 
       /// @}
 
@@ -296,22 +299,17 @@ namespace util {
       /// Returns true if there is no bit set.
       constexpr bool operator!() const { return !data; }
 
-
       /// Returns data with all bits from base and from bits set.
-      static void setBits(Storage_t& base, Storage_t bits)
-        { base |= bits; }
+      static void setBits(Storage_t& base, Storage_t bits) { base |= bits; }
 
       /// Returns data with all bits from base which are also in `bits`
       /// argument.
-      static void onlyBits(Storage_t& base, Storage_t bits)
-        { base &= bits; }
+      static void onlyBits(Storage_t& base, Storage_t bits) { base &= bits; }
 
       /// Returns data with all bits from base, but the ones from bits unset.
-      static void unsetBits(Storage_t& base, Storage_t bits)
-        { onlyBits(base, ~bits); }
+      static void unsetBits(Storage_t& base, Storage_t bits) { onlyBits(base, ~bits); }
 
     }; // Bits_t
-
 
     /// @{
     /**
@@ -323,46 +321,41 @@ namespace util {
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator|
-      (Bits_t<Storage> left, Bits_t<Storage> right);
+    constexpr Bits_t<Storage> operator|(Bits_t<Storage> left, Bits_t<Storage> right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator|
-      (Bits_t<Storage> left, typename Bits_t<Storage>::Flag_t right);
+    constexpr Bits_t<Storage> operator|(Bits_t<Storage> left,
+                                        typename Bits_t<Storage>::Flag_t right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator|
-      (typename Bits_t<Storage>::Flag_t left, Bits_t<Storage> right);
+    constexpr Bits_t<Storage> operator|(typename Bits_t<Storage>::Flag_t left,
+                                        Bits_t<Storage> right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator|
-      (Flag_t<Storage> left, Flag_t<Storage> right);
+    constexpr Bits_t<Storage> operator|(Flag_t<Storage> left, Flag_t<Storage> right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator+
-      (Bits_t<Storage> left, Bits_t<Storage> right);
+    constexpr Bits_t<Storage> operator+(Bits_t<Storage> left, Bits_t<Storage> right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator+
-      (Bits_t<Storage> left, typename Bits_t<Storage>::Flag_t right);
+    constexpr Bits_t<Storage> operator+(Bits_t<Storage> left,
+                                        typename Bits_t<Storage>::Flag_t right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator+
-      (typename Bits_t<Storage>::Flag_t left, Bits_t<Storage> right);
+    constexpr Bits_t<Storage> operator+(typename Bits_t<Storage>::Flag_t left,
+                                        Bits_t<Storage> right);
 
     /// Returns a new Bits_t with all the bits from both arguments set.
     template <typename Storage>
-    constexpr Bits_t<Storage> operator+
-      (Flag_t<Storage> left, Flag_t<Storage> right);
+    constexpr Bits_t<Storage> operator+(Flag_t<Storage> left, Flag_t<Storage> right);
 
     /// @}
-
 
     //--------------------------------------------------------------------------
     /// Namespace enclosing BitMask exceptions.
@@ -372,36 +365,30 @@ namespace util {
       /// @name BitMask exceptions
 
       /// Base class for exceptions thrown by flag-related utilities.
-      struct Exception: public std::exception {
-        explicit Exception(std::string msg = "Flag error"): message(msg) {}
-        virtual const char* what() const noexcept override
-          { return message.c_str(); }
+      struct Exception : public std::exception {
+        explicit Exception(std::string msg = "Flag error") : message(msg) {}
+        virtual const char* what() const noexcept override { return message.c_str(); }
         std::string message;
       }; // Exception
 
       /// Exception thrown to convey that an undefined flag index was tested
-      struct FlagNotDefined: public Exception {
-        explicit FlagNotDefined(std::string msg = "Flag undefined-flag error")
-          : Exception(msg)
-          {}
+      struct FlagNotDefined : public Exception {
+        explicit FlagNotDefined(std::string msg = "Flag undefined-flag error") : Exception(msg) {}
       }; // FlagNotDefined
 
       /// Exception thrown to convey that an invalid flag index was used
-      struct OutOfRange: public Exception {
-        explicit OutOfRange(std::string msg = "Flag out-of-range error")
-          : Exception(msg)
-          {}
+      struct OutOfRange : public Exception {
+        explicit OutOfRange(std::string msg = "Flag out-of-range error") : Exception(msg) {}
       }; // OutOfRange
 
       /// @}
 
     } // namespace errors
 
-
     struct BitMaskFromValuesTag {}; ///< Type for constructor tag from values.
 
     /// Value useful for `BitMask` constructors from value.
-    constexpr BitMaskFromValuesTag maskFromValues {};
+    constexpr BitMaskFromValuesTag maskFromValues{};
 
     /**
      * @brief A class containing a set of flags.
@@ -422,8 +409,7 @@ namespace util {
       /// Type of underlying bit data representation.
       using Storage_t = Storage;
 
-        public:
-
+    public:
       using Mask_t = BitMask<Storage>; ///< This type.
 
       using FlagIndex_t = util::flags::Index_t; ///< Type of index of flag.
@@ -450,7 +436,6 @@ namespace util {
       /// Constructor tag from values.
       static constexpr auto fromValues = maskFromValues;
 
-
       // -- BEGIN Constructors from values -------------------------------------
       /**
        * @name Constructors from values
@@ -465,7 +450,6 @@ namespace util {
       /// Default constructor: no flag defined at all.
       explicit constexpr BitMask() = default;
 
-
       /**
        * @brief Constructor: defines and sets flags.
        * @param defined a bit mask of the values to be defined and set
@@ -478,7 +462,6 @@ namespace util {
        * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        */
       constexpr BitMask(BitMaskFromValuesTag, Storage_t defined);
-
 
       /**
        * @brief Constructor: defines and sets flags.
@@ -493,16 +476,13 @@ namespace util {
        * constexpr MyMask_t DefaultMask(MyMask_t::fromValues, 0x0300U, 0x0200U);
        * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        */
-      constexpr BitMask
-        (BitMaskFromValuesTag, Storage_t defined, Storage_t values);
-
+      constexpr BitMask(BitMaskFromValuesTag, Storage_t defined, Storage_t values);
 
       /**
        * @brief Constructor: defines and sets flags.
        * @param values a bit mask of the values to be set
        */
       constexpr BitMask(BitMaskFromValuesTag, Bits_t values);
-
 
       /**
        * @brief Constructor: defines and sets flags.
@@ -514,10 +494,8 @@ namespace util {
        */
       constexpr BitMask(BitMaskFromValuesTag, Bits_t defined, Bits_t values);
 
-
       /// @}
       // -- END Constructors from values ---------------------------------------
-
 
       // -- BEGIN Constructors combining flags ---------------------------------
       /// @name Constructors combining flags
@@ -533,9 +511,8 @@ namespace util {
        * The effect is equivalent to call `create(first, others...)`.
        */
       template <typename... Others>
-      constexpr BitMask(Flag_t first, Others... others)
-        : BitMask(create(first, others...))
-        {}
+      constexpr BitMask(Flag_t first, Others... others) : BitMask(create(first, others...))
+      {}
 
       /**
        * @brief Constructor: merges all arguments in the argument list.
@@ -547,9 +524,8 @@ namespace util {
        * The effect is equivalent to call `create(first, others...)`.
        */
       template <typename... Others>
-      constexpr BitMask(Bits_t first, Others... others)
-        : BitMask(create(first, others...))
-        {}
+      constexpr BitMask(Bits_t first, Others... others) : BitMask(create(first, others...))
+      {}
 
       /**
        * @brief Constructor: merges all arguments in the argument list.
@@ -568,11 +544,10 @@ namespace util {
       template <typename Second, typename... Others>
       constexpr BitMask(Mask_t first, Second second, Others... others)
         : BitMask(create(first, second, others...))
-        {}
+      {}
 
       /// @}
       // -- END Constructors combining flags -----------------------------------
-
 
       // -- BEGIN Access to flags ----------------------------------------------
       /// @name Access to flags
@@ -692,7 +667,6 @@ namespace util {
        */
       constexpr bool none(Bits_t bits) const;
 
-
       /**
        * @brief Returns whether any of the bits set in the mask are set.
        * @param mask the mask of bits
@@ -729,7 +703,6 @@ namespace util {
       /// @}
       // -- END Access to flags ------------------------------------------------
 
-
       // -- BEGIN Setting flags ------------------------------------------------
       /// @name Setting flags
       /// @{
@@ -749,7 +722,9 @@ namespace util {
        */
       template <typename Flag, typename... OtherFlags>
       void set(Flag first, OtherFlags... others)
-        { setImpl(first, others...); }
+      {
+        setImpl(first, others...);
+      }
 
       /**
        * @brief Sets all flags specified by the index iterator range
@@ -777,7 +752,9 @@ namespace util {
        */
       template <typename Flag, typename... OtherFlags>
       void unset(Flag first, OtherFlags... others)
-        { unsetImpl(first, others...); }
+      {
+        unsetImpl(first, others...);
+      }
 
       /**
        * @brief Unsets all flags specified by the index iterator range
@@ -791,7 +768,6 @@ namespace util {
        */
       template <typename BeginIter, typename EndIter>
       void rangeUnset(BeginIter begin, EndIter end);
-
 
       /**
        * @brief Declares all specified flags as undefined.
@@ -815,15 +791,19 @@ namespace util {
        */
       template <typename Flag, typename... OtherFlags>
       void remove(Flag first, OtherFlags... others)
-        { undefineImpl(first, others...); }
+      {
+        undefineImpl(first, others...);
+      }
 
       /// Undefines all bits.
       void clear()
-        { presence.clear(); values.clear(); }
+      {
+        presence.clear();
+        values.clear();
+      }
 
       /// @}
       // -- END Setting flags --------------------------------------------------
-
 
       // -- BEGIN Number of flags ----------------------------------------------
       /// @name Number of flags
@@ -837,14 +817,17 @@ namespace util {
 
       /// Comparison: all flags must be the same
       /// @bug Also the value of undefined flags is currently checked
-      constexpr bool operator== (Mask_t const& other) const
-        { return (values == other.values) && (presence == other.presence); }
+      constexpr bool operator==(Mask_t const& other) const
+      {
+        return (values == other.values) && (presence == other.presence);
+      }
 
       /// Comparison: not all flags must be the same
       /// @bug Also the value of undefined flags is currently checked
-      constexpr bool operator!= (Mask_t const& other) const
-        { return (values != other.values) || (presence != other.presence); }
-
+      constexpr bool operator!=(Mask_t const& other) const
+      {
+        return (values != other.values) || (presence != other.presence);
+      }
 
       /// Prints into the specified stream the least nBits significant bits.
       template <typename Stream>
@@ -853,8 +836,9 @@ namespace util {
       /// Prints into the specified stream all bits.
       template <typename Stream>
       void dump(Stream&& out) const
-        { dump(std::forward<Stream>(out), capacity()); }
-
+      {
+        dump(std::forward<Stream>(out), capacity());
+      }
 
       // -- BEGIN Static mask manipulation -------------------------------------
       /// @name Static mask manipulation
@@ -1137,8 +1121,7 @@ namespace util {
       /// @}
       // -- END Static mask manipulation ---------------------------------------
 
-        private:
-
+    private:
       Bits_t values;   ///< Storage of value bits.
       Bits_t presence; ///< Storage of definition bits.
 
@@ -1183,26 +1166,29 @@ namespace util {
       void unsetSingle(Flag_t flag);
 
       /// Returns whether any of the specified bits is set.
-      static constexpr bool testBits(Storage_t data, Storage_t bits)
-        { return data & bits; }
+      static constexpr bool testBits(Storage_t data, Storage_t bits) { return data & bits; }
 
       /// Returns whether all the specified bits in the mask are set.
       static constexpr bool testBitmask(Storage_t data, Storage_t mask)
-        { return (data & mask) == mask; }
+      {
+        return (data & mask) == mask;
+      }
 
       /// Returns whether all the specified bits in the mask are set.
       static constexpr bool testUnsetBitmask(Storage_t data, Storage_t mask)
-        { return (data & ~mask) == data; }
-
+      {
+        return (data & ~mask) == data;
+      }
 
     }; // BitMask<>
 
-
     /// Output of a bit mask into a stream.
     template <typename Stream, typename Storage>
-    Stream& operator<< (Stream&& out, BitMask<Storage> const& mask)
-      { mask.dump(std::forward<Stream>(out)); return out; }
-
+    Stream& operator<<(Stream&& out, BitMask<Storage> const& mask)
+    {
+      mask.dump(std::forward<Stream>(out));
+      return out;
+    }
 
     // -- BEGIN Flag and mask management ---------------------------------------
     /**
@@ -1227,128 +1213,113 @@ namespace util {
      */
     /// @{
 
-
     /// Returns a mask which combines two of them.
     /// @see `BitMask<Storage>::combineWithMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator|
-      (BitMask<Storage> left, BitMask<Storage> right);
+    constexpr BitMask<Storage> operator|(BitMask<Storage> left, BitMask<Storage> right);
 
     /// Returns a mask which merges two of them.
     /// @see `BitMask<Storage>::combineWithMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator|
-      (BitMask<Storage> left, typename BitMask<Storage>::Bits_t right);
+    constexpr BitMask<Storage> operator|(BitMask<Storage> left,
+                                         typename BitMask<Storage>::Bits_t right);
 
     /// Returns a mask which merges two of them.
     /// @see `BitMask<Storage>::combineWithMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator|
-      (typename BitMask<Storage>::Bits_t left, BitMask<Storage> right);
+    constexpr BitMask<Storage> operator|(typename BitMask<Storage>::Bits_t left,
+                                         BitMask<Storage> right);
 
     // operator|(Bits_t, Bits_t) is still a Bits_t
 
+    /// Returns a mask which intersects two of them.
+    /// @see `BitMask<Storage>::intersectWithMask()`
+    template <typename Storage>
+    constexpr BitMask<Storage> operator&(BitMask<Storage> left, BitMask<Storage> right);
 
     /// Returns a mask which intersects two of them.
     /// @see `BitMask<Storage>::intersectWithMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator&
-      (BitMask<Storage> left, BitMask<Storage> right);
+    constexpr BitMask<Storage> operator&(BitMask<Storage> left,
+                                         typename BitMask<Storage>::Bits_t right);
 
     /// Returns a mask which intersects two of them.
     /// @see `BitMask<Storage>::intersectWithMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator&
-      (BitMask<Storage> left, typename BitMask<Storage>::Bits_t right);
+    constexpr BitMask<Storage> operator&(typename BitMask<Storage>::Bits_t left,
+                                         BitMask<Storage> right);
 
     /// Returns a mask which intersects two of them.
     /// @see `BitMask<Storage>::intersectWithMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator&
-      (typename BitMask<Storage>::Bits_t left, BitMask<Storage> right);
-
-    /// Returns a mask which intersects two of them.
-    /// @see `BitMask<Storage>::intersectWithMask()`
-    template <typename Storage>
-    constexpr BitMask<Storage> operator&
-      (Bits_t<Storage> left, Bits_t<Storage> right);
-
+    constexpr BitMask<Storage> operator&(Bits_t<Storage> left, Bits_t<Storage> right);
 
     /// Returns a mask which merges two of them.
     /// @see `BitMask<Storage>::mergeIntoMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator+
-      (BitMask<Storage> baseMask, BitMask<Storage> mask);
+    constexpr BitMask<Storage> operator+(BitMask<Storage> baseMask, BitMask<Storage> mask);
 
     /// Returns a mask which merges two of them
     /// @see `BitMask<Storage>::mergeIntoMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator+
-      (BitMask<Storage> baseMask, typename BitMask<Storage>::Bits_t bits);
+    constexpr BitMask<Storage> operator+(BitMask<Storage> baseMask,
+                                         typename BitMask<Storage>::Bits_t bits);
 
     /// Returns a mask which merges two of them
     /// @see `BitMask<Storage>::mergeIntoMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator+
-      (typename BitMask<Storage>::Bits_t baseBits, BitMask<Storage> mask);
+    constexpr BitMask<Storage> operator+(typename BitMask<Storage>::Bits_t baseBits,
+                                         BitMask<Storage> mask);
 
     // operator+(Bits_t, Bits_t) is still a Bits_t
-
 
     /// Returns a mask set which defines and unsets the bits set in the mask.
     /// @see `BitMask<Storage>::unsetMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator-
-      (BitMask<Storage> baseMask, BitMask<Storage> mask);
+    constexpr BitMask<Storage> operator-(BitMask<Storage> baseMask, BitMask<Storage> mask);
 
     /// Returns a mask set which defines and unsets the specified bits.
     /// @see `BitMask<Storage>::unsetMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator-
-      (BitMask<Storage> baseMask, typename BitMask<Storage>::Bits_t bits);
+    constexpr BitMask<Storage> operator-(BitMask<Storage> baseMask,
+                                         typename BitMask<Storage>::Bits_t bits);
 
     /// Returns a mask set which defines and unsets the bits set in the mask.
     /// @see `BitMask<Storage>::unsetMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator-
-      (typename BitMask<Storage>::Bits_t baseBits, BitMask<Storage> mask);
+    constexpr BitMask<Storage> operator-(typename BitMask<Storage>::Bits_t baseBits,
+                                         BitMask<Storage> mask);
 
     /// Returns a mask which defines and unsets the specified bits.
     /// @see `BitMask<Storage>::unsetMask()`
     template <typename Storage>
-    constexpr BitMask<Storage> operator-
-      (Bits_t<Storage> baseBits, Bits_t<Storage> bits);
-
+    constexpr BitMask<Storage> operator-(Bits_t<Storage> baseBits, Bits_t<Storage> bits);
 
     /// Returns a copy of the mask.
     template <typename Storage>
-    constexpr BitMask<Storage> operator+ (BitMask<Storage> mask);
+    constexpr BitMask<Storage> operator+(BitMask<Storage> mask);
 
     /// Returns a mask with the specified bits set.
     template <typename Storage>
-    constexpr BitMask<Storage> operator+ (Bits_t<Storage> bits);
-
-
-    /// Returns a mask `M = -B` so that `A + M` is equivalent to `A - B`.
-    template <typename Storage>
-    constexpr BitMask<Storage> operator- (Bits_t<Storage> bits);
+    constexpr BitMask<Storage> operator+(Bits_t<Storage> bits);
 
     /// Returns a mask `M = -B` so that `A + M` is equivalent to `A - B`.
     template <typename Storage>
-    constexpr BitMask<Storage> operator- (Flag_t<Storage> flag);
+    constexpr BitMask<Storage> operator-(Bits_t<Storage> bits);
 
+    /// Returns a mask `M = -B` so that `A + M` is equivalent to `A - B`.
+    template <typename Storage>
+    constexpr BitMask<Storage> operator-(Flag_t<Storage> flag);
 
     /// Returns a bit set which unsets the specified bits.
     template <typename Storage>
-    constexpr BitMask<Storage> operator~
-      (BitMask<Storage> mask);
+    constexpr BitMask<Storage> operator~(BitMask<Storage> mask);
 
     /*
     /// Returns a bit set which unsets the specified bits.
     template <typename Storage>
     constexpr BitMask<Storage> operator~ (Bits_t<Storage> bits);
     */
-
 
     /// Returns a bit mask which sets the specified flag.
     template <typename Storage>
@@ -1358,7 +1329,6 @@ namespace util {
     template <typename Storage>
     constexpr BitMask<Storage> Unset(Flag_t<Storage> flag);
 
-
     /// @}
     // -- END Flag and mask management -----------------------------------------
 
@@ -1366,11 +1336,9 @@ namespace util {
     template <typename Storage>
     constexpr BitMask<Storage> makeMask(Bits_t<Storage> bits);
 
-
   } // namespace flags
 
 } // namespace util
-
 
 //------------------------------------------------------------------------------
 //---  template implementation
@@ -1379,6 +1347,5 @@ namespace util {
 #include "lardataobj/Utilities/BitMask.tcc"
 
 //------------------------------------------------------------------------------
-
 
 #endif // LARDATAOBJ_UTILITIES_BITMASK_H

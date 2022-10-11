@@ -1,9 +1,9 @@
 #ifndef PARTICLEID_VARIABLETYPEENUMS_H
 #define PARTICLEID_VARIABLETYPEENUMS_H
 
-namespace anab{
+namespace anab {
 
-  enum kVariableType{
+  enum kVariableType {
     kGOF,
     kLikelihood,
     kLogL,
@@ -17,7 +17,7 @@ namespace anab{
     kNotSet
   }; ///< Enum to define type of variable returned by a ParticleID algorithm
 
-  enum kTrackDir{
+  enum kTrackDir {
     kForward,
     kBackward,
     kNoDirection

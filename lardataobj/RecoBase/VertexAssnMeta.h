@@ -24,14 +24,16 @@ namespace recob {
     enum VertexAssnStatus { Undefined, NotUsedInFit, RejectedByFit, IncludedInFit };
     VertexAssnMeta() { status_ = Undefined; }
     VertexAssnMeta(float pD, float iP, float iPErr, float c2, VertexAssnStatus st)
-      : propDist_(pD), impactParam_(iP), impactParamErr_(iPErr), chi2_(c2), status_(st) {}
-    float propDist()           const { return propDist_; }
-    float impactParam()        const { return impactParam_; }
-    float impactParamErr()     const { return impactParamErr_; }
-    float impactParamSig()     const { return impactParam_/impactParamErr_; }
-    float chi2()               const { return chi2_; }
+      : propDist_(pD), impactParam_(iP), impactParamErr_(iPErr), chi2_(c2), status_(st)
+    {}
+    float propDist() const { return propDist_; }
+    float impactParam() const { return impactParam_; }
+    float impactParamErr() const { return impactParamErr_; }
+    float impactParamSig() const { return impactParam_ / impactParamErr_; }
+    float chi2() const { return chi2_; }
     VertexAssnStatus status() const { return status_; }
     void updateStatus(const VertexAssnStatus& newstatus) { status_ = newstatus; }
+
   private:
     float propDist_;
     float impactParam_;

@@ -17,7 +17,7 @@
 
 namespace recob {
 
-/**
+  /**
  * \brief Data related to `recob::Hit` associated with `recob::Track`.
  * \ingroup DataProductRecoBase
  *
@@ -40,21 +40,18 @@ namespace recob {
  * definition.
  *
  */
-class TrackHitMeta
-{
-public:
-	/// Default needed by ROOT.
-	TrackHitMeta() = default;
+  class TrackHitMeta {
+  public:
+    /// Default needed by ROOT.
+    TrackHitMeta() = default;
 
-	/// Constructor with initialization.
-	TrackHitMeta(unsigned int idx, double dx = 0.0)
-	  : fIndex(idx), fDx(dx)
-	  {}
+    /// Constructor with initialization.
+    TrackHitMeta(unsigned int idx, double dx = 0.0) : fIndex(idx), fDx(dx) {}
 
-	/// Hit index along the track trajectory.
-	unsigned int Index() const { return fIndex; }
+    /// Hit index along the track trajectory.
+    unsigned int Index() const { return fIndex; }
 
-	/**
+    /**
 	 * \brief Length of the track segments associated with the 2D hit.
 	 * \return lenth of the track segments [cm]
 	 *
@@ -62,25 +59,28 @@ public:
 	 * next hit in the same plane and half-distance to the preceding hit in the
 	 * same plane.
 	 */
-	double Dx() const { return fDx; }
+    double Dx() const { return fDx; }
 
-	// /// Candidate to keep 3D trajectory point here instead of inside recob::Track
-	//geo::Point_t const & Position3D(void) const { return fPosition3D; }
+    // /// Candidate to keep 3D trajectory point here instead of inside recob::Track
+    //geo::Point_t const & Position3D(void) const { return fPosition3D; }
 
-private:
-	unsigned int fIndex = 0U; ///< Stored index of the hit in the sequence.
-	double fDx = 0.0; ///< Stored _dx_ size, in centimeters.
+  private:
+    unsigned int fIndex = 0U; ///< Stored index of the hit in the sequence.
+    double fDx = 0.0;         ///< Stored _dx_ size, in centimeters.
 
-	//geo::Point_t fPosition3D;
-}; // class TrackHitMeta
+    //geo::Point_t fPosition3D;
+  }; // class TrackHitMeta
 
+  inline std::ostream& operator<<(std::ostream& o, const TrackHitMeta& a)
+  {
+    o << a.Index();
+    return o;
+  }
 
-inline std::ostream& operator<< (std::ostream& o, const TrackHitMeta & a)
-  { o << a.Index(); return o; }
-
-inline bool operator < (const TrackHitMeta & a, const TrackHitMeta & b)
-  { return a.Index() < b.Index(); }
-
+  inline bool operator<(const TrackHitMeta& a, const TrackHitMeta& b)
+  {
+    return a.Index() < b.Index();
+  }
 
 } // namespace recob
 

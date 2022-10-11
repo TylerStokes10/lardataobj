@@ -13,8 +13,7 @@
 // C/C++ standard libraries
 #include <utility> // std::move()
 
-
-namespace raw{
+namespace raw {
 
   //----------------------------------------------------------------------
   RawDigit::RawDigit()
@@ -27,15 +26,13 @@ namespace raw{
   //  , fFlags(DefaultFlags)
   {}
 
-
   //----------------------------------------------------------------------
-  RawDigit::RawDigit(
-    ChannelID_t                  channel,
-    ULong64_t                    samples,
-    ADCvector_t const&           adclist,
-    Compress_t                   compression /* = kNone */ /*,
+  RawDigit::RawDigit(ChannelID_t channel,
+                     ULong64_t samples,
+                     ADCvector_t const& adclist,
+                     Compress_t compression /* = kNone */ /*,
     const Flags_t&               flags / * = DefaultFlags * / */
-  )
+                     )
     : fADC(adclist)
     , fChannel(channel)
     , fSamples(samples)
@@ -45,15 +42,13 @@ namespace raw{
   //  , fFlags(flags)
   {}
 
-
   //----------------------------------------------------------------------
-  RawDigit::RawDigit(
-    ChannelID_t             channel,
-    ULong64_t               samples,
-    ADCvector_t&&           adclist,
-    Compress_t              compression /* = kNone */ /*,
+  RawDigit::RawDigit(ChannelID_t channel,
+                     ULong64_t samples,
+                     ADCvector_t&& adclist,
+                     Compress_t compression /* = kNone */ /*,
     const Flags_t&          flags / * = DefaultFlags * / */
-  )
+                     )
     : fADC(std::move(adclist))
     , fChannel(channel)
     , fSamples(samples)
@@ -63,9 +58,8 @@ namespace raw{
   //  , fFlags(flags)
   {}
 
-
   //----------------------------------------------------------------------
-  void RawDigit::SetPedestal(float ped, float sigma /* = 1. */ )
+  void RawDigit::SetPedestal(float ped, float sigma /* = 1. */)
   {
 
     fPedestal = ped;
@@ -73,7 +67,5 @@ namespace raw{
 
   } // RawDigit::SetPedestal()
 
-
 } // namespace raw
 ////////////////////////////////////////////////////////////////////////
-

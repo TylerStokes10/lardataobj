@@ -6,16 +6,16 @@
 //
 // Original author Rob Kutschke, modified by klg
 
+#include "canvas/Persistency/Common/Assns.h"
 #include "canvas/Persistency/Common/PtrVector.h"
 #include "canvas/Persistency/Common/Wrapper.h"
-#include "canvas/Persistency/Common/Assns.h"
 
-#include "lardataobj/RawData/DAQHeader.h"
-#include "lardataobj/RawData/RawDigit.h"
-#include "lardataobj/RawData/OpDetPulse.h"
 #include "lardataobj/RawData/AuxDetDigit.h"
 #include "lardataobj/RawData/BeamInfo.h"
+#include "lardataobj/RawData/DAQHeader.h"
 #include "lardataobj/RawData/ExternalTrigger.h"
-#include "lardataobj/RawData/TriggerData.h"
+#include "lardataobj/RawData/OpDetPulse.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
 #include "lardataobj/RawData/RDTimeStamp.h"
+#include "lardataobj/RawData/RawDigit.h"
+#include "lardataobj/RawData/TriggerData.h"

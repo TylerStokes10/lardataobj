@@ -14,31 +14,26 @@
 #ifndef MCBASEEXCEPTION_H
 #define MCBASEEXCEPTION_H
 
-#include <string>
 #include <exception>
+#include <string>
 
 namespace sim {
   /**
      \class MCBaseException
      Simple exception class for MCBase package
   */
-  class MCBaseException : public std::exception{
+  class MCBaseException : public std::exception {
 
   public:
+    MCBaseException(std::string msg = "") : std::exception(), _msg(msg) {}
 
-    MCBaseException(std::string msg="") : std::exception(), _msg(msg)
-    {}
-
-    virtual ~MCBaseException() throw(){}
-    virtual const char* what() const throw()
-    {return _msg.c_str(); }
+    virtual ~MCBaseException() throw() {}
+    virtual const char* what() const throw() { return _msg.c_str(); }
 
   private:
-
     std::string _msg;
   };
 
 }
 #endif
 /** @} */ // end of doxygen group
-

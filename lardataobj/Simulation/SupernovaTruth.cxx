@@ -10,12 +10,21 @@
 
 namespace sim {
 
-  SupernovaTruth::SupernovaTruth() : SupernovaTime(0.), Weight(0.),
-    FluxAveragedCrossSection(0.), SamplingMode(kUnknownSupernovaSamplingMode) {}
+  SupernovaTruth::SupernovaTruth()
+    : SupernovaTime(0.)
+    , Weight(0.)
+    , FluxAveragedCrossSection(0.)
+    , SamplingMode(kUnknownSupernovaSamplingMode)
+  {}
 
-  SupernovaTruth::SupernovaTruth(double time, double weight,
-    double xs_avg, SupernovaSamplingMode_t sampling_mode)
-    : SupernovaTime(time), Weight(weight), FluxAveragedCrossSection(xs_avg),
-    SamplingMode(sampling_mode) {}
+  SupernovaTruth::SupernovaTruth(double time,
+                                 double weight,
+                                 double xs_avg,
+                                 SupernovaSamplingMode_t sampling_mode)
+    : SupernovaTime(time)
+    , Weight(weight)
+    , FluxAveragedCrossSection(xs_avg)
+    , SamplingMode(sampling_mode)
+  {}
 
 }

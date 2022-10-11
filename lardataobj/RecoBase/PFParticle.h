@@ -10,8 +10,8 @@
 #define Recob_PFParticle_H
 
 #include <iosfwd>
-#include <vector>
 #include <limits>
+#include <vector>
 
 namespace recob {
 
@@ -44,19 +44,15 @@ namespace recob {
   class PFParticle {
 
   public:
-
-      PFParticle();  ///< Default constructor necessary for gccxml - not really for public use
+    PFParticle(); ///< Default constructor necessary for gccxml - not really for public use
 
   private:
-
-      int                 fPdgCode;   ///< A preliminary estimate of the PFParticle type using the PDG code
-      size_t              fSelf;      ///< Self reference
-      size_t              fParent;    ///< Index into PFParticle collection for parent
-      std::vector<size_t> fDaughters; ///< Vector of indices into PFParticle Collection for daughters
-
+    int fPdgCode;   ///< A preliminary estimate of the PFParticle type using the PDG code
+    size_t fSelf;   ///< Self reference
+    size_t fParent; ///< Index into PFParticle collection for parent
+    std::vector<size_t> fDaughters; ///< Vector of indices into PFParticle Collection for daughters
 
   public:
-
     /// Define index to signify primary particle
     static constexpr size_t kPFParticlePrimary = std::numeric_limits<size_t>::max();
 
@@ -66,34 +62,34 @@ namespace recob {
     PFParticle(int pdgCode, size_t self, size_t parent, std::vector<size_t>&& daughters);
 
     /// Destructor definition
-     ~PFParticle() = default;
+    ~PFParticle() = default;
 
     /// Copy constructor (using defaults)
     PFParticle(const PFParticle& other) = default;
-    PFParticle(PFParticle&& other)      = default;
+    PFParticle(PFParticle&& other) = default;
 
     /// Copy assignment operator (using defaults)
-    PFParticle& operator= (const PFParticle& other) = default;
-    PFParticle& operator= (PFParticle&& other)      = default;
+    PFParticle& operator=(const PFParticle& other) = default;
+    PFParticle& operator=(PFParticle&& other) = default;
 
     /// @name Accessors
     /// @{
 
     /// Return the type of particle as a PDG ID.
-    int                        PdgCode()            const {return fPdgCode;}
+    int PdgCode() const { return fPdgCode; }
 
     /// Returns whether the particle is the root of the flow.
-    bool                       IsPrimary()          const {return fParent == PFParticle::kPFParticlePrimary;}
+    bool IsPrimary() const { return fParent == PFParticle::kPFParticlePrimary; }
 
     /// Returns the number of daughter particles flowing from this one.
-    int                        NumDaughters()       const {return fDaughters.size();}
+    int NumDaughters() const { return fDaughters.size(); }
 
     /// Returns the index of this particle.
-    size_t                     Self()               const {return fSelf;}
+    size_t Self() const { return fSelf; }
 
     /// Returns the index of the parent particle
     /// (`PFParticle::kPFParticlePrimary` if primary).
-    size_t                     Parent()             const {return fParent;}
+    size_t Parent() const { return fParent; }
 
     /**
      * @brief Returns the ID of the specified daughter.
@@ -108,15 +104,15 @@ namespace recob {
      * This function checks the validity of the index (`idx`). For unchecked access,
      * use `Daughters()[idx]` instead.
      */
-    size_t                     Daughter(size_t idx) const {return Daughters().at(idx);}
+    size_t Daughter(size_t idx) const { return Daughters().at(idx); }
 
     /// Returns the collection of daughter particles.
-    const std::vector<size_t>& Daughters()          const {return fDaughters;}
+    const std::vector<size_t>& Daughters() const { return fDaughters; }
 
     /// @}
 
-    friend std::ostream& operator << (std::ostream& o, const PFParticle& c);
-    friend bool          operator <  (const PFParticle& a, const PFParticle& b);
+    friend std::ostream& operator<<(std::ostream& o, const PFParticle& c);
+    friend bool operator<(const PFParticle& a, const PFParticle& b);
 
   }; // class PFParticle
 } // namespace recob

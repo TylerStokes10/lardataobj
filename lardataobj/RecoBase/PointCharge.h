@@ -11,11 +11,10 @@
 #define LARDATAOBJ_RECOBASE_CHARGE_H
 
 // C/C++ standard libraries
+#include <iosfwd> // std::ostream
 #include <limits>
 #include <string>
 #include <utility> // std::forward()
-#include <iosfwd> // std::ostream
-
 
 namespace recob {
 
@@ -30,32 +29,28 @@ namespace recob {
    */
   class PointCharge {
 
-      public:
-
+  public:
     using Charge_t = float; ///< Type for the amount of reconstructed charge.
 
     /// Value used for default-constructed ("invalid") charge.
-    static constexpr Charge_t InvalidCharge
-      = std::numeric_limits<Charge_t>::lowest();
-
+    static constexpr Charge_t InvalidCharge = std::numeric_limits<Charge_t>::lowest();
 
     //--- BEGIN Constructors ---------------------------------------------------
     /// @{
     /// @name Constructors
 
     /// Default constructor (for ROOT only).
-    constexpr PointCharge(): fCharge(InvalidCharge) {}
+    constexpr PointCharge() : fCharge(InvalidCharge) {}
 
     /**
      * @brief Constructor: sets all the data.
      * @param charge reconstructed charge (used unchanged)
      *
      */
-    constexpr PointCharge(Charge_t charge): fCharge(charge) {}
+    constexpr PointCharge(Charge_t charge) : fCharge(charge) {}
 
     /// @}
     //--- END Constructors -----------------------------------------------------
-
 
     //--- BEGIN Accessors ------------------------------------------------------
     /// @{
@@ -67,7 +62,6 @@ namespace recob {
     /// @}
     //--- END Accessors --------------------------------------------------------
 
-
     //--- BEGIN Status ---------------------------------------------------------
     /// @{
     /// @name Object status and data validity
@@ -77,7 +71,6 @@ namespace recob {
 
     /// @}
     //--- END Status -----------------------------------------------------------
-
 
     //--- BEGIN Printing operations --------------------------------------------
     /// @{
@@ -104,67 +97,70 @@ namespace recob {
      * No end-of-line is inserted at the end of the output.
      */
     template <typename Stream>
-    void dump(
-      Stream&& out, unsigned int verbosity,
-      std::string indent, std::string firstIndent
-      ) const;
+    void dump(Stream&& out,
+              unsigned int verbosity,
+              std::string indent,
+              std::string firstIndent) const;
 
     // variants for the implementation of default values
     template <typename Stream>
-    void dump
-      (Stream&& out, unsigned int verbosity, std::string indent = "") const
-      { dump(std::forward<Stream>(out), verbosity, indent, indent); }
+    void dump(Stream&& out, unsigned int verbosity, std::string indent = "") const
+    {
+      dump(std::forward<Stream>(out), verbosity, indent, indent);
+    }
     template <typename Stream>
     void dump(Stream&& out, std::string indent, std::string firstIndent) const
-      { dump(std::forward<Stream>(out), DefaultVerbosity, indent, firstIndent); }
+    {
+      dump(std::forward<Stream>(out), DefaultVerbosity, indent, firstIndent);
+    }
     template <typename Stream>
     void dump(Stream&& out, std::string indent = "") const
-      { dump(std::forward<Stream>(out), indent, indent); }
+    {
+      dump(std::forward<Stream>(out), indent, indent);
+    }
 
     /// @}
     //--- END Printing operations ----------------------------------------------
 
-      private:
+  private:
     float fCharge; ///< Reconstructed charge.
 
   }; // class PointCharge
 
-
   /// Dumps the content of a `recob::PointCharge` object into an output stream.
-  inline std::ostream& operator<<
-    (std::ostream& out, recob::PointCharge const& charge)
-    { charge.dump(out); return out; }
-
+  inline std::ostream& operator<<(std::ostream& out, recob::PointCharge const& charge)
+  {
+    charge.dump(out);
+    return out;
+  }
 
 } // namespace recob
-
-
 
 //------------------------------------------------------------------------------
 //---  template implementation
 //---
 template <typename Stream>
-void recob::PointCharge::dump(
-  Stream&& out, unsigned int verbosity,
-  std::string indent, std::string firstIndent
-  ) const
+void recob::PointCharge::dump(Stream&& out,
+                              unsigned int verbosity,
+                              std::string indent,
+                              std::string firstIndent) const
 {
   if (verbosity <= 0U) return;
 
   //----------------------------------------------------------------------------
-  out << firstIndent
-    << "charge: ";
-  if (hasCharge()) out << charge();
-  else             out << "none";
+  out << firstIndent << "charge: ";
+  if (hasCharge())
+    out << charge();
+  else
+    out << "none";
 
-//  if (verbosity <= 1U) return;
+  //  if (verbosity <= 1U) return;
   //----------------------------------------------------------------------------
   // if the following check fails,
   // consistency between `dump()` and `MaxVerbosity` needs to be restored
   static_assert(MaxVerbosity == 1U, "Please update the code!");
 
 } // recob::PointCharge::dump()
-
 
 //------------------------------------------------------------------------------
 

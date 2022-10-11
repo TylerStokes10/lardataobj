@@ -32,15 +32,14 @@ namespace recob {
    * @version 2.0
    */
 
-  class Vertex  {
+  class Vertex {
 
   public:
-
-    using Point_t      = tracking::Point_t;
+    using Point_t = tracking::Point_t;
     using SMatrixSym33 = tracking::SMatrixSym33;
     using SMatrixSym22 = tracking::SMatrixSym22;
-    using SVector3     = tracking::SVector3;
-    using SVector2     = tracking::SVector2;
+    using SVector3 = tracking::SVector3;
+    using SVector2 = tracking::SVector2;
 
     /// Status of the vertex. Here the convention is that when adding new enum values
     /// all invalid go before 'Invalid', all valid go after 'Valid', and all valid with covariance go after 'ValidWithCovariance'
@@ -50,14 +49,19 @@ namespace recob {
     Vertex();
 
     /// Legacy constructor, preserved to avoid breaking code. Please try to use the new constructor.
-    explicit Vertex(double *xyz, int id=util::kBogusI);
+    explicit Vertex(double* xyz, int id = util::kBogusI);
 
     /// Constructor initializing all data members.
-    Vertex(const Point_t& pos, const SMatrixSym33& cov, double chi2, int ndof, int id=util::kBogusI)
-      : pos_(pos), cov_(cov), chi2_(chi2), ndof_(ndof), status_(ValidWithCovariance), id_(id) {}
+    Vertex(const Point_t& pos,
+           const SMatrixSym33& cov,
+           double chi2,
+           int ndof,
+           int id = util::kBogusI)
+      : pos_(pos), cov_(cov), chi2_(chi2), ndof_(ndof), status_(ValidWithCovariance), id_(id)
+    {}
 
     /// Return vertex 3D position.
-    const Point_t&      position()   const { return pos_; }
+    const Point_t& position() const { return pos_; }
     /// Return vertex 3D covariance (be careful, the matrix may have rank=2).
     const SMatrixSym33& covariance() const { return cov_; }
     // Return vertex fit chi2.
@@ -65,37 +69,38 @@ namespace recob {
     // Return vertex fit ndof.
     int ndof() const { return ndof_; }
     // Return vertex fit chi2 per ndof.
-    double chi2PerNdof() const { return (ndof_>0. ? chi2_/ndof_ : util::kBogusD); }
+    double chi2PerNdof() const { return (ndof_ > 0. ? chi2_ / ndof_ : util::kBogusD); }
     //
     // Return vertex status.
-    Status status()            const { return status_; }
-    bool   isValid()           const { return status_>=Valid; }
-    bool   isValidCovariance() const { return status_>=ValidWithCovariance; }
+    Status status() const { return status_; }
+    bool isValid() const { return status_ >= Valid; }
+    bool isValidCovariance() const { return status_ >= ValidWithCovariance; }
 
     /// Legacy method to access vertex position, preserved to avoid breaking code. Please try to use Vertex::position().
-    void      XYZ(double *xyz) const;
+    void XYZ(double* xyz) const;
 
     /// Return vertex id.
-    int       ID()             const;
+    int ID() const;
 
     /// Set vertex id.
     void setID(int newID) { id_ = newID; }
 
-    friend bool          operator <   (const Vertex & a, const Vertex & b);
-    friend std::ostream& operator <<  (std::ostream& o,  const Vertex & a);
+    friend bool operator<(const Vertex& a, const Vertex& b);
+    friend std::ostream& operator<<(std::ostream& o, const Vertex& a);
 
   private:
-
     Point_t pos_;      ///< Vertex 3D position
     SMatrixSym33 cov_; ///< Vertex covariance matrix 3x3
     double chi2_;      ///< Vertex fit chi2
     int ndof_;         ///< Vertex fit degrees of freedom
     Status status_;    ///< Vertex status, as define in Vertex::Status enum
-    int    id_;        ///< id number for vertex
-
+    int id_;           ///< id number for vertex
   };
 }
 
-inline int recob::Vertex::ID() const { return id_; }
+inline int recob::Vertex::ID() const
+{
+  return id_;
+}
 
 #endif // RB_VERTEX_H

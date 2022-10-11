@@ -6,13 +6,13 @@
 #ifndef RAWDATA_RAW_H
 #define RAWDATA_RAW_H
 
-#include <vector>
-#include <map>
-#include <functional>
-#include <boost/circular_buffer.hpp>
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h"
+#include <boost/circular_buffer.hpp>
+#include <functional>
+#include <map>
+#include <vector>
 
-namespace raw{
+namespace raw {
 
   /**
    * @brief Uncompresses a raw data buffer
@@ -33,27 +33,25 @@ namespace raw{
    *
    */
   void Uncompress(const std::vector<short>& adc,
-                  std::vector<short>      &uncompressed,
-                  raw::Compress_t          compress);
+                  std::vector<short>& uncompressed,
+                  raw::Compress_t compress);
 
   void Uncompress(const std::vector<short>& adc,
-                  std::vector<short>      &uncompressed,
-		  int       pedestal,
-                  raw::Compress_t          compress);
+                  std::vector<short>& uncompressed,
+                  int pedestal,
+                  raw::Compress_t compress);
 
-  void Compress(std::vector<short> &adc,
-                raw::Compress_t     compress,
-                int                &nearestneighbor);
-  void Compress(std::vector<short> &adc,
-                raw::Compress_t     compress,
-                unsigned int       &zerothreshold,
-                int &nearestneighbor);
-  void Compress(std::vector<short> &adc,
-                raw::Compress_t     compress,
-                unsigned int       &zerothreshold,
-	        int       pedestal,
-                int &nearestneighbor,
-		bool fADCStickyCodeFeature=false);
+  void Compress(std::vector<short>& adc, raw::Compress_t compress, int& nearestneighbor);
+  void Compress(std::vector<short>& adc,
+                raw::Compress_t compress,
+                unsigned int& zerothreshold,
+                int& nearestneighbor);
+  void Compress(std::vector<short>& adc,
+                raw::Compress_t compress,
+                unsigned int& zerothreshold,
+                int pedestal,
+                int& nearestneighbor,
+                bool fADCStickyCodeFeature = false);
 
   /**
    * @brief Compresses a raw data buffer
@@ -67,80 +65,75 @@ namespace raw{
    * in principle no need for reallocation of the input buffer, adc, to store
    * the result.
    */
-  void Compress(std::vector<short> &adc,
-                raw::Compress_t     compress);
-  void Compress(std::vector<short> &adc,
-                raw::Compress_t     compress,
-                unsigned int       &zerothreshold);
+  void Compress(std::vector<short>& adc, raw::Compress_t compress);
+  void Compress(std::vector<short>& adc, raw::Compress_t compress, unsigned int& zerothreshold);
 
-  void Compress(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
-		std::vector<short> &adc,
-                raw::Compress_t     compress,
-                unsigned int       &zerothreshold,
-                int &nearestneighbor);
+  void Compress(const boost::circular_buffer<std::vector<short>>& adcvec_neighbors,
+                std::vector<short>& adc,
+                raw::Compress_t compress,
+                unsigned int& zerothreshold,
+                int& nearestneighbor);
 
-  void Compress(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
-		std::vector<short> &adc,
-                raw::Compress_t     compress,
-                unsigned int       &zerothreshold,
-		int       pedestal,
-                int &nearestneighbor,
-		bool fADCStickyCodeFeature=false);
+  void Compress(const boost::circular_buffer<std::vector<short>>& adcvec_neighbors,
+                std::vector<short>& adc,
+                raw::Compress_t compress,
+                unsigned int& zerothreshold,
+                int pedestal,
+                int& nearestneighbor,
+                bool fADCStickyCodeFeature = false);
 
-  void CompressHuffman(std::vector<short> &adc);
+  void CompressHuffman(std::vector<short>& adc);
 
-  void UncompressHuffman(const std::vector<short>& adc,
-                         std::vector<short>      &uncompressed);
+  void UncompressHuffman(const std::vector<short>& adc, std::vector<short>& uncompressed);
 
   short fibonacci_decode(std::vector<bool>& chunk);
   void fibonacci_encode_table(int end, std::vector<std::vector<bool>>& table);
 
-  void CompressFibonacci(std::vector<short>   &wf,
-                         std::function<void(int, std::vector<std::vector<bool>>&)> add_to_table=fibonacci_encode_table);
+  void CompressFibonacci(std::vector<short>& wf,
+                         std::function<void(int, std::vector<std::vector<bool>>&)> add_to_table =
+                           fibonacci_encode_table);
 
-  void UncompressFibonacci(const std::vector<short> &adc,
-                           std::vector<short>       &uncompressed,
-                           std::function<int(std::vector<bool>&)> decode_table_chunk=fibonacci_decode);
+  void UncompressFibonacci(
+    const std::vector<short>& adc,
+    std::vector<short>& uncompressed,
+    std::function<int(std::vector<bool>&)> decode_table_chunk = fibonacci_decode);
 
+  void ZeroSuppression(std::vector<short>& adc, unsigned int& zerothreshold, int& nearestneighbor);
 
-  void ZeroSuppression(std::vector<short> &adc,
-                       unsigned int       &zerothreshold,
-                       int                &nearestneighbor);
+  void ZeroSuppression(std::vector<short>& adc,
+                       unsigned int& zerothreshold,
+                       int pedestal,
+                       int& nearestneighbor,
+                       bool fADCStickyCodeFeature = false);
 
-  void ZeroSuppression(std::vector<short> &adc,
-                       unsigned int       &zerothreshold,
-		       int       pedestal,
-                       int                &nearestneighbor,
-		       bool fADCStickyCodeFeature=false);
+  void ZeroSuppression(std::vector<short>& adc, unsigned int& zerothreshold);
 
+  void ZeroSuppression(const boost::circular_buffer<std::vector<short>>& adcvec_neighbors,
+                       std::vector<short>& adc,
+                       unsigned int& zerothreshold,
+                       int& nearestneighbor);
 
-  void ZeroSuppression(std::vector<short> &adc,
-                       unsigned int       &zerothreshold);
+  void ZeroSuppression(const boost::circular_buffer<std::vector<short>>& adcvec_neighbors,
+                       std::vector<short>& adc,
+                       unsigned int& zerothreshold,
+                       int pedestal,
+                       int& nearestneighbor,
+                       bool fADCStickyCodeFeature = false);
 
-  void ZeroSuppression(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
-		       std::vector<short> &adc,
-                       unsigned int       &zerothreshold,
-                       int                &nearestneighbor);
-
-  void ZeroSuppression(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
-		       std::vector<short> &adc,
-                       unsigned int       &zerothreshold,
-		       int       pedestal,
-                       int                &nearestneighbor,
-		       bool fADCStickyCodeFeature=false);
-
-  void ZeroUnsuppression(const std::vector<short>& adc,
-                         std::vector<short>      &uncompressed);
+  void ZeroUnsuppression(const std::vector<short>& adc, std::vector<short>& uncompressed);
 
   void ZeroUnsuppression(const std::vector<short>& adc,
-                         std::vector<short>      &uncompressed,
-			 int       pedestal);
+                         std::vector<short>& uncompressed,
+                         int pedestal);
 
-  const unsigned int onemask = 0x003f; // Unsigned int ending in 111111 used to select 6 LSBs with bitwise AND
+  const unsigned int onemask =
+    0x003f; // Unsigned int ending in 111111 used to select 6 LSBs with bitwise AND
 
-  int ADCStickyCodeCheck(const short adc_current_value, // Function to check if ADC value may be ADC sticky code in DUNE35t data
-			 const int   pedestal,
-			 bool fADCStickyCodeFeature);
+  int ADCStickyCodeCheck(
+    const short
+      adc_current_value, // Function to check if ADC value may be ADC sticky code in DUNE35t data
+    const int pedestal,
+    bool fADCStickyCodeFeature);
 
 } // namespace raw
 

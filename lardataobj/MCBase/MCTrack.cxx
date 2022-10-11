@@ -6,7 +6,7 @@ namespace sim {
   {
     std::vector<MCStep>::clear();
 
-    fOrigin  = simb::kUnknown;
+    fOrigin = simb::kUnknown;
     fProcess = "";
     fPDGCode = kINVALID_INT;
     fTrackID = kINVALID_UINT;
@@ -19,24 +19,20 @@ namespace sim {
     fAncestorTrackID = kINVALID_UINT;
     fAncestorProcess = "";
 
-    TLorentzVector invalid(kINVALID_DOUBLE,
-			   kINVALID_DOUBLE,
-			   kINVALID_DOUBLE,
-			   kINVALID_DOUBLE);
+    TLorentzVector invalid(kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE);
 
-    MCStep invalid_step(invalid,invalid);
+    MCStep invalid_step(invalid, invalid);
 
     fStart = invalid_step;
-    fEnd   = invalid_step;
+    fEnd = invalid_step;
 
     fdEdx.clear();
     fdQdx.clear();
 
     fMotherStart = invalid_step;
-    fMotherEnd   = invalid_step;
+    fMotherEnd = invalid_step;
 
     fAncestorStart = invalid_step;
-    fAncestorEnd   = invalid_step;
-
+    fAncestorEnd = invalid_step;
   }
 }

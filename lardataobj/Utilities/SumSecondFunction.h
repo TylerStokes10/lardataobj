@@ -27,22 +27,15 @@
 
 namespace util {
 
-  template < typename _Key, typename _Value, typename _BinaryOperation = std::plus<_Value> >
-  class SumSecondFunction
-    : public std::binary_function< _Value,
-				   std::pair<_Key, _Value>,
-				   _Value >
-  {
+  template <typename _Key, typename _Value, typename _BinaryOperation = std::plus<_Value>>
+  class SumSecondFunction : public std::binary_function<_Value, std::pair<_Key, _Value>, _Value> {
   public:
-    const _Value operator() ( const _Value& value,
-			      const std::pair<_Key, _Value>& entry ) const
+    const _Value operator()(const _Value& value, const std::pair<_Key, _Value>& entry) const
     {
-      return _BinaryOperation()( value, entry.second );
+      return _BinaryOperation()(value, entry.second);
     }
   };
 
 } // namespace util
 
 #endif // Utilities_SumSecondFunction_h
-
-

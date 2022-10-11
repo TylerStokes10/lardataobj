@@ -21,14 +21,12 @@
 #ifndef LARDATAOBJ_RECOBASE_HIT_H
 #define LARDATAOBJ_RECOBASE_HIT_H
 
-
 // C/C++ standard librraies
 #include <iosfwd>
 
 // LArSoft libraries
-#include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t, geo::SignalType, geo::WireID
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
-
+#include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t, geo::SignalType, geo::WireID
 
 namespace recob {
 
@@ -46,35 +44,37 @@ namespace recob {
    * - Charge(true) is now PeakAmplitude(), Charge(false) (default) is Integral()
    */
   class Hit {
-    public:
-      /// Default constructor: a hit with no signal
-      Hit();
+  public:
+    /// Default constructor: a hit with no signal
+    Hit();
 
-    private:
+  private:
+    raw::ChannelID_t fChannel; ///< ID of the readout channel the hit was extracted from
+    raw::TDCtick_t fStartTick; ///< initial tdc tick for hit
+    raw::TDCtick_t fEndTick;   ///< final tdc tick for hit
+    float fPeakTime;           ///< time of the signal peak, in tick units
+    float fSigmaPeakTime;      ///< uncertainty for the signal peak, in tick units
+    float fRMS;                ///< RMS of the hit shape, in tick units
+    float fPeakAmplitude;      ///< the estimated amplitude of the hit at its peak, in ADC units
+    float
+      fSigmaPeakAmplitude; ///< uncertainty on estimated amplitude of the hit at its peak, in ADC units
+    float fSummedADC;      ///< the sum of calibrated ADC counts of the hit
+    float
+      fIntegral; ///< the integral under the calibrated signal waveform of the hit, in tick x ADC units
+    float
+      fSigmaIntegral; ///< the uncertainty of integral under the calibrated signal waveform of the hit, in ADC units
+    short int fMultiplicity; ///< how many hits could this one be shared with
+    short int fLocalIndex; ///< index of this hit among the Multiplicity() hits in the signal window
+    float fGoodnessOfFit;  ///< how well do we believe we know this hit?
+    int fNDF;              ///< degrees of freedom in the determination of the hit shape
+    geo::View_t fView;     ///< view for the plane of the hit
+    geo::SigType_t fSignalType; ///< signal type for the plane of the hit
+    geo::WireID fWireID;        ///< WireID for the hit (Cryostat, TPC, Plane, Wire)
 
-      raw::ChannelID_t        fChannel;        ///< ID of the readout channel the hit was extracted from
-      raw::TDCtick_t          fStartTick;      ///< initial tdc tick for hit
-      raw::TDCtick_t          fEndTick;        ///< final tdc tick for hit
-      float                   fPeakTime;       ///< time of the signal peak, in tick units
-      float                   fSigmaPeakTime;  ///< uncertainty for the signal peak, in tick units
-      float                   fRMS;            ///< RMS of the hit shape, in tick units
-      float                   fPeakAmplitude;  ///< the estimated amplitude of the hit at its peak, in ADC units
-      float                   fSigmaPeakAmplitude; ///< uncertainty on estimated amplitude of the hit at its peak, in ADC units
-      float                   fSummedADC;      ///< the sum of calibrated ADC counts of the hit
-      float                   fIntegral;       ///< the integral under the calibrated signal waveform of the hit, in tick x ADC units
-      float                   fSigmaIntegral;  ///< the uncertainty of integral under the calibrated signal waveform of the hit, in ADC units
-      short int               fMultiplicity;   ///< how many hits could this one be shared with
-      short int               fLocalIndex;     ///< index of this hit among the Multiplicity() hits in the signal window
-      float                   fGoodnessOfFit;  ///< how well do we believe we know this hit?
-      int                     fNDF;            ///< degrees of freedom in the determination of the hit shape
-      geo::View_t             fView;           ///< view for the plane of the hit
-      geo::SigType_t          fSignalType;     ///< signal type for the plane of the hit
-      geo::WireID             fWireID;         ///< WireID for the hit (Cryostat, TPC, Plane, Wire)
+    friend class HitCreator; // helper to create hits
 
-      friend class HitCreator; // helper to create hits
-
-    public:
-      /**
+  public:
+    /**
        * @brief Constructor: directly sets all the fields
        * @param channel         ID of the readout channel the hit was extracted from
        * @param start_tick      initial tdc tick for hit
@@ -98,88 +98,86 @@ namespace recob {
        * The tick parameters are real numbers, since they can in principle come
        * from some processing.
        */
-      Hit(
-        raw::ChannelID_t        channel,
-        raw::TDCtick_t          start_tick,
-        raw::TDCtick_t          end_tick,
-        float                   peak_time,
-        float                   sigma_peak_time,
-        float                   rms,
-        float                   peak_amplitude,
-        float                   sigma_peak_amplitude,
-        float                   summedADC,
-        float                   hit_integral,
-        float                   hit_sigma_integral,
-        short int               multiplicity,
-        short int               local_index,
-        float                   goodness_of_fit,
-        int                     dof,
-        geo::View_t             view,
-        geo::SigType_t          signal_type,
-        geo::WireID             wireID
-        );
+    Hit(raw::ChannelID_t channel,
+        raw::TDCtick_t start_tick,
+        raw::TDCtick_t end_tick,
+        float peak_time,
+        float sigma_peak_time,
+        float rms,
+        float peak_amplitude,
+        float sigma_peak_amplitude,
+        float summedADC,
+        float hit_integral,
+        float hit_sigma_integral,
+        short int multiplicity,
+        short int local_index,
+        float goodness_of_fit,
+        int dof,
+        geo::View_t view,
+        geo::SigType_t signal_type,
+        geo::WireID wireID);
 
-      /// @{
-      /// @name Accessors
+    /// @{
+    /// @name Accessors
 
-      /// Initial tdc tick for hit
-      raw::TDCtick_t          StartTick()                 const;
+    /// Initial tdc tick for hit
+    raw::TDCtick_t StartTick() const;
 
-      /// Final tdc tick for hit
-      raw::TDCtick_t          EndTick()                   const;
+    /// Final tdc tick for hit
+    raw::TDCtick_t EndTick() const;
 
-      /// Time of the signal peak, in tick units
-      float                   PeakTime()                  const;
+    /// Time of the signal peak, in tick units
+    float PeakTime() const;
 
-      /// Uncertainty for the signal peak, in tick units
-      float                   SigmaPeakTime()             const;
+    /// Uncertainty for the signal peak, in tick units
+    float SigmaPeakTime() const;
 
-      /// RMS of the hit shape, in tick units
-      float                   RMS()                       const;
+    /// RMS of the hit shape, in tick units
+    float RMS() const;
 
-      /// The estimated amplitude of the hit at its peak, in ADC units
-      float                   PeakAmplitude()             const;
+    /// The estimated amplitude of the hit at its peak, in ADC units
+    float PeakAmplitude() const;
 
-      /// Uncertainty on estimated amplitude of the hit at its peak, in ADC units
-      float                   SigmaPeakAmplitude()        const;
+    /// Uncertainty on estimated amplitude of the hit at its peak, in ADC units
+    float SigmaPeakAmplitude() const;
 
-      /// The sum of calibrated ADC counts of the hit (0. by default)
-      float                   SummedADC()                 const;
+    /// The sum of calibrated ADC counts of the hit (0. by default)
+    float SummedADC() const;
 
-      /// Integral under the calibrated signal waveform of the hit, in tick x ADC units
-      float                   Integral()                  const;
+    /// Integral under the calibrated signal waveform of the hit, in tick x ADC units
+    float Integral() const;
 
-      ///< Uncertainty of integral under the calibrated signal waveform of the hit, in ADC units
-      float                   SigmaIntegral()             const;
+    ///< Uncertainty of integral under the calibrated signal waveform of the hit, in ADC units
+    float SigmaIntegral() const;
 
-      /// How many hits could this one be shared with
-      short int               Multiplicity()              const;
+    /// How many hits could this one be shared with
+    short int Multiplicity() const;
 
-      ///< Index of this hit among the Multiplicity() hits in the signal window (-1 by default)
-      short int               LocalIndex()                const;
+    ///< Index of this hit among the Multiplicity() hits in the signal window (-1 by default)
+    short int LocalIndex() const;
 
-      ///< How well do we believe we know this hit?
-      float                   GoodnessOfFit()             const;
+    ///< How well do we believe we know this hit?
+    float GoodnessOfFit() const;
 
-      ///< Degrees of freedom in the determination of the hit signal shape (-1 by default)
-      int                     DegreesOfFreedom()          const;
+    ///< Degrees of freedom in the determination of the hit signal shape (-1 by default)
+    int DegreesOfFreedom() const;
 
-      /// ID of the readout channel the hit was extracted from
-      raw::ChannelID_t        Channel()                   const;
+    /// ID of the readout channel the hit was extracted from
+    raw::ChannelID_t Channel() const;
 
-      /// View for the plane of the hit
-      geo::View_t             View()                      const;
+    /// View for the plane of the hit
+    geo::View_t View() const;
 
-      /// Signal type for the plane of the hit
-      geo::SigType_t          SignalType()                const;
+    /// Signal type for the plane of the hit
+    geo::SigType_t SignalType() const;
 
-      ///< ID of the wire the hit is on (Cryostat, TPC, Plane, Wire)
-      geo::WireID             WireID()                    const;
+    ///< ID of the wire the hit is on (Cryostat, TPC, Plane, Wire)
+    geo::WireID WireID() const;
 
-      /// @}
+    /// @}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns a time sigmas RMS away from the peak time
        * @param sigmas the number of RMS units to move away
        * @return the shifted time in TDC ticks
@@ -191,11 +189,11 @@ namespace recob {
        *   GausHitFinder to be PeakTimePlusRMS(-1.), and EndTime() was
        *   PeakTimePlusRMS(+1.).
        */
-      float                   PeakTimePlusRMS(float sigmas = +1.) const;
-      float                   PeakTimeMinusRMS(float sigmas = +1.) const;
-      //@}
+    float PeakTimePlusRMS(float sigmas = +1.) const;
+    float PeakTimeMinusRMS(float sigmas = +1.) const;
+    //@}
 
-      /**
+    /**
        * @brief Returns the distance of the specified time from peak, in RMS units
        * @param time the time, in TDC tick units
        * @return the distance of the specified time from peak, in RMS units
@@ -203,45 +201,100 @@ namespace recob {
        * This returns (ticks - PeakTime()) / RMS().
        * There is no protection in case RMS is 0!
        */
-      float                   TimeDistanceAsRMS(float time) const;
+    float TimeDistanceAsRMS(float time) const;
 
-
-      friend std::ostream&  operator << (std::ostream & o, const Hit & a);
-      friend bool           operator <  (const Hit & a, const Hit & b);
+    friend std::ostream& operator<<(std::ostream& o, const Hit& a);
+    friend bool operator<(const Hit& a, const Hit& b);
 
   }; // class Hit
 } // namespace recob
 
-
-inline raw::TDCtick_t          recob::Hit::StartTick()      const { return fStartTick;     }
-inline raw::TDCtick_t          recob::Hit::EndTick()        const { return fEndTick;       }
-inline float                   recob::Hit::PeakTime()       const { return fPeakTime;      }
-inline float                   recob::Hit::SigmaPeakTime()  const { return fSigmaPeakTime; }
-inline float                   recob::Hit::RMS()            const { return fRMS;           }
-inline float                   recob::Hit::PeakAmplitude()  const { return fPeakAmplitude; }
-inline float                   recob::Hit::SigmaPeakAmplitude() const { return fSigmaPeakAmplitude; }
-inline float                   recob::Hit::SummedADC()      const { return fSummedADC;     }
-inline float                   recob::Hit::Integral()       const { return fIntegral;      }
-inline float                   recob::Hit::SigmaIntegral()  const { return fSigmaIntegral; }
-inline short int               recob::Hit::Multiplicity()   const { return fMultiplicity;  }
-inline short int               recob::Hit::LocalIndex()     const { return fLocalIndex;    }
-inline float                   recob::Hit::GoodnessOfFit()  const { return fGoodnessOfFit; }
-inline int                     recob::Hit::DegreesOfFreedom() const { return fNDF;         }
-inline raw::ChannelID_t        recob::Hit::Channel()        const { return fChannel;       }
-inline geo::SigType_t          recob::Hit::SignalType()     const { return fSignalType;    }
-inline geo::View_t             recob::Hit::View()           const { return fView;          }
-inline geo::WireID             recob::Hit::WireID()         const { return fWireID;        }
-
+inline raw::TDCtick_t recob::Hit::StartTick() const
+{
+  return fStartTick;
+}
+inline raw::TDCtick_t recob::Hit::EndTick() const
+{
+  return fEndTick;
+}
+inline float recob::Hit::PeakTime() const
+{
+  return fPeakTime;
+}
+inline float recob::Hit::SigmaPeakTime() const
+{
+  return fSigmaPeakTime;
+}
+inline float recob::Hit::RMS() const
+{
+  return fRMS;
+}
+inline float recob::Hit::PeakAmplitude() const
+{
+  return fPeakAmplitude;
+}
+inline float recob::Hit::SigmaPeakAmplitude() const
+{
+  return fSigmaPeakAmplitude;
+}
+inline float recob::Hit::SummedADC() const
+{
+  return fSummedADC;
+}
+inline float recob::Hit::Integral() const
+{
+  return fIntegral;
+}
+inline float recob::Hit::SigmaIntegral() const
+{
+  return fSigmaIntegral;
+}
+inline short int recob::Hit::Multiplicity() const
+{
+  return fMultiplicity;
+}
+inline short int recob::Hit::LocalIndex() const
+{
+  return fLocalIndex;
+}
+inline float recob::Hit::GoodnessOfFit() const
+{
+  return fGoodnessOfFit;
+}
+inline int recob::Hit::DegreesOfFreedom() const
+{
+  return fNDF;
+}
+inline raw::ChannelID_t recob::Hit::Channel() const
+{
+  return fChannel;
+}
+inline geo::SigType_t recob::Hit::SignalType() const
+{
+  return fSignalType;
+}
+inline geo::View_t recob::Hit::View() const
+{
+  return fView;
+}
+inline geo::WireID recob::Hit::WireID() const
+{
+  return fWireID;
+}
 
 inline float recob::Hit::PeakTimePlusRMS(float sigmas /* = +1. */) const
-  { return PeakTime() + sigmas * RMS(); }
+{
+  return PeakTime() + sigmas * RMS();
+}
 
 inline float recob::Hit::PeakTimeMinusRMS(float sigmas /* = +1. */) const
-  { return PeakTimePlusRMS(-sigmas); }
+{
+  return PeakTimePlusRMS(-sigmas);
+}
 
 inline float recob::Hit::TimeDistanceAsRMS(float time) const
-  { return (time - PeakTime()) / RMS(); }
-
-
+{
+  return (time - PeakTime()) / RMS();
+}
 
 #endif // LARDATAOBJ_RECOBASE_HIT_H

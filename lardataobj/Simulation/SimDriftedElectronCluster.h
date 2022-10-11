@@ -14,29 +14,26 @@
 // C++ includes
 #include <iostream>
 
-namespace sim
-{
+namespace sim {
 
   // This structure contains all the information per simulated cluster of drifted electrons towards the anode.
 
-  class SimDriftedElectronCluster
-  {
+  class SimDriftedElectronCluster {
   private:
     using Length_t = double;
     using StoredPoint_t = geo::GenPoint3DBase_t<double>;
     using StoredVector_t = geo::GenVector3DBase_t<double>;
 
   public:
-
     SimDriftedElectronCluster() = default;
 
     SimDriftedElectronCluster(int ne,
-          double t,
-          StoredPoint_t start,
-          StoredPoint_t end,
-          StoredPoint_t width,
-          float e,
-          int id)
+                              double t,
+                              StoredPoint_t start,
+                              StoredPoint_t end,
+                              StoredPoint_t width,
+                              float e,
+                              int id)
       : fNumberOfElectrons(ne)
       , fTime(t)
       , fInitialPosition(start)
@@ -59,14 +56,13 @@ namespace sim
     geo::Length_t FinalPositionZ() const { return fFinalPosition.Z(); }
 
   private:
-
-    int            fNumberOfElectrons; //< of ionization electrons
-    double         fTime;    //< (ns)
-    StoredPoint_t  fInitialPosition;     //< positions in (cm)
-    StoredPoint_t  fFinalPosition;
-    StoredVector_t  fClusterWidth;
-    float          fEnergy;         //< energy deposition (MeV)
-    int            fMotherTrackID;      //< simulation track id
+    int fNumberOfElectrons;         //< of ionization electrons
+    double fTime;                   //< (ns)
+    StoredPoint_t fInitialPosition; //< positions in (cm)
+    StoredPoint_t fFinalPosition;
+    StoredVector_t fClusterWidth;
+    float fEnergy;      //< energy deposition (MeV)
+    int fMotherTrackID; //< simulation track id
   };
 
 } // namespace sim

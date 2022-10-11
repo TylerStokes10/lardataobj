@@ -16,14 +16,12 @@
 #define CLUSTER_H
 
 // C/C++ standard library
-# include <iosfwd> // std::ostream
+#include <iosfwd> // std::ostream
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::PlaneID, geo::View_t
 
-
 namespace recob {
-
 
   /**
    * @brief Set of hits with a 2D structure
@@ -70,119 +68,112 @@ namespace recob {
    */
   class Cluster {
 
-    public:
-      typedef int ID_t; ///< Type of cluster ID
+  public:
+    typedef int ID_t; ///< Type of cluster ID
 
+    typedef enum {
+      clStart,       ///< Represents the most likely start of the cluster
+      clEnd,         ///< Represents the end, or the alternative start, of the cluster
+      NEnds,         ///< End count
+      clFirstEnd = 0 ///< Just an alias for loops
+    } ClusterEnds_t; ///< Used to decide which end to use
 
-      typedef enum {
-        clStart,       ///< Represents the most likely start of the cluster
-        clEnd,         ///< Represents the end, or the alternative start, of the cluster
-        NEnds,         ///< End count
-        clFirstEnd = 0 ///< Just an alias for loops
-      } ClusterEnds_t; ///< Used to decide which end to use
+    typedef enum {
+      cmFit,          ///< Sums from the fitted hit values
+      cmADC,          ///< Sums directly from ADC counts
+      NChargeModes,   ///< End count
+      cmFirstMode = 0 ///< Just an alias for loops
+    } ChargeMode_t;   ///< Used to decide which style of charge sum to use
 
-      typedef enum {
-        cmFit,          ///< Sums from the fitted hit values
-        cmADC,          ///< Sums directly from ADC counts
-        NChargeModes,   ///< End count
-        cmFirstMode = 0 ///< Just an alias for loops
-      } ChargeMode_t; ///< Used to decide which style of charge sum to use
+    /// Default constructor: an empty cluster
+    Cluster();
 
+  private:
+    unsigned int fNHits; ///< Number of hits in the cluster
 
-      /// Default constructor: an empty cluster
-      Cluster();
+    /// @name Data referring to start and end of the cluster
+    /// @{
+    /// Wire coordinate of the start and end of the cluster (may lie between wires);
+    /// index is intended to be of type ClusterEnds_t.
+    float fEndWires[NEnds];
 
-    private:
+    /// Uncertainty on wire coordinate of the start and end of the cluster;
+    /// index is intended to be of type ClusterEnds_t.
+    float fSigmaEndWires[NEnds];
 
-      unsigned int fNHits; ///< Number of hits in the cluster
+    /// Tick coordinate of the start and end of the cluster (may be set between ticks);
+    /// index is intended to be of type ClusterEnds_t.
+    float fEndTicks[NEnds];
 
-      /// @name Data referring to start and end of the cluster
-      /// @{
-      /// Wire coordinate of the start and end of the cluster (may lie between wires);
-      /// index is intended to be of type ClusterEnds_t.
-      float fEndWires[NEnds];
+    /// Uncertainty on tick coordinate of the start and end of the cluster;
+    /// index is intended to be of type ClusterEnds_t.
+    float fSigmaEndTicks[NEnds];
 
-      /// Uncertainty on wire coordinate of the start and end of the cluster;
-      /// index is intended to be of type ClusterEnds_t.
-      float fSigmaEndWires[NEnds];
+    /// Charge on the start and end wire of the cluster.
+    /// This value can be result of extrapolation or average from a range of hits.
+    /// index is intended to be of type ClusterEnds_t.
+    float fEndCharges[NEnds];
 
-      /// Tick coordinate of the start and end of the cluster (may be set between ticks);
-      /// index is intended to be of type ClusterEnds_t.
-      float fEndTicks[NEnds];
+    /// Angle of the start and end of the cluster, defined in [-pi,pi]
+    /// and so that tan(angle) = dT/dW (or, more precisely, `angle = atan2(dT, dW)`).
+    /// The elements are expressed in physical distances and therefore this
+    /// represents a physical angle on the plane orthogonal to the wires in
+    /// the view and containing the drift direction ("x"); the angle is 0 or
+    /// @f$ \pi @f$ when lying on the wire plane, @f$ \pm\pi/2 @f$ when
+    /// pointing into/from the wire plane.
+    /// Index is intended to be of type ClusterEnds_t.
+    float fAngles[NEnds];
 
-      /// Uncertainty on tick coordinate of the start and end of the cluster;
-      /// index is intended to be of type ClusterEnds_t.
-      float fSigmaEndTicks[NEnds];
+    /// Opening angle of the cluster shape at the start and end of the cluster.
+    /// The coordinates are expressed in physical distances and therefore this
+    /// represents a physical opening angle on the plane orthogonal to the
+    /// wires in the view and containing the drift direction ("x").
+    /// Index is intended to be of type ClusterEnds_t.
+    float fOpeningAngles[NEnds];
+    /// @}
 
-      /// Charge on the start and end wire of the cluster.
-      /// This value can be result of extrapolation or average from a range of hits.
-      /// index is intended to be of type ClusterEnds_t.
-      float fEndCharges[NEnds];
+    /// @name Data derived from hit charge
+    /// @{
+    /// Sum of the charge of all hits in the cluster.
+    /// Index is intended to be of type ChargeMode_t
+    float fChargeSum[NChargeModes];
 
-      /// Angle of the start and end of the cluster, defined in [-pi,pi]
-      /// and so that tan(angle) = dT/dW (or, more precisely, `angle = atan2(dT, dW)`).
-      /// The elements are expressed in physical distances and therefore this
-      /// represents a physical angle on the plane orthogonal to the wires in
-      /// the view and containing the drift direction ("x"); the angle is 0 or
-      /// @f$ \pi @f$ when lying on the wire plane, @f$ \pm\pi/2 @f$ when
-      /// pointing into/from the wire plane.
-      /// Index is intended to be of type ClusterEnds_t.
-      float fAngles[NEnds];
+    /// Standard deviation of the charge of hits.
+    /// Index is intended to be of type ChargeMode_t
+    float fChargeStdDev[NChargeModes];
 
-      /// Opening angle of the cluster shape at the start and end of the cluster.
-      /// The coordinates are expressed in physical distances and therefore this
-      /// represents a physical opening angle on the plane orthogonal to the
-      /// wires in the view and containing the drift direction ("x").
-      /// Index is intended to be of type ClusterEnds_t.
-      float fOpeningAngles[NEnds];
-      /// @}
+    ///< Average of the charge of all hits in the cluster (fChargeSum/NHits()).
+    /// Index is intended to be of type ChargeMode_t
+    float fChargeAverage[NChargeModes];
+    /// @}
 
+    /// Density of wires in the cluster with more than one hit.
+    float fMultipleHitDensity;
 
-      /// @name Data derived from hit charge
-      /// @{
-      /// Sum of the charge of all hits in the cluster.
-      /// Index is intended to be of type ChargeMode_t
-      float fChargeSum[NChargeModes];
+    /// A measure of the cluster width, in homogenized units.
+    float fWidth;
 
-      /// Standard deviation of the charge of hits.
-      /// Index is intended to be of type ChargeMode_t
-      float fChargeStdDev[NChargeModes];
+    /// Identifier of this cluster.
+    /// It should be unique per event and per algorithm.
+    /// An invalid cluster can be defined by having an ID Cluster::InvalidID.
+    ID_t fID;
 
-      ///< Average of the charge of all hits in the cluster (fChargeSum/NHits()).
-      /// Index is intended to be of type ChargeMode_t
-      float fChargeAverage[NChargeModes];
-      /// @}
+    geo::View_t fView; ///< View for this cluster
 
-      /// Density of wires in the cluster with more than one hit.
-      float fMultipleHitDensity;
+    geo::PlaneID fPlaneID; ///< Location of the start of the cluster
 
-      /// A measure of the cluster width, in homogenized units.
-      float fWidth;
+  public:
+    /// Type of sentry argument
+    typedef struct {
+    } SentryArgument_t;
 
-      /// Identifier of this cluster.
-      /// It should be unique per event and per algorithm.
-      /// An invalid cluster can be defined by having an ID Cluster::InvalidID.
-      ID_t fID;
+    /// Value for an invalid cluster ID
+    static constexpr ID_t InvalidID = -1;
 
+    /// An instance of the sentry object
+    static const SentryArgument_t Sentry;
 
-      geo::View_t fView; ///< View for this cluster
-
-      geo::PlaneID fPlaneID; ///< Location of the start of the cluster
-
-
-    public:
-
-      /// Type of sentry argument
-      typedef struct {} SentryArgument_t;
-
-      /// Value for an invalid cluster ID
-      static constexpr ID_t InvalidID = -1;
-
-      /// An instance of the sentry object
-      static const SentryArgument_t Sentry;
-
-
-      /**
+    /**
        * @brief Constructor: assigns all the fields
        * @param start_wire wire coordinate of the start of the cluster
        * @param sigma_start_wire uncertainty on start_wire
@@ -219,62 +210,61 @@ namespace recob {
        * compiler will realize if the number of parameters in the constructor
        * has varied.
        */
-      Cluster(
-        float start_wire,
-        float sigma_start_wire,
-        float start_tick,
-        float sigma_start_tick,
-        float start_charge,
-        float start_angle,
-        float start_opening,
-        float end_wire,
-        float sigma_end_wire,
-        float end_tick,
-        float sigma_end_tick,
-        float end_charge,
-        float end_angle,
-        float end_opening,
-        float integral,
-        float integral_stddev,
-        float summedADC,
-        float summedADC_stddev,
-        unsigned int n_hits,
-        float multiple_hit_density,
-        float width,
-        ID_t ID,
-        geo::View_t view,
-        geo::PlaneID const& plane,
-        SentryArgument_t sentry = Sentry
-        );
+    Cluster(float start_wire,
+            float sigma_start_wire,
+            float start_tick,
+            float sigma_start_tick,
+            float start_charge,
+            float start_angle,
+            float start_opening,
+            float end_wire,
+            float sigma_end_wire,
+            float end_tick,
+            float sigma_end_tick,
+            float end_charge,
+            float end_angle,
+            float end_opening,
+            float integral,
+            float integral_stddev,
+            float summedADC,
+            float summedADC_stddev,
+            unsigned int n_hits,
+            float multiple_hit_density,
+            float width,
+            ID_t ID,
+            geo::View_t view,
+            geo::PlaneID const& plane,
+            SentryArgument_t sentry = Sentry);
 
+    /// Copy constructor: automatically generated
+    Cluster(Cluster const&) = default;
 
-      /// Copy constructor: automatically generated
-      Cluster(Cluster const&) = default;
+    /// Move constructor: as copy, but source cluster gets an invalid ID
+    Cluster(Cluster&& from) : Cluster(from) { from.fID = InvalidID; }
 
-      /// Move constructor: as copy, but source cluster gets an invalid ID
-      Cluster(Cluster&& from): Cluster(from) { from.fID = InvalidID; }
+    /// Copy assignment: automatically generated
+    Cluster& operator=(Cluster const&) = default;
 
-      /// Copy assignment: automatically generated
-      Cluster& operator= (Cluster const&) = default;
+    /// Move assignment: as copy, but source cluster gets an invalid ID
+    Cluster& operator=(Cluster&& from)
+    {
+      if (&from != this) {
+        operator=(from);
+        from.fID = InvalidID;
+      }
+      return *this;
+    }
 
-      /// Move assignment: as copy, but source cluster gets an invalid ID
-      Cluster& operator= (Cluster&& from)
-        {
-          if (&from != this) { operator=(from); from.fID = InvalidID; }
-          return *this;
-        }
+    /// Destructor: automatically generated
+    ~Cluster() = default;
 
-      /// Destructor: automatically generated
-      ~Cluster() = default;
+    /// @{
+    /// @name Accessors
 
+    /// Number of hits in the cluster
+    unsigned int NHits() const { return fNHits; }
 
-      /// @{
-      /// @name Accessors
-
-      /// Number of hits in the cluster
-      unsigned int NHits() const { return fNHits; }
-
-      /** **********************************************************************
+    /** **********************************************************************
        * @brief Returns the wire coordinate of the start of the cluster
        * @return wire coordinate of the start of the cluster (may lie between wires)
        * @see EndWire(), WireCoord(), StartTick()
@@ -283,9 +273,9 @@ namespace recob {
        * but can have a fractional part describing the relative distance from
        * the previous wire.
        */
-      float StartWire() const { return fEndWires[clStart]; }
+    float StartWire() const { return fEndWires[clStart]; }
 
-      /**
+    /**
        * @brief Returns the tick coordinate of the start of the cluster
        * @return tick coordinate of the start of the cluster (may br fractional)
        * @see EndTick(), TickCoord(), StartWire()
@@ -294,28 +284,27 @@ namespace recob {
        * but can have a fractional part describing the relative time from
        * the previous tick.
        */
-      float StartTick() const { return fEndTicks[clStart]; }
+    float StartTick() const { return fEndTicks[clStart]; }
 
-      /**
+    /**
        * @brief Returns the uncertainty on wire coordinate of the start of the cluster
        * @return uncertainty on wire coordinate of the start of the cluster
        * @see StartWire()
        *
        * The wire uncertainty is in wire units (as for StartWire()).
        */
-      float SigmaStartWire() const { return fSigmaEndWires[clStart]; }
+    float SigmaStartWire() const { return fSigmaEndWires[clStart]; }
 
-      /**
+    /**
        * @brief Returns the uncertainty on tick coordinate of the start of the cluster
        * @return uncertainty on tick coordinate of the start of the cluster
        * @see StartTick()
        *
        * The tick uncertainty is in tick units (as for StartTick()).
        */
-      float SigmaStartTick() const { return fSigmaEndTicks[clStart]; }
+    float SigmaStartTick() const { return fSigmaEndTicks[clStart]; }
 
-
-      /** **********************************************************************
+    /** **********************************************************************
        * @brief Returns the wire coordinate of the end of the cluster
        * @return wire coordinate of the end of the cluster (may lie between wires)
        * @see StartWire(), WireCoord(), EndTick()
@@ -326,9 +315,9 @@ namespace recob {
        * but can have a fractional part describing the relative distance from
        * the previous wire.
        */
-      float EndWire() const { return fEndWires[clEnd]; }
+    float EndWire() const { return fEndWires[clEnd]; }
 
-      /**
+    /**
        * @brief Returns the tick coordinate of the end of the cluster
        * @return tick coordinate of the end of the cluster (may be fractional)
        * @see StartTick(), TickCoord(), EndWire()
@@ -339,29 +328,28 @@ namespace recob {
        * but can have a fractional part describing the relative time from
        * the previous tick.
        */
-      float EndTick() const { return fEndTicks[clEnd]; }
+    float EndTick() const { return fEndTicks[clEnd]; }
 
-      /**
+    /**
        * @brief Returns the uncertainty on wire coordinate of the end of the cluster
        * @return uncertainty on wire coordinate of the end of the cluster
        * @see EndWire()
        *
        * The wire uncertainty is in wire units (as for EndWire()).
        */
-      float SigmaEndWire() const { return fSigmaEndWires[clEnd]; }
+    float SigmaEndWire() const { return fSigmaEndWires[clEnd]; }
 
-      /**
+    /**
        * @brief Returns the uncertainty on tick coordinate of the end of the cluster
        * @return uncertainty on tick coordinate of the end of the cluster
        * @see EndTick()
        *
        * The tick uncertainty is in tick units (as for EndTick()).
        */
-      float SigmaEndTick() const { return fSigmaEndTicks[clEnd]; }
+    float SigmaEndTick() const { return fSigmaEndTicks[clEnd]; }
 
-
-      //@{
-      /** **********************************************************************
+    //@{
+    /** **********************************************************************
        * @brief Returns the wire coordinate of one of the end sides of the cluster
        * @param side clStart for start, clEnd for end of the cluster
        * @return wire coordinate of the requested end of the cluster (may lie between wires)
@@ -383,12 +371,12 @@ namespace recob {
        *     } // for
        *
        */
-      float WireCoord(ClusterEnds_t side) const { return fEndWires[side]; }
-      float WireCoord(unsigned int side) const { return fEndWires[side]; }
-      //@}
+    float WireCoord(ClusterEnds_t side) const { return fEndWires[side]; }
+    float WireCoord(unsigned int side) const { return fEndWires[side]; }
+    //@}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the tick coordinate of one of the end sides of the cluster
        * @param side clStart for start, clEnd for end of the cluster
        * @return tick coordinate of the requested end of the cluster (may be fractional)
@@ -410,13 +398,12 @@ namespace recob {
        *     } // for
        *
        */
-      float TickCoord(ClusterEnds_t side) const { return fEndTicks[side]; }
-      float TickCoord(unsigned int side) const { return fEndTicks[side]; }
-      //@}
+    float TickCoord(ClusterEnds_t side) const { return fEndTicks[side]; }
+    float TickCoord(unsigned int side) const { return fEndTicks[side]; }
+    //@}
 
-
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the uncertainty on wire coordinate of one of the end sides of the cluster
        * @param side clStart for start, clEnd for end of the cluster
        * @return uncertainty on wire coordinate of the requested end of the cluster
@@ -424,12 +411,12 @@ namespace recob {
        *
        * Usage of this method is similar to WireCoord().
        */
-      float SigmaWireCoord(ClusterEnds_t side) const { return fSigmaEndWires[side]; }
-      float SigmaWireCoord(unsigned int side) const { return fSigmaEndWires[side]; }
-      //@}
+    float SigmaWireCoord(ClusterEnds_t side) const { return fSigmaEndWires[side]; }
+    float SigmaWireCoord(unsigned int side) const { return fSigmaEndWires[side]; }
+    //@}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the uncertainty on tick coordinate of one of the end sides of the cluster
        * @param side clStart for start, clEnd for end of the cluster
        * @return uncertainty on tick coordinate of the requested end of the cluster
@@ -437,12 +424,11 @@ namespace recob {
        *
        * Usage of this method is similar to TimeCoord().
        */
-      float SigmaTickCoord(ClusterEnds_t side) const { return fSigmaEndTicks[side]; }
-      float SigmaTickCoord(unsigned int side) const { return fSigmaEndTicks[side]; }
-      //@}
+    float SigmaTickCoord(ClusterEnds_t side) const { return fSigmaEndTicks[side]; }
+    float SigmaTickCoord(unsigned int side) const { return fSigmaEndTicks[side]; }
+    //@}
 
-
-      /** **********************************************************************
+    /** **********************************************************************
        * @brief Returns the charge on the first wire of the cluster
        * @return charge on the first wire in ADC counts, negative if not available
        * @see EndCharge(), EdgeCharge()
@@ -451,9 +437,9 @@ namespace recob {
        * fractional.
        * This value can be result of extrapolation or average from a range of hits.
        */
-      float StartCharge() const { return fEndCharges[clStart]; }
+    float StartCharge() const { return fEndCharges[clStart]; }
 
-      /**
+    /**
        * @brief Returns the starting angle of the cluster
        * @return angle in radians
        * @see EndAngle(), Angle()
@@ -472,9 +458,9 @@ namespace recob {
        * This value can be result of extrapolation or average from a range of
        * hits.
        */
-      float StartAngle() const { return fAngles[clStart]; }
+    float StartAngle() const { return fAngles[clStart]; }
 
-      /**
+    /**
        * @brief Returns the opening angle at the start of the cluster
        * @return opening angle in radians
        * @see EndOpeningAngle(), OpeningAngle()
@@ -482,10 +468,9 @@ namespace recob {
        * The returned value is from physical coordinates and in the range
        * @f$[ 0, \pi ]@f$.
        */
-      float StartOpeningAngle() const { return fOpeningAngles[clStart]; }
+    float StartOpeningAngle() const { return fOpeningAngles[clStart]; }
 
-
-      /**
+    /**
        * @brief Returns the charge on the last wire of the cluster
        * @return charge on the last wire in ADC counts, negative if not available
        * @see StartCharge(), EdgeCharge()
@@ -495,9 +480,9 @@ namespace recob {
        * This value can be result of extrapolation or average from a range of
        * hits.
        */
-      float EndCharge() const { return fEndCharges[clEnd]; }
+    float EndCharge() const { return fEndCharges[clEnd]; }
 
-      /**
+    /**
        * @brief Returns the ending angle of the cluster
        * @return angle in radians
        * @see StartAngle(), Angle()
@@ -516,9 +501,9 @@ namespace recob {
        * This value can be result of extrapolation or average from a range of
        * hits.
        */
-      float EndAngle() const { return fAngles[clEnd]; }
+    float EndAngle() const { return fAngles[clEnd]; }
 
-      /**
+    /**
        * @brief Returns the opening angle at the end of the cluster
        * @return opening angle in radians
        * @see StartOpeningAngle(), OpeningAngle()
@@ -526,11 +511,10 @@ namespace recob {
        * The returned value is from homogenized coordinates and in the range
        * @f$[ 0, \pi ]@f$.
        */
-      float EndOpeningAngle() const { return fOpeningAngles[clEnd]; }
+    float EndOpeningAngle() const { return fOpeningAngles[clEnd]; }
 
-
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the charge on the first or last wire of the cluster
        * @param side clStart for start, clEnd for end of the cluster
        * @return charge on the requested wire in ADC counts, negative if not available
@@ -541,12 +525,12 @@ namespace recob {
        * This value can be result of extrapolation or average from a range of
        * hits.
        */
-      float EdgeCharge(ClusterEnds_t side) const { return fEndCharges[side]; }
-      float EdgeCharge(unsigned int side) const { return fEndCharges[side]; }
-      //@}
+    float EdgeCharge(ClusterEnds_t side) const { return fEndCharges[side]; }
+    float EdgeCharge(unsigned int side) const { return fEndCharges[side]; }
+    //@}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the angle at either end of the cluster
        * @param side clStart for start, clEnd for end of the cluster
        * @return angle in radians
@@ -566,12 +550,12 @@ namespace recob {
        * This value can be result of extrapolation or average from a range of
        * hits.
        */
-      float Angle(ClusterEnds_t side) const { return fAngles[side]; }
-      float Angle(unsigned int side) const { return fAngles[side]; }
-      //@}
+    float Angle(ClusterEnds_t side) const { return fAngles[side]; }
+    float Angle(unsigned int side) const { return fAngles[side]; }
+    //@}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the opening angle at either end of the cluster
        * @return opening angle in radians
        * @see StartOpeningAngle(), EndOpeningAngle()
@@ -581,14 +565,11 @@ namespace recob {
        * This value can be result of extrapolation or average from a range of
        * hits.
        */
-      float OpeningAngle(ClusterEnds_t side) const
-        { return fOpeningAngles[side]; }
-      float OpeningAngle(unsigned int side) const
-        { return fOpeningAngles[side]; }
-      //@}
+    float OpeningAngle(ClusterEnds_t side) const { return fOpeningAngles[side]; }
+    float OpeningAngle(unsigned int side) const { return fOpeningAngles[side]; }
+    //@}
 
-
-      /** **********************************************************************
+    /** **********************************************************************
        * @brief Returns the total charge of the cluster from hit shape
        * @return total charge of the cluster from hit shape, in ADC counts
        * @see IntegralStdDev(), IntegralAverage(), SummedADC(), Charge()
@@ -597,9 +578,9 @@ namespace recob {
        * The charge of a single hit includes the hit shape (fit) and is obtained
        * by recob::Hit::Integral().
        */
-      float Integral() const { return fChargeSum[cmFit]; }
+    float Integral() const { return fChargeSum[cmFit]; }
 
-      /**
+    /**
        * @brief Returns the standard deviation of the charge of the cluster hits
        * @return standard deviation of the charge of the cluster hits, in ADC counts
        * @see Integral(), IntegralAverage(), SummedADCstdDev(), ChargeStdDev()
@@ -608,9 +589,9 @@ namespace recob {
        * by recob::Hit::Integral().
        * It should return 0 if less than two hits are available.
        */
-      float IntegralStdDev() const { return fChargeStdDev[cmFit]; }
+    float IntegralStdDev() const { return fChargeStdDev[cmFit]; }
 
-      /**
+    /**
        * @brief Returns the average charge of the cluster hits
        * @return average of the charge of the cluster hits, in ADC counts
        * @see Integral(), IntegralStdDev(), SummedADCaverage(), ChargeAverage()
@@ -619,10 +600,9 @@ namespace recob {
        * by recob::Hit::Integral().
        * It should return 0 if no hit is available.
        */
-      float IntegralAverage() const { return fChargeAverage[cmFit]; }
+    float IntegralAverage() const { return fChargeAverage[cmFit]; }
 
-
-      /** **********************************************************************
+    /** **********************************************************************
        * @brief Returns the total charge of the cluster from signal ADC counts
        * @return total charge of the cluster from signal ADC, in ADC counts
        * @see SummedADCstdDev(), SummedADCaverage(), Integral(), Charge()
@@ -631,9 +611,9 @@ namespace recob {
        * The charge of a single hit includes the signal ADC counts and is
        * obtained by recob::Hit::SummedADC().
        */
-      float SummedADC() const { return fChargeSum[cmADC]; }
+    float SummedADC() const { return fChargeSum[cmADC]; }
 
-      /**
+    /**
        * @brief Returns the standard deviation of the signal ADC counts of the cluster hits
        * @return standard deviation of the signal of the cluster hits, in ADC counts
        * @see SummedADC(), SummedADCaverage(), IntegralStdDev(), ChargeStdDev()
@@ -642,9 +622,9 @@ namespace recob {
        * obtained by recob::Hit::SummedADC().
        * It should return 0 if less than two hits are available.
        */
-      float SummedADCstdDev() const { return fChargeStdDev[cmADC]; }
+    float SummedADCstdDev() const { return fChargeStdDev[cmADC]; }
 
-      /**
+    /**
        * @brief Returns the average signal ADC counts of the cluster hits
        * @return average of the signal of the cluster hits, in ADC counts
        * @see SummedADC(), SummedADCstdDev(), IntegralAverage(), ChargeAverage()
@@ -653,11 +633,10 @@ namespace recob {
        * obtained by recob::Hit::SummedADC().
        * It should return 0 if no hit is available.
        */
-      float SummedADCaverage() const { return fChargeAverage[cmADC]; }
+    float SummedADCaverage() const { return fChargeAverage[cmADC]; }
 
-
-      //@{
-      /** **********************************************************************
+    //@{
+    /** **********************************************************************
        * @brief Returns the total charge of the cluster
        * @param mode cmFit to use fitted hit shape, cmADC for signal ADCs
        * @return total charge of the cluster, in ADC counts
@@ -673,12 +652,12 @@ namespace recob {
        * the old `Charge()` with `Charge(cmFit)` should do the trick.
        * The recommended update is to use `Integral()` instead.
        */
-      float Charge(ChargeMode_t mode) const { return fChargeSum[mode]; }
-      float Charge(unsigned int mode) const { return fChargeSum[mode]; }
-      //@}
+    float Charge(ChargeMode_t mode) const { return fChargeSum[mode]; }
+    float Charge(unsigned int mode) const { return fChargeSum[mode]; }
+    //@}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the standard deviation of charge of the cluster hits
        * @return standard deviation of charge of the cluster hits, in ADC counts
        * @see Charge(), ChargeAverage(), SummedADCstdDev(), IntegralStdDev()
@@ -688,14 +667,12 @@ namespace recob {
        * (recob::Hit::SummedADC()) for cmADC.
        * It should return 0 if less than two hits are available.
        */
-      float ChargeStdDev(ChargeMode_t mode) const
-        { return fChargeStdDev[mode]; }
-      float ChargeStdDev(unsigned int mode) const
-        { return fChargeStdDev[mode]; }
-      //@}
+    float ChargeStdDev(ChargeMode_t mode) const { return fChargeStdDev[mode]; }
+    float ChargeStdDev(unsigned int mode) const { return fChargeStdDev[mode]; }
+    //@}
 
-      //@{
-      /**
+    //@{
+    /**
        * @brief Returns the average charge of the cluster hits
        * @return average of the charge of the cluster hits, in ADC counts
        * @see Charge(), ChargeStdDev(), SummedADCaverage(), IntegralAverage()
@@ -705,13 +682,11 @@ namespace recob {
        * (recob::Hit::SummedADC()) for cmADC.
        * It should return 0 if no hit is available.
        */
-      float ChargeAverage(ChargeMode_t mode) const
-        { return fChargeAverage[mode]; }
-      float ChargeAverage(unsigned int mode) const
-        { return fChargeAverage[mode]; }
-      //@}
+    float ChargeAverage(ChargeMode_t mode) const { return fChargeAverage[mode]; }
+    float ChargeAverage(unsigned int mode) const { return fChargeAverage[mode]; }
+    //@}
 
-      /**
+    /**
        * @brief Density of wires in the cluster with more than one hit
        * @return density of wires in the cluster with more than one hit
        *
@@ -720,14 +695,12 @@ namespace recob {
        * one hit amd Length is an estimation of the length of the cluster, in
        * centimetres.
        */
-      float MultipleHitDensity() const { return fMultipleHitDensity; }
+    float MultipleHitDensity() const { return fMultipleHitDensity; }
 
+    /// A measure of the cluster width, in homogenized units.
+    float Width() const { return fWidth; }
 
-      /// A measure of the cluster width, in homogenized units.
-      float Width() const { return fWidth; }
-
-
-      /**
+    /**
        * @brief Identifier of this cluster
        * @return the identifier of this cluster
        * @see isValid()
@@ -735,31 +708,27 @@ namespace recob {
        * The identifier should be unique per event and per algorithm.
        * An invalid cluster can be defined by having an ID Cluster::InvalidID.
        */
-      ID_t  ID() const { return fID; }
+    ID_t ID() const { return fID; }
 
-      /// Returns the view for this cluster
-      geo::View_t View() const { return fView; }
+    /// Returns the view for this cluster
+    geo::View_t View() const { return fView; }
 
-      /// Returns the plane ID this cluster lies on
-      geo::PlaneID Plane() const { return fPlaneID; }
+    /// Returns the plane ID this cluster lies on
+    geo::PlaneID Plane() const { return fPlaneID; }
 
-      /// @}
+    /// @}
 
-      /// Returns whether geometry plane is valid
-      bool hasPlane() const { return fPlaneID.isValid; }
+    /// Returns whether geometry plane is valid
+    bool hasPlane() const { return fPlaneID.isValid; }
 
+    /// Returns if the cluster is valid (that is, if its ID is not invalid)
+    bool isValid() const { return ID() != InvalidID; }
 
-      /// Returns if the cluster is valid (that is, if its ID is not invalid)
-      bool isValid() const { return ID() != InvalidID; }
-
-
-      friend std::ostream& operator << (std::ostream& o, Cluster const& c);
-      friend bool          operator <  (Cluster const& a, Cluster const& b);
-
+    friend std::ostream& operator<<(std::ostream& o, Cluster const& c);
+    friend bool operator<(Cluster const& a, Cluster const& b);
 
   }; // class Cluster
 
 } // namespace recob
-
 
 #endif //CLUSTER_H

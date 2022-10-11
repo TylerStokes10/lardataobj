@@ -14,25 +14,18 @@
 // C/C++ standard library
 
 // Boost libraries
-#define BOOST_TEST_MODULE ( charge_test )
+#define BOOST_TEST_MODULE (charge_test)
 #include "boost/test/unit_test.hpp"
-
 
 // LArSoft libraries
 #include "lardataobj/RecoBase/PointCharge.h"
-
-
 
 //------------------------------------------------------------------------------
 //--- Test code
 //
 
-
-void CheckCharge(
-  recob::PointCharge const& obj,
-  bool hasCharge,
-  recob::PointCharge::Charge_t charge
-) {
+void CheckCharge(recob::PointCharge const& obj, bool hasCharge, recob::PointCharge::Charge_t charge)
+{
 
   // verify that the values are as expected
   if (hasCharge) {
@@ -46,8 +39,8 @@ void CheckCharge(
 
 } // CheckCharge()
 
-
-void ChargeTestDefaultConstructor() {
+void ChargeTestDefaultConstructor()
+{
 
   //
   // Part I: initialization of inputs
@@ -67,8 +60,8 @@ void ChargeTestDefaultConstructor() {
 
 } // ChargeTestDefaultConstructor()
 
-
-void ChargeTestValueConstructors() {
+void ChargeTestValueConstructors()
+{
   //
   // Part I: initialization of inputs
   //
@@ -87,16 +80,16 @@ void ChargeTestValueConstructors() {
 
 } // ChargeTestValueConstructors()
 
-
 //------------------------------------------------------------------------------
 //--- registration of tests
 //
 
-BOOST_AUTO_TEST_CASE(ChargeTestDefaultConstructor_testcase) {
+BOOST_AUTO_TEST_CASE(ChargeTestDefaultConstructor_testcase)
+{
   ChargeTestDefaultConstructor();
 } // ChargeTestDefaultConstructor_testcase
 
-BOOST_AUTO_TEST_CASE(ChargeTestValueConstructor_testcase) {
+BOOST_AUTO_TEST_CASE(ChargeTestValueConstructor_testcase)
+{
   ChargeTestValueConstructors();
 } // ChargeTestValueConstructor_testcase
-

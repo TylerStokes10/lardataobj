@@ -35,29 +35,27 @@ namespace recob {
     , fView(geo::kUnknown)
     , fSignalType(geo::kMysteryType)
     , fWireID() // invalid
-    {}
+  {}
 
   //----------------------------------------------------------------------
-  Hit::Hit(
-    raw::ChannelID_t        channel,
-    raw::TDCtick_t          start_tick,
-    raw::TDCtick_t          end_tick,
-    float                   peak_time,
-    float                   sigma_peak_time,
-    float                   rms,
-    float                   peak_amplitude,
-    float                   sigma_peak_amplitude,
-    float                   summedADC,
-    float                   hit_integral,
-    float                   hit_sigma_integral,
-    short int               multiplicity,
-    short int               local_index,
-    float                   goodness_of_fit,
-    int                     dof,
-    geo::View_t             view,
-    geo::SigType_t          signal_type,
-    geo::WireID             wireID
-    )
+  Hit::Hit(raw::ChannelID_t channel,
+           raw::TDCtick_t start_tick,
+           raw::TDCtick_t end_tick,
+           float peak_time,
+           float sigma_peak_time,
+           float rms,
+           float peak_amplitude,
+           float sigma_peak_amplitude,
+           float summedADC,
+           float hit_integral,
+           float hit_sigma_integral,
+           short int multiplicity,
+           short int local_index,
+           float goodness_of_fit,
+           int dof,
+           geo::View_t view,
+           geo::SigType_t signal_type,
+           geo::WireID wireID)
     : fChannel(channel)
     , fStartTick(start_tick)
     , fEndTick(end_tick)
@@ -78,49 +76,41 @@ namespace recob {
     , fWireID(wireID)
   {}
 
-
   //----------------------------------------------------------------------
   // ostream operator.
   //
-  std::ostream& operator<< (std::ostream& o, Hit const& hit) {
+  std::ostream& operator<<(std::ostream& o, Hit const& hit)
+  {
     o << std::setiosflags(std::ios::fixed) << std::setprecision(2);
-    o <<   " Channel "          << std::setw(5) << std::right << hit.Channel()
-      <<   " View = "           << std::setw(3) << std::right << hit.View()
-      <<   " Signal type = "    << std::setw(3) << std::right << hit.SignalType()
-      <<   " Wire = "           << std::setw(3) << std::right << hit.WireID()
-      << "\n\tStartTick = "     << std::setw(7) << std::right << hit.StartTick()
-        << "\tEndTick = "       << std::setw(7) << std::right << hit.EndTick()
-        << "\tPeakTime = "      << std::setw(7) << std::right << hit.PeakTime()
-        << " +/- "              << std::setw(7) << std::right << hit.SigmaPeakTime()
-        << "\tRMS = "           << std::setw(7) << std::right << hit.RMS()
-      << "\n\tAmplitude = "     << std::setw(7) << std::right << hit.PeakAmplitude()
-        << " +/- "              << std::setw(7) << std::right << hit.SigmaPeakAmplitude()
-        << "\tIntegral = "      << std::setw(7) << std::right << hit.Integral()
-        << " +/- "              << std::setw(7) << std::right << hit.SigmaIntegral()
-        << "\tADCsum = "        << std::setw(7) << std::right << hit.SummedADC()
-        << "\tMultiplicity = "  << std::setw(5) << std::right << hit.LocalIndex() << " of " << hit.Multiplicity()
-        << "\tGoodnessOfFit = " << std::setw(7) << std::right << hit.GoodnessOfFit()
-        << " DoF = "           << std::setw(7) << std::right << hit.DegreesOfFreedom()
+    o << " Channel " << std::setw(5) << std::right << hit.Channel() << " View = " << std::setw(3)
+      << std::right << hit.View() << " Signal type = " << std::setw(3) << std::right
+      << hit.SignalType() << " Wire = " << std::setw(3) << std::right << hit.WireID()
+      << "\n\tStartTick = " << std::setw(7) << std::right << hit.StartTick()
+      << "\tEndTick = " << std::setw(7) << std::right << hit.EndTick()
+      << "\tPeakTime = " << std::setw(7) << std::right << hit.PeakTime() << " +/- " << std::setw(7)
+      << std::right << hit.SigmaPeakTime() << "\tRMS = " << std::setw(7) << std::right << hit.RMS()
+      << "\n\tAmplitude = " << std::setw(7) << std::right << hit.PeakAmplitude() << " +/- "
+      << std::setw(7) << std::right << hit.SigmaPeakAmplitude() << "\tIntegral = " << std::setw(7)
+      << std::right << hit.Integral() << " +/- " << std::setw(7) << std::right
+      << hit.SigmaIntegral() << "\tADCsum = " << std::setw(7) << std::right << hit.SummedADC()
+      << "\tMultiplicity = " << std::setw(5) << std::right << hit.LocalIndex() << " of "
+      << hit.Multiplicity() << "\tGoodnessOfFit = " << std::setw(7) << std::right
+      << hit.GoodnessOfFit() << " DoF = " << std::setw(7) << std::right << hit.DegreesOfFreedom()
       << std::endl;
     return o;
   } // operator<< (std::ostream, Hit)
 
-
   //----------------------------------------------------------------------
   // < operator.
   //
-  bool operator < (const Hit & a, const Hit & b)
+  bool operator<(const Hit& a, const Hit& b)
   {
-    if (a.Channel() != b.Channel())
-      return a.Channel() < b.Channel();
-    if (a.View() != b.View())
-      return a.View() < b.View();
-    if (a.PeakTime() != b.PeakTime())
-      return a.PeakTime() < b.PeakTime();
+    if (a.Channel() != b.Channel()) return a.Channel() < b.Channel();
+    if (a.View() != b.View()) return a.View() < b.View();
+    if (a.PeakTime() != b.PeakTime()) return a.PeakTime() < b.PeakTime();
 
     return false; //They are equal
-  } // operator< (Hit, Hit)
-
+  }               // operator< (Hit, Hit)
 
   //----------------------------------------------------------------------
 } // namespace recob

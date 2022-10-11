@@ -10,40 +10,39 @@
  *
  * ****************************************************************************/
 
-
 // class header
 #include "lardataobj/RecoBase/Cluster.h"
 
 // C/C++ standard libraries
-#include <iomanip> // std::setw(), ...
-#include <cmath> // std::sqrt
 #include <algorithm> // std::min(), std::max()
-
+#include <cmath>     // std::sqrt
+#include <iomanip>   // std::setw(), ...
 
 namespace {
   template <typename T>
-  inline T sqr(T v) { return v*v; }
+  inline T sqr(T v)
+  {
+    return v * v;
+  }
 } // local namespace
 
-
-namespace recob{
+namespace recob {
 
   const Cluster::SentryArgument_t Cluster::Sentry;
-
 
   //----------------------------------------------------------------------
   Cluster::Cluster()
     : fNHits(0)
-    , fEndWires{ 0., 0. }
-    , fSigmaEndWires{ 0., 0. }
-    , fEndTicks{ 0., 0. }
-    , fSigmaEndTicks{ 0., 0. }
-    , fEndCharges{ 0., 0. }
-    , fAngles{ 0., 0. }
-    , fOpeningAngles{ 0., 0. }
-    , fChargeSum{ 0., 0. }
-    , fChargeStdDev{ 0., 0. }
-    , fChargeAverage{ 0., 0. }
+    , fEndWires{0., 0.}
+    , fSigmaEndWires{0., 0.}
+    , fEndTicks{0., 0.}
+    , fSigmaEndTicks{0., 0.}
+    , fEndCharges{0., 0.}
+    , fAngles{0., 0.}
+    , fOpeningAngles{0., 0.}
+    , fChargeSum{0., 0.}
+    , fChargeStdDev{0., 0.}
+    , fChargeAverage{0., 0.}
     , fMultipleHitDensity(0.)
     , fWidth(0.)
     , fID(InvalidID)
@@ -51,45 +50,43 @@ namespace recob{
     , fPlaneID()
   {} // Cluster::Cluster()
 
-
   //----------------------------------------------------------------------
-  Cluster::Cluster(
-    float start_wire,
-    float sigma_start_wire,
-    float start_tick,
-    float sigma_start_tick,
-    float start_charge,
-    float start_angle,
-    float start_opening,
-    float end_wire,
-    float sigma_end_wire,
-    float end_tick,
-    float sigma_end_tick,
-    float end_charge,
-    float end_angle,
-    float end_opening,
-    float integral,
-    float integral_stddev,
-    float summedADC,
-    float summedADC_stddev,
-    unsigned int n_hits,
-    float multiple_hit_density,
-    float width,
-    ID_t ID,
-    geo::View_t view,
-    geo::PlaneID const& plane,
-    SentryArgument_t /* sentry = Sentry */
-    )
+  Cluster::Cluster(float start_wire,
+                   float sigma_start_wire,
+                   float start_tick,
+                   float sigma_start_tick,
+                   float start_charge,
+                   float start_angle,
+                   float start_opening,
+                   float end_wire,
+                   float sigma_end_wire,
+                   float end_tick,
+                   float sigma_end_tick,
+                   float end_charge,
+                   float end_angle,
+                   float end_opening,
+                   float integral,
+                   float integral_stddev,
+                   float summedADC,
+                   float summedADC_stddev,
+                   unsigned int n_hits,
+                   float multiple_hit_density,
+                   float width,
+                   ID_t ID,
+                   geo::View_t view,
+                   geo::PlaneID const& plane,
+                   SentryArgument_t /* sentry = Sentry */
+                   )
     : fNHits(n_hits)
-    , fEndWires{ start_wire, end_wire }
-    , fSigmaEndWires{ sigma_start_wire, sigma_end_wire }
-    , fEndTicks{ start_tick, end_tick }
-    , fSigmaEndTicks{ sigma_start_tick, sigma_end_tick }
-    , fEndCharges{ start_charge, end_charge }
-    , fAngles{ start_angle, end_angle }
-    , fOpeningAngles{ start_opening, end_opening }
-    , fChargeSum{ integral, summedADC }
-    , fChargeStdDev{ integral_stddev, summedADC_stddev }
+    , fEndWires{start_wire, end_wire}
+    , fSigmaEndWires{sigma_start_wire, sigma_end_wire}
+    , fEndTicks{start_tick, end_tick}
+    , fSigmaEndTicks{sigma_start_tick, sigma_end_tick}
+    , fEndCharges{start_charge, end_charge}
+    , fAngles{start_angle, end_angle}
+    , fOpeningAngles{start_opening, end_opening}
+    , fChargeSum{integral, summedADC}
+    , fChargeStdDev{integral_stddev, summedADC_stddev}
     , fChargeAverage{}
     , fMultipleHitDensity(multiple_hit_density)
     , fWidth(width)
@@ -99,10 +96,9 @@ namespace recob{
   {
 
     for (unsigned int mode = cmFirstMode; mode < NChargeModes; ++mode)
-      fChargeAverage[mode] = (fNHits > 0)? fChargeSum[mode] / fNHits: 0.;
+      fChargeAverage[mode] = (fNHits > 0) ? fChargeSum[mode] / fNHits : 0.;
 
   } // Cluster::Cluster(float...)
-
 
 #if 0
   // FIXME DELME
@@ -166,48 +162,39 @@ namespace recob{
 
 #endif // 0
 
-
   //----------------------------------------------------------------------
   // ostream operator.
   //
-  std::ostream& operator<< (std::ostream& o, Cluster const& c) {
+  std::ostream& operator<<(std::ostream& o, Cluster const& c)
+  {
     o << std::setiosflags(std::ios::fixed) << std::setprecision(2);
-    o << "Cluster ID "     << std::setw(5)  << std::right << c.ID()
-      << " : Cryo = "      << std::setw(3)  << std::right << c.Plane().Cryostat
-      << " TPC = "         << std::setw(3)  << std::right << c.Plane().TPC
-      << " Plane = "       << std::setw(3)  << std::right << c.Plane().Plane
-      << " View = "        << std::setw(3)  << std::right << c.View()
-      << " StartWire = "   << std::setw(7)  << std::right << c.StartWire()
-      << " EndWire = "     << std::setw(7)  << std::right << c.EndWire()
-      << " StartTime = "   << std::setw(9)  << std::right << c.StartTick()
-      << " EndTime = "     << std::setw(9)  << std::right << c.EndTick()
-      << " N hits =      " << std::setw(5)  << std::right << c.NHits()
-      << " Width =       " << std::setw(5)  << std::right << c.Width()
+    o << "Cluster ID " << std::setw(5) << std::right << c.ID() << " : Cryo = " << std::setw(3)
+      << std::right << c.Plane().Cryostat << " TPC = " << std::setw(3) << std::right
+      << c.Plane().TPC << " Plane = " << std::setw(3) << std::right << c.Plane().Plane
+      << " View = " << std::setw(3) << std::right << c.View() << " StartWire = " << std::setw(7)
+      << std::right << c.StartWire() << " EndWire = " << std::setw(7) << std::right << c.EndWire()
+      << " StartTime = " << std::setw(9) << std::right << c.StartTick()
+      << " EndTime = " << std::setw(9) << std::right << c.EndTick()
+      << " N hits =      " << std::setw(5) << std::right << c.NHits()
+      << " Width =       " << std::setw(5) << std::right << c.Width()
       << " Charge(fit) = " << std::setw(10) << std::right << c.Integral()
-      << " Charge(ADC) = " << std::setw(10) << std::right << c.SummedADC()
-      ;
+      << " Charge(ADC) = " << std::setw(10) << std::right << c.SummedADC();
     return o;
   } // operator<< (ostream, Cluster)
-
 
   //----------------------------------------------------------------------
   // < operator.
   //
-  bool operator < (Cluster const& a, Cluster const& b) {
+  bool operator<(Cluster const& a, Cluster const& b)
+  {
 
-    if (a.hasPlane() && b.hasPlane() && a.Plane() != b.Plane())
-      return a.Plane() < b.Plane();
-    if (a.View() != b.View())
-      return a.View() < b.View();
-    if (a.ID() != b. ID())
-      return a.ID() < b.ID();
-    if (a.StartTick() != b.StartTick())
-      return a.StartTick() < b.StartTick();
-    if (a.EndTick() != b.EndTick())
-      return a.EndTick() < b.EndTick();
+    if (a.hasPlane() && b.hasPlane() && a.Plane() != b.Plane()) return a.Plane() < b.Plane();
+    if (a.View() != b.View()) return a.View() < b.View();
+    if (a.ID() != b.ID()) return a.ID() < b.ID();
+    if (a.StartTick() != b.StartTick()) return a.StartTick() < b.StartTick();
+    if (a.EndTick() != b.EndTick()) return a.EndTick() < b.EndTick();
 
     return false; // they are equal enough
-  } // operator < (Cluster, Cluster)
+  }               // operator < (Cluster, Cluster)
 
-}// namespace
-
+} // namespace

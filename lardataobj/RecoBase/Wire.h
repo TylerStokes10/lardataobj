@@ -21,16 +21,14 @@
 #ifndef LARDATAOBJ_RECOBASE_WIRE_H
 #define LARDATAOBJ_RECOBASE_WIRE_H
 
-
 // LArSoft libraries
-#include "lardataobj/Utilities/sparse_vector.h"
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
+#include "lardataobj/Utilities/sparse_vector.h"
 
 // C/C++ standard libraries
-#include <vector>
 #include <cstddef> // std::size_t
-
+#include <vector>
 
 namespace recob {
 
@@ -116,25 +114,23 @@ namespace recob {
    * In both cases, please read the documentation of `recob::Wire` constructors.
    */
   class Wire {
-    public:
-      /// a region of interest is a pair (TDC offset, readings)
-      typedef lar::sparse_vector<float> RegionsOfInterest_t;
+  public:
+    /// a region of interest is a pair (TDC offset, readings)
+    typedef lar::sparse_vector<float> RegionsOfInterest_t;
 
-      /// Default constructor: a wire with no signal information
-      Wire();
+    /// Default constructor: a wire with no signal information
+    Wire();
 
-    private:
-      raw::ChannelID_t    fChannel;   ///< ID of the associated channel.
-      geo::View_t         fView;      ///< View corresponding to the plane of this wire.
-      RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
-
+  private:
+    raw::ChannelID_t fChannel;      ///< ID of the associated channel.
+    geo::View_t fView;              ///< View corresponding to the plane of this wire.
+    RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
 
     friend class WireCreator; // helper to create wires in art
 
-    public:
-      
-      // --- BEGIN -- Constructors ---------------------------------------------
-      /**
+  public:
+    // --- BEGIN -- Constructors ---------------------------------------------
+    /**
        * @brief Constructor: uses specified signal in regions of interest.
        * @param sigROIlist signal organized in regions of interest
        * @param channel the ID of the channel
@@ -146,13 +142,9 @@ namespace recob {
        * 
        * For more details, see the other constructor documentation.
        */
-      Wire(
-        RegionsOfInterest_t const& sigROIlist,
-        raw::ChannelID_t channel,
-        geo::View_t view
-        );
+    Wire(RegionsOfInterest_t const& sigROIlist, raw::ChannelID_t channel, geo::View_t view);
 
-      /**
+    /**
        * @brief Constructor: uses specified signal in regions of interest.
        * @param sigROIlist signal organized in regions of interest
        * @param channel the ID of the channel
@@ -175,65 +167,69 @@ namespace recob {
        * This also preserves the sparse region of interest structure within
        * `sigROIlist`.
        */
-      Wire(
-        RegionsOfInterest_t&& sigROIlist,
-        raw::ChannelID_t channel,
-        geo::View_t view
-        );
-      // --- END -- Constructors -----------------------------------------------
+    Wire(RegionsOfInterest_t&& sigROIlist, raw::ChannelID_t channel, geo::View_t view);
+    // --- END -- Constructors -----------------------------------------------
 
+    // --- BEGIN -- Accessors ------------------------------------------------
+    ///@name Accessors
+    ///@{
 
-      // --- BEGIN -- Accessors ------------------------------------------------
-      ///@name Accessors
-      ///@{
+    /// Return a zero-padded full length vector filled with RoI signal
+    std::vector<float> Signal() const;
 
-      /// Return a zero-padded full length vector filled with RoI signal
-      std::vector<float>  Signal() const;
+    /// Returns the list of regions of interest
+    const RegionsOfInterest_t& SignalROI() const;
 
-      /// Returns the list of regions of interest
-      const RegionsOfInterest_t& SignalROI()  const;
+    /// Returns the number of time ticks, or samples, in the channel
+    std::size_t NSignal() const;
 
-      /// Returns the number of time ticks, or samples, in the channel
-      std::size_t                NSignal()    const;
+    /// Returns the view the channel belongs to
+    geo::View_t View() const;
 
-      /// Returns the view the channel belongs to
-      geo::View_t                View()       const;
+    /// Returns the ID of the channel (or InvalidChannelID)
+    raw::ChannelID_t Channel() const;
 
-      /// Returns the ID of the channel (or InvalidChannelID)
-      raw::ChannelID_t           Channel()    const;
-      
-      ///@}
-      // --- END -- Accessors --------------------------------------------------
+    ///@}
+    // --- END -- Accessors --------------------------------------------------
 
-      
-      // --- BEGIN -- Sorting and comparison operations ------------------------
-      /// @name Sorting and comparison operations
-      /// @{
-      
-      /// Returns whether this channel ID is smaller than the other
-      bool operator< (const Wire& than) const;
-      
-      // --- END -- Sorting and comparison operations --------------------------
+    // --- BEGIN -- Sorting and comparison operations ------------------------
+    /// @name Sorting and comparison operations
+    /// @{
 
+    /// Returns whether this channel ID is smaller than the other
+    bool operator<(const Wire& than) const;
+
+    // --- END -- Sorting and comparison operations --------------------------
 
   }; // class Wire
 
 } // namespace recob
 
-
 //------------------------------------------------------------------------------
 //--- inline implementation
 //------------------------------------------------------------------------------
-inline const recob::Wire::RegionsOfInterest_t&
-                                  recob::Wire::SignalROI()  const { return fSignalROI;        }
-inline std::size_t                recob::Wire::NSignal()    const { return fSignalROI.size(); }
-inline geo::View_t                recob::Wire::View()       const { return fView;             }
-inline raw::ChannelID_t           recob::Wire::Channel()    const { return fChannel;          }
-inline bool                       recob::Wire::operator< (const Wire& than) const
-  { return Channel() < than.Channel(); }
+inline const recob::Wire::RegionsOfInterest_t& recob::Wire::SignalROI() const
+{
+  return fSignalROI;
+}
+inline std::size_t recob::Wire::NSignal() const
+{
+  return fSignalROI.size();
+}
+inline geo::View_t recob::Wire::View() const
+{
+  return fView;
+}
+inline raw::ChannelID_t recob::Wire::Channel() const
+{
+  return fChannel;
+}
+inline bool recob::Wire::operator<(const Wire& than) const
+{
+  return Channel() < than.Channel();
+}
 
 //------------------------------------------------------------------------------
-
 
 #endif // LARDATAOBJ_RECOBASE_WIRE_H
 

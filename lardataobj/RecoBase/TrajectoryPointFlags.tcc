@@ -12,17 +12,15 @@
 #define LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_TCC
 
 #ifndef LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_H
-# error "Do not include TrajectoryPointFlags.tcc. Include in TrajectoryPointFlags.h instead."
+#error "Do not include TrajectoryPointFlags.tcc. Include in TrajectoryPointFlags.h instead."
 #endif // !LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_H
-
 
 //------------------------------------------------------------------------------
 template <typename Stream>
-void recob::TrajectoryPointFlags::dump(
-  Stream&& out,
-  unsigned int verbosity,
-  std::string /* indent */, std::string indentFirst
-  ) const
+void recob::TrajectoryPointFlags::dump(Stream&& out,
+                                       unsigned int verbosity,
+                                       std::string /* indent */,
+                                       std::string indentFirst) const
 {
   /*
    * Information printed out (`verbosity` argument)
@@ -32,12 +30,10 @@ void recob::TrajectoryPointFlags::dump(
    * * level `1`: name of the flags set, and index
    * 
    */
-  
+
   //----------------------------------------------------------------------------
   out << indentFirst;
-  if (verbosity == 0) {
-    fFlags.dump(std::forward<Stream>(out));
-  }
+  if (verbosity == 0) { fFlags.dump(std::forward<Stream>(out)); }
   else { // verbosity >= 1
     out << "{";
     unsigned int count = 0;
@@ -47,22 +43,19 @@ void recob::TrajectoryPointFlags::dump(
       out << ' ';
       if (isUnset(index)) out << '!';
       switch (verbosity) {
-        case 0:
-          out << index;
-          break;
-        default:
-          out << flag::name(index);
+      case 0: out << index; break;
+      default: out << flag::name(index);
       } // switch
-    } // for
+    }   // for
     out << " }";
   }
-  if (hasOriginalHitIndex()) out << ", hit index: " << fromHit();
-  else out << " (no hit index)";
-  
+  if (hasOriginalHitIndex())
+    out << ", hit index: " << fromHit();
+  else
+    out << " (no hit index)";
+
 } // recob::TrajectoryPointFlags::dump()
 
-
 //------------------------------------------------------------------------------
-
 
 #endif // LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_TCC

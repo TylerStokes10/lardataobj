@@ -8,12 +8,10 @@
  *
  */
 
-
 #include "TrajectoryPointFlags.h"
 
 // C/C++ standard library
 #include <ostream>
-
 
 //------------------------------------------------------------------------------
 //---  recob::TrajectoryPointFlagTraits
@@ -29,37 +27,33 @@ constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTra
 constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::DetectorIssue;
 constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Shared;
 constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::TrajReserved1;
-constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::ExcludedFromFit;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t
+  recob::TrajectoryPointFlagTraits::ExcludedFromFit;
 constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Rejected;
 constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Reinterpreted;
 
-
+//------------------------------------------------------------------------------
+const recob::TrajectoryPointFlagTraits::NameMap_t recob::TrajectoryPointFlagTraits::names =
+  recob::TrajectoryPointFlagTraits::initNames(); ///< Names of the flags
 
 //------------------------------------------------------------------------------
-const recob::TrajectoryPointFlagTraits::NameMap_t
-recob::TrajectoryPointFlagTraits::names
-  = recob::TrajectoryPointFlagTraits::initNames(); ///< Names of the flags
-
-
-//------------------------------------------------------------------------------
-std::string recob::TrajectoryPointFlagTraits::decorateFlagName
-  (std::string baseName, Flag_t flag)
+std::string recob::TrajectoryPointFlagTraits::decorateFlagName(std::string baseName, Flag_t flag)
 {
   return baseName + std::to_string(flag.index());
 } // recob::TrajectoryPointFlagTraits::decorateFlagName()
 
+//------------------------------------------------------------------------------
+std::string recob::TrajectoryPointFlagTraits::invalidFlagName(Flag_t flag)
+{
+  return "<" + decorateFlagName("InvalidFlag", flag) + ">";
+}
 
 //------------------------------------------------------------------------------
-std::string recob::TrajectoryPointFlagTraits::invalidFlagName
-  (Flag_t flag)
-  { return "<" + decorateFlagName("InvalidFlag", flag) + ">"; }
-
-
-//------------------------------------------------------------------------------
-void recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames(
-  NameMap_t& flagNames,
-  FlagIndex_t BeginFlags, FlagIndex_t EndFlags, std::string baseName
-) {
+void recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames(NameMap_t& flagNames,
+                                                                 FlagIndex_t BeginFlags,
+                                                                 FlagIndex_t EndFlags,
+                                                                 std::string baseName)
+{
   if (EndFlags <= BeginFlags) return;
   unsigned int const NFlags = EndFlags - BeginFlags;
 
@@ -72,59 +66,46 @@ void recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames(
 
 } // recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames()
 
-
 //------------------------------------------------------------------------------
-void recob::TrajectoryPointFlagTraits::initDefaultFlagsNames
-  (NameMap_t& flagNames)
+void recob::TrajectoryPointFlagTraits::initDefaultFlagsNames(NameMap_t& flagNames)
 {
 
   initDefaultFlagRangeNames(
-    flagNames, BeginTrajectoryFlags, EndTrajectoryFlags,
-    "TrajectoryReserved"
-    );
+    flagNames, BeginTrajectoryFlags, EndTrajectoryFlags, "TrajectoryReserved");
+  initDefaultFlagRangeNames(flagNames, BeginTrackFlags, EndTrackFlags, "TrackReserved");
   initDefaultFlagRangeNames(
-    flagNames, BeginTrackFlags, EndTrackFlags,
-    "TrackReserved"
-    );
-  initDefaultFlagRangeNames(
-    flagNames, BeginExperimentReservedFlags, EndExperimentReservedFlags,
-    "ExperimentFlag"
-    );
-  initDefaultFlagRangeNames(
-    flagNames, BeginUserReservedFlags, EndUserReservedFlags,
-    "UserFlag"
-    );
+    flagNames, BeginExperimentReservedFlags, EndExperimentReservedFlags, "ExperimentFlag");
+  initDefaultFlagRangeNames(flagNames, BeginUserReservedFlags, EndUserReservedFlags, "UserFlag");
 
 } // recob::TrajectoryPointFlagTraits::initDefaultFlagsNames()
 
-
 //------------------------------------------------------------------------------
-void recob::TrajectoryPointFlagTraits::setFlagNames(NameMap_t& flagNames) {
+void recob::TrajectoryPointFlagTraits::setFlagNames(NameMap_t& flagNames)
+{
 
   //
   // set the names of the new flags here
   //
 
   // trajectory flags
-  std::get<HitIgnored.index()   >(flagNames) = "HitIgnored"   ;
-  std::get<NoPoint.index()      >(flagNames) = "NoPoint"      ;
-  std::get<Suspicious.index()   >(flagNames) = "Suspicious"   ;
-  std::get<Merged.index()       >(flagNames) = "Merged"       ;
-  std::get<DeltaRay.index()     >(flagNames) = "DeltaRay"     ;
+  std::get<HitIgnored.index()>(flagNames) = "HitIgnored";
+  std::get<NoPoint.index()>(flagNames) = "NoPoint";
+  std::get<Suspicious.index()>(flagNames) = "Suspicious";
+  std::get<Merged.index()>(flagNames) = "Merged";
+  std::get<DeltaRay.index()>(flagNames) = "DeltaRay";
   std::get<DetectorIssue.index()>(flagNames) = "DetectorIssue";
-  std::get<Shared.index()       >(flagNames) = "Shared"       ;
+  std::get<Shared.index()>(flagNames) = "Shared";
 
   // track flags
   std::get<ExcludedFromFit.index()>(flagNames) = "ExcludedFromFit";
-  std::get<Rejected.index()       >(flagNames) = "Rejected"       ;
-  std::get<Reinterpreted.index()  >(flagNames) = "Reinterpreted"  ;
+  std::get<Rejected.index()>(flagNames) = "Rejected";
+  std::get<Reinterpreted.index()>(flagNames) = "Reinterpreted";
 
 } // recob::TrajectoryPointFlagTraits::initNames()
 
-
 //------------------------------------------------------------------------------
-recob::TrajectoryPointFlagTraits::NameMap_t
-recob::TrajectoryPointFlagTraits::initNames() {
+recob::TrajectoryPointFlagTraits::NameMap_t recob::TrajectoryPointFlagTraits::initNames()
+{
 
   NameMap_t flagNames; // not initialized
 
@@ -139,10 +120,11 @@ recob::TrajectoryPointFlagTraits::initNames() {
 
 } // recob::TrajectoryPointFlagTraits::initNames()
 
-
 //------------------------------------------------------------------------------
-std::ostream& recob::operator<<
-  (std::ostream& out, recob::TrajectoryPointFlags const& flags)
-  { flags.dump(out); return out; }
+std::ostream& recob::operator<<(std::ostream& out, recob::TrajectoryPointFlags const& flags)
+{
+  flags.dump(out);
+  return out;
+}
 
 //------------------------------------------------------------------------------

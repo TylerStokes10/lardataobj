@@ -6,40 +6,36 @@
  *
  */
 
-
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 
 // C/C++ standard libraries
 #include <ostream>
-#include <utility> // std::move()
 #include <stdexcept> // std::runtime_error
+#include <utility>   // std::move()
 
 //------------------------------------------------------------------------------
-recob::TrackTrajectory::TrackTrajectory(
-  Positions_t&& positions, Momenta_t&& momenta, Flags_t&& flags, bool hasMomenta
-  )
-  : Trajectory_t(std::move(positions), std::move(momenta), hasMomenta)
-  , fFlags(std::move(flags))
+recob::TrackTrajectory::TrackTrajectory(Positions_t&& positions,
+                                        Momenta_t&& momenta,
+                                        Flags_t&& flags,
+                                        bool hasMomenta)
+  : Trajectory_t(std::move(positions), std::move(momenta), hasMomenta), fFlags(std::move(flags))
 {
   // additional invariant check
   if (fFlags.size() != NPoints()) {
-    throw std::runtime_error("recob::TrackTrajectory constructed with "
-      + std::to_string(NPoints()) + " points "
-      + std::to_string(fFlags.size())
-      + " point flags! it requires the same number for both."
-      );
+    throw std::runtime_error(
+      "recob::TrackTrajectory constructed with " + std::to_string(NPoints()) + " points " +
+      std::to_string(fFlags.size()) + " point flags! it requires the same number for both.");
   }
   if (!AtLeastValidTrajectoryPoints(2U)) {
-    throw std::runtime_error("recob::TrackTrajectory constructed with only "
-      + std::to_string(CountValidPoints())
-      + " valid positions! at least 2 are required."
-      );
+    throw std::runtime_error("recob::TrackTrajectory constructed with only " +
+                             std::to_string(CountValidPoints()) +
+                             " valid positions! at least 2 are required.");
   }
 } // recob::TrackTrajectory::TrackTrajectory()
 
-
 //------------------------------------------------------------------------------
-unsigned int recob::TrackTrajectory::CountValidPoints() const {
+unsigned int recob::TrackTrajectory::CountValidPoints() const
+{
 
   unsigned int count = 0;
   for (size_t index = 0; index < NPoints(); ++index) {
@@ -48,7 +44,6 @@ unsigned int recob::TrackTrajectory::CountValidPoints() const {
   return count;
 
 } // recob::TrackTrajectory::CountValidPoints()
-
 
 //------------------------------------------------------------------------------
 /**
@@ -67,7 +62,8 @@ unsigned int recob::TrackTrajectory::CountValidPoints() const {
  *
  * This operation is slow, and the result should be stored in a variable.
  */
-double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const {
+double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const
+{
 
   // sanity check
   if (startAt >= LastPoint()) return 0.;
@@ -86,10 +82,8 @@ double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const {
   return length;
 } // recob::TrackTrajectory::Length()
 
-
 //------------------------------------------------------------------------------
-bool recob::TrackTrajectory::AtLeastValidTrajectoryPoints
-  (unsigned int min) const
+bool recob::TrackTrajectory::AtLeastValidTrajectoryPoints(unsigned int min) const
 {
   if (min == 0) return true;
   unsigned int left = min;
@@ -102,9 +96,10 @@ bool recob::TrackTrajectory::AtLeastValidTrajectoryPoints
 } // moreThanTwoValidTrajectoryPoints()
 
 //------------------------------------------------------------------------------
-std::ostream& recob::operator<<
-  (std::ostream&& out, recob::TrackTrajectory const& traj)
-  { traj.Dump(out); return out; }
-
+std::ostream& recob::operator<<(std::ostream&& out, recob::TrackTrajectory const& traj)
+{
+  traj.Dump(out);
+  return out;
+}
 
 //------------------------------------------------------------------------------

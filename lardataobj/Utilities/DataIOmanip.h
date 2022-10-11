@@ -13,14 +13,12 @@
 #define LARDATAOBJ_UTILITIES_DATAIOMANIP_H
 
 // C++ standard library
-#include <iosfwd> // std::ostream
+#include <iosfwd>  // std::ostream
 #include <utility> // std::forward()
-
 
 namespace util {
 
   namespace manip {
-
 
     namespace details {
 
@@ -37,28 +35,28 @@ namespace util {
       class Vector3DStruct {
         Vect const& v; ///< Vector to be printed
 
-          public:
+      public:
         /// Constructor: print the specified vector
-        Vector3DStruct(Vect const& vector): v(vector) {}
+        Vector3DStruct(Vect const& vector) : v(vector) {}
 
         /// The printing operator
         template <typename Stream>
-        Stream& operator() (Stream&& out) const
-          {
-            out << "( " << v.X() << " ; " << v.Y() << " ; " << v.Z() << " )";
-            return out;
-          } // operator()
+        Stream& operator()(Stream&& out) const
+        {
+          out << "( " << v.X() << " ; " << v.Y() << " ; " << v.Z() << " )";
+          return out;
+        } // operator()
 
       }; // class vector3D
 
       /// Operator to print the manipulator
       template <typename Vect>
-      std::ostream& operator<<
-        (std::ostream& out, Vector3DStruct<Vect> const& vmanip)
-        { return vmanip(out); }
+      std::ostream& operator<<(std::ostream& out, Vector3DStruct<Vect> const& vmanip)
+      {
+        return vmanip(out);
+      }
 
     } // namespace details
-
 
     /**
      * @brief Produces a manipulator to print a vector
@@ -77,13 +75,13 @@ namespace util {
      *
      */
     template <typename Vect>
-    details::Vector3DStruct<Vect> vector3D(Vect const& v) { return { v }; }
-
+    details::Vector3DStruct<Vect> vector3D(Vect const& v)
+    {
+      return {v};
+    }
 
   } // namespace manip
 
-
 } // namespace util
-
 
 #endif // LARDATAOBJ_UTILITIES_DATAIOMANIP_H

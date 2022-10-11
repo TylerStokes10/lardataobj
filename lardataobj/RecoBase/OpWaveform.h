@@ -8,17 +8,15 @@
 #ifndef LARDATAOBJ_RECOBASE_OPWAVEFORM_H
 #define LARDATAOBJ_RECOBASE_OPWAVEFORM_H
 
-
 // LArSoft libraries
-#include "lardataobj/Utilities/sparse_vector.h"
-#include "lardataobj/RawData/RDTimeStamp.h"
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
+#include "lardataobj/RawData/RDTimeStamp.h"
+#include "lardataobj/Utilities/sparse_vector.h"
 
 // C/C++ standard libraries
-#include <vector>
 #include <cstddef> // std::size_t
-
+#include <vector>
 
 namespace recob {
 
@@ -95,24 +93,23 @@ namespace recob {
    */
 
   class OpWaveform {
-    public:
-      /// a region of interest is a pair (TDC offset, readings)
-      typedef lar::sparse_vector<float> RegionsOfInterest_t;
+  public:
+    /// a region of interest is a pair (TDC offset, readings)
+    typedef lar::sparse_vector<float> RegionsOfInterest_t;
 
-      /// Default constructor: a wire with no signal information
-      OpWaveform();
+    /// Default constructor: a wire with no signal information
+    OpWaveform();
 
-    private:
-      raw::RDTimeStamp    fTimeStamp; ///< Time stamp
-      raw::ChannelID_t    fChannel;   ///< ID of the associated channel.
-      RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
+  private:
+    raw::RDTimeStamp fTimeStamp;    ///< Time stamp
+    raw::ChannelID_t fChannel;      ///< ID of the associated channel.
+    RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
 
-      //friend class OpWaveformCreator; // helper to create wires in art
+    //friend class OpWaveformCreator; // helper to create wires in art
 
-    public:
-      
-      // --- BEGIN -- Constructors ---------------------------------------------
-      /**
+  public:
+    // --- BEGIN -- Constructors ---------------------------------------------
+    /**
        * @brief Constructor: uses specified signal in regions of interest.
        * @param time time stamp of the signal
        * @param channel the ID of the channel
@@ -124,13 +121,11 @@ namespace recob {
        * 
        * For more details, see the other constructor documentation.
        */
-      OpWaveform(
-        raw::RDTimeStamp time,
-        raw::ChannelID_t channel,
-        RegionsOfInterest_t const& sigROIlist
-        );
+    OpWaveform(raw::RDTimeStamp time,
+               raw::ChannelID_t channel,
+               RegionsOfInterest_t const& sigROIlist);
 
-      /**
+    /**
        * @brief Constructor: uses specified signal in regions of interest.
        * @param time time stamp of the signal
        * @param channel the ID of the channel
@@ -153,65 +148,69 @@ namespace recob {
        * This also preserves the sparse region of interest structure within
        * `sigROIlist`.
        */
-      OpWaveform(
-        raw::RDTimeStamp time,
-        raw::ChannelID_t channel,
-        RegionsOfInterest_t&& sigROIlist
-        );
-      // --- END -- Constructors -----------------------------------------------
+    OpWaveform(raw::RDTimeStamp time, raw::ChannelID_t channel, RegionsOfInterest_t&& sigROIlist);
+    // --- END -- Constructors -----------------------------------------------
 
+    // --- BEGIN -- Accessors ------------------------------------------------
+    ///@name Accessors
+    ///@{
 
-      // --- BEGIN -- Accessors ------------------------------------------------
-      ///@name Accessors
-      ///@{
+    /// Return a zero-padded full length vector filled with RoI signal
+    std::vector<float> Signal() const;
 
-      /// Return a zero-padded full length vector filled with RoI signal
-      std::vector<float>  Signal() const;
+    /// Returns the list of regions of interest
+    const RegionsOfInterest_t& SignalROI() const;
 
-      /// Returns the list of regions of interest
-      const RegionsOfInterest_t& SignalROI()  const;
+    /// Returns the number of time ticks, or samples, in the channel
+    std::size_t NSignal() const;
 
-      /// Returns the number of time ticks, or samples, in the channel
-      std::size_t                NSignal()    const;
+    /// Returns the ID of the channel (or InvalidChannelID)
+    raw::ChannelID_t Channel() const;
 
-      /// Returns the ID of the channel (or InvalidChannelID)
-      raw::ChannelID_t           Channel()    const;
+    /// Returns the time stamp
+    raw::RDTimeStamp TimeStamp() const;
 
-      /// Returns the time stamp
-      raw::RDTimeStamp           TimeStamp()  const;
-      
-      ///@}
-      // --- END -- Accessors --------------------------------------------------
+    ///@}
+    // --- END -- Accessors --------------------------------------------------
 
-      
-      // --- BEGIN -- Sorting and comparison operations ------------------------
-      /// @name Sorting and comparison operations
-      /// @{
-      
-      /// Returns whether this channel ID is smaller than the other
-      bool operator< (const OpWaveform& than) const;
-      
-      // --- END -- Sorting and comparison operations --------------------------
+    // --- BEGIN -- Sorting and comparison operations ------------------------
+    /// @name Sorting and comparison operations
+    /// @{
 
+    /// Returns whether this channel ID is smaller than the other
+    bool operator<(const OpWaveform& than) const;
+
+    // --- END -- Sorting and comparison operations --------------------------
 
   }; // class OpWaveform
 
 } // namespace recob
 
-
 //------------------------------------------------------------------------------
 //--- inline implementation
 //------------------------------------------------------------------------------
-inline const recob::OpWaveform::RegionsOfInterest_t&
-                                  recob::OpWaveform::SignalROI()  const { return fSignalROI;        }
-inline std::size_t                recob::OpWaveform::NSignal()    const { return fSignalROI.size(); }
-inline raw::ChannelID_t           recob::OpWaveform::Channel()    const { return fChannel;          }
-inline raw::RDTimeStamp           recob::OpWaveform::TimeStamp()  const { return fTimeStamp;          }
-inline bool                       recob::OpWaveform::operator< (const OpWaveform& than) const
-  { return Channel() < than.Channel(); }
+inline const recob::OpWaveform::RegionsOfInterest_t& recob::OpWaveform::SignalROI() const
+{
+  return fSignalROI;
+}
+inline std::size_t recob::OpWaveform::NSignal() const
+{
+  return fSignalROI.size();
+}
+inline raw::ChannelID_t recob::OpWaveform::Channel() const
+{
+  return fChannel;
+}
+inline raw::RDTimeStamp recob::OpWaveform::TimeStamp() const
+{
+  return fTimeStamp;
+}
+inline bool recob::OpWaveform::operator<(const OpWaveform& than) const
+{
+  return Channel() < than.Channel();
+}
 
 //------------------------------------------------------------------------------
-
 
 #endif // LARDATAOBJ_RECOBASE_OPWAVEFORM_H
 

@@ -12,7 +12,6 @@
  *
  */
 
-
 // Boost libraries
 /*
  * Boost: define the name of the module;
@@ -23,26 +22,24 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( tracktrajectory_test )
+#define BOOST_TEST_MODULE (tracktrajectory_test)
 #include "boost/test/unit_test.hpp"
 
-
 // LArSoft libraries
+#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 #include "lardataobj/RecoBase/TrajectoryPointFlags.h"
-#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
 
 // ROOT libraries (for the legacy interface)
-#include "TVector3.h"
 #include "TMatrixD.h"
+#include "TVector3.h"
 
 // C/C++ standard libraries
-#include <set>
-#include <iterator> // std::prev(), std::next()
 #include <algorithm> // std::equal(), std::accumulate()
-#include <tuple> // std::tie()
 #include <iostream>
-
+#include <iterator> // std::prev(), std::next()
+#include <set>
+#include <tuple> // std::tie()
 
 //------------------------------------------------------------------------------
 //--- Test code
@@ -50,8 +47,8 @@
 struct Expected_t {
 
   recob::TrackTrajectory::Positions_t positions;
-  recob::TrackTrajectory::Momenta_t   momenta;
-  recob::TrackTrajectory::Flags_t     flags;
+  recob::TrackTrajectory::Momenta_t momenta;
+  recob::TrackTrajectory::Flags_t flags;
   bool hasMomenta;
   double length;
   double theta;
@@ -62,38 +59,39 @@ struct Expected_t {
 }; // struct Expected_t
 
 template <typename T>
-void CheckValue(T v, T exp, T tol, std::string tag = "") {
+void CheckValue(T v, T exp, T tol, std::string tag = "")
+{
   if (!tag.empty()) BOOST_TEST_MESSAGE(tag);
-  if (std::abs(exp) < (tol / 100.)) BOOST_CHECK_SMALL(v, tol);
-  else                              BOOST_CHECK_CLOSE(v, exp, tol);
+  if (std::abs(exp) < (tol / 100.))
+    BOOST_CHECK_SMALL(v, tol);
+  else
+    BOOST_CHECK_CLOSE(v, exp, tol);
 } // CheckValue()
 
 template <typename VectA, typename VectB>
-void CheckVectorsEqual(VectA const& v, VectB const& exp) {
+void CheckVectorsEqual(VectA const& v, VectB const& exp)
+{
   BOOST_TEST(v.X() == exp.X());
   BOOST_TEST(v.Y() == exp.Y());
   BOOST_TEST(v.Z() == exp.Z());
 } // CheckVectorsEqual()
 
 template <typename VectA, typename VectB>
-void CheckVectorsClose(VectA const& v, VectB const& exp, double tol = 0.01) {
+void CheckVectorsClose(VectA const& v, VectB const& exp, double tol = 0.01)
+{
   CheckValue(v.X(), exp.X(), tol, "  X()");
   CheckValue(v.Y(), exp.Y(), tol, "  Y()");
   CheckValue(v.Z(), exp.Z(), tol, "  Z()");
 } // CheckVectorsClose()
 
-
-recob::TrackTrajectory::Rotation_t makeRotationMatrix(TMatrixD const& Tm) {
+recob::TrackTrajectory::Rotation_t makeRotationMatrix(TMatrixD const& Tm)
+{
   recob::TrackTrajectory::Rotation_t m;
   m.SetRotationMatrix(Tm);
   return m;
 } // makeRotationMatrix()
 
-
-void TestTrackTrajectory(
-  recob::TrackTrajectory const& traj,
-  Expected_t const& expected
-  )
+void TestTrackTrajectory(recob::TrackTrajectory const& traj, Expected_t const& expected)
 {
 
   //----------------------------------------------------------------------------
@@ -114,14 +112,13 @@ void TestTrackTrajectory(
   // some preparation:
   std::set<size_t> validPoints;
   for (size_t i = 0; i < NPoints; ++i) {
-    if (expected.flags[i].isSet(recob::TrackTrajectory::flag::NoPoint))
-      continue;
+    if (expected.flags[i].isSet(recob::TrackTrajectory::flag::NoPoint)) continue;
     validPoints.insert(i);
   } // for
-  std::size_t const firstValidPoint = validPoints.empty()
-    ? recob::TrackTrajectory::InvalidIndex: *(validPoints.begin());
-  std::size_t const lastValidPoint = validPoints.empty()
-    ? recob::TrackTrajectory::InvalidIndex: *(validPoints.rbegin());
+  std::size_t const firstValidPoint =
+    validPoints.empty() ? recob::TrackTrajectory::InvalidIndex : *(validPoints.begin());
+  std::size_t const lastValidPoint =
+    validPoints.empty() ? recob::TrackTrajectory::InvalidIndex : *(validPoints.rbegin());
 
   //----------------------------------------------------------------------------
   BOOST_TEST(traj.LastPoint() == NPoints - 1);
@@ -181,7 +178,6 @@ void TestTrackTrajectory(
 
   } // for
 
-
   //----------------------------------------------------------------------------
   TVector3 Vstart, Vend;
   std::tie(Vstart, Vend) = traj.Extent<TVector3>();
@@ -192,7 +188,6 @@ void TestTrackTrajectory(
   BOOST_TEST(Vend[1] == expected.positions[lastValidPoint].Y());
   BOOST_TEST(Vend[2] == expected.positions[lastValidPoint].Z());
 
-
   recob::Trajectory::Point_t start, end;
   std::tie(start, end) = traj.Extent(); // assign both start and end
   BOOST_TEST_MESSAGE("Extent() start");
@@ -200,37 +195,29 @@ void TestTrackTrajectory(
   BOOST_TEST_MESSAGE("Extent() end");
   CheckVectorsEqual(end, expected.positions[lastValidPoint]);
 
-
   //----------------------------------------------------------------------------
   BOOST_CHECK_CLOSE(traj.Length(), expected.length, 0.01); // 0.01%
   if (validPoints.size() >= 2) {
     std::size_t const secondValidPoint = *(std::next(validPoints.begin()));
-    BOOST_CHECK_CLOSE(traj.Length(firstValidPoint + 1),
-      expected.length - (
-         expected.positions[secondValidPoint]
-         - expected.positions[firstValidPoint]
-      ).R(),
-      0.01
-      );
+    BOOST_CHECK_CLOSE(
+      traj.Length(firstValidPoint + 1),
+      expected.length -
+        (expected.positions[secondValidPoint] - expected.positions[firstValidPoint]).R(),
+      0.01);
   } // if
-
 
   //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("VertexDirection()");
-  CheckVectorsClose
-    (traj.VertexDirection(), expected.momenta[firstValidPoint].Unit());
+  CheckVectorsClose(traj.VertexDirection(), expected.momenta[firstValidPoint].Unit());
   BOOST_CHECK_CLOSE(traj.VertexDirection().Mag2(), 1.0, 0.01);
 
   BOOST_TEST_MESSAGE("StartDirection()");
-  CheckVectorsClose
-    (traj.StartDirection(), expected.momenta[firstValidPoint].Unit());
+  CheckVectorsClose(traj.StartDirection(), expected.momenta[firstValidPoint].Unit());
   BOOST_CHECK_CLOSE(traj.StartDirection().Mag2(), 1.0, 0.01);
 
   BOOST_TEST_MESSAGE("EndDirection()");
-  CheckVectorsClose
-    (traj.EndDirection(), expected.momenta[lastValidPoint].Unit());
+  CheckVectorsClose(traj.EndDirection(), expected.momenta[lastValidPoint].Unit());
   BOOST_CHECK_CLOSE(traj.EndDirection().Mag2(), 1.0, 0.01);
-
 
   //----------------------------------------------------------------------------
   BOOST_CHECK_CLOSE(traj.Theta(), expected.theta, 0.01);
@@ -238,34 +225,26 @@ void TestTrackTrajectory(
   BOOST_CHECK_CLOSE(traj.ZenithAngle(), expected.zenith, 0.01);
   BOOST_CHECK_CLOSE(traj.AzimuthAngle(), expected.azimuth, 0.01);
 
-
   //----------------------------------------------------------------------------
 
   BOOST_TEST_MESSAGE("VertexMomentumVector()");
-  CheckVectorsClose
-    (traj.VertexMomentumVector(), expected.momenta[firstValidPoint]);
+  CheckVectorsClose(traj.VertexMomentumVector(), expected.momenta[firstValidPoint]);
 
   BOOST_TEST_MESSAGE("StartMomentumVector()");
-  CheckVectorsClose
-    (traj.StartMomentumVector(), expected.momenta[firstValidPoint]);
+  CheckVectorsClose(traj.StartMomentumVector(), expected.momenta[firstValidPoint]);
 
   BOOST_TEST_MESSAGE("EndMomentumVector()");
   CheckVectorsClose(traj.EndMomentumVector(), expected.momenta[lastValidPoint]);
 
-
   //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("VertexMomentum()");
-  BOOST_CHECK_CLOSE
-    (traj.VertexMomentum(), expected.momenta[firstValidPoint].R(), 0.01);
+  BOOST_CHECK_CLOSE(traj.VertexMomentum(), expected.momenta[firstValidPoint].R(), 0.01);
 
   BOOST_TEST_MESSAGE("StartMomentum()");
-  BOOST_CHECK_CLOSE
-    (traj.StartMomentum(), expected.momenta[firstValidPoint].R(), 0.01);
+  BOOST_CHECK_CLOSE(traj.StartMomentum(), expected.momenta[firstValidPoint].R(), 0.01);
 
   BOOST_TEST_MESSAGE("EndMomentum()");
-  BOOST_CHECK_CLOSE
-    (traj.EndMomentum(), expected.momenta[lastValidPoint].R(), 0.01);
-
+  BOOST_CHECK_CLOSE(traj.EndMomentum(), expected.momenta[lastValidPoint].R(), 0.01);
 
   //----------------------------------------------------------------------------
   for (size_t i = 0; i < NPoints; ++i) {
@@ -274,7 +253,6 @@ void TestTrackTrajectory(
     CheckVectorsClose(traj.DirectionAtPoint(i), expected.momenta[i].Unit());
 
   } // for
-
 
   //----------------------------------------------------------------------------
   for (size_t i = 0; i < NPoints; ++i) {
@@ -285,36 +263,27 @@ void TestTrackTrajectory(
     if (traj.HasMomentum())
       CheckVectorsClose(traj.MomentumVectorAtPoint(i), expected.momenta[i]);
     else {
-      CheckVectorsClose
-        (traj.MomentumVectorAtPoint(i), expected.momenta[i].Unit());
+      CheckVectorsClose(traj.MomentumVectorAtPoint(i), expected.momenta[i].Unit());
     }
 
     BOOST_TEST_MESSAGE("MomentumAtPoint() position #" << i);
     if (traj.HasMomentum()) {
-      BOOST_CHECK_CLOSE
-        (traj.MomentumAtPoint(i), expected.momenta[i].R(), 0.01);
+      BOOST_CHECK_CLOSE(traj.MomentumAtPoint(i), expected.momenta[i].R(), 0.01);
     }
     else
       BOOST_CHECK_CLOSE(traj.MomentumAtPoint(i), 1.0, 0.01);
 
   } // for
 
-
   //----------------------------------------------------------------------------
   TVector3 AstartDir, AendDir;
   std::tie(AstartDir, AendDir) = traj.Direction<TVector3>();
-  BOOST_CHECK_CLOSE
-    (AstartDir[0], expected.momenta[firstValidPoint].Unit().X(), 0.01);
-  BOOST_CHECK_CLOSE
-    (AstartDir[1], expected.momenta[firstValidPoint].Unit().Y(), 0.01);
-  BOOST_CHECK_CLOSE
-    (AstartDir[2], expected.momenta[firstValidPoint].Unit().Z(), 0.01);
-  BOOST_CHECK_CLOSE
-    (AendDir[0], expected.momenta[lastValidPoint].Unit().X(), 0.01);
-  BOOST_CHECK_CLOSE
-    (AendDir[1], expected.momenta[lastValidPoint].Unit().Y(), 0.01);
-  BOOST_CHECK_CLOSE
-    (AendDir[2], expected.momenta[lastValidPoint].Unit().Z(), 0.01);
+  BOOST_CHECK_CLOSE(AstartDir[0], expected.momenta[firstValidPoint].Unit().X(), 0.01);
+  BOOST_CHECK_CLOSE(AstartDir[1], expected.momenta[firstValidPoint].Unit().Y(), 0.01);
+  BOOST_CHECK_CLOSE(AstartDir[2], expected.momenta[firstValidPoint].Unit().Z(), 0.01);
+  BOOST_CHECK_CLOSE(AendDir[0], expected.momenta[lastValidPoint].Unit().X(), 0.01);
+  BOOST_CHECK_CLOSE(AendDir[1], expected.momenta[lastValidPoint].Unit().Y(), 0.01);
+  BOOST_CHECK_CLOSE(AendDir[2], expected.momenta[lastValidPoint].Unit().Z(), 0.01);
 
   recob::Trajectory::Vector_t startDir, endDir;
   std::tie(startDir, endDir) = traj.Direction();
@@ -322,7 +291,6 @@ void TestTrackTrajectory(
   CheckVectorsClose(startDir, expected.momenta[firstValidPoint].Unit());
   BOOST_TEST_MESSAGE("Direction() end");
   CheckVectorsClose(endDir, expected.momenta[lastValidPoint].Unit());
-
 
   //----------------------------------------------------------------------------
 
@@ -367,9 +335,9 @@ void TestTrackTrajectory(
 
 } // TestTrackTrajectory()
 
-
 //------------------------------------------------------------------------------
-void TrackTrajectoryTestDefaultConstructor() {
+void TrackTrajectoryTestDefaultConstructor()
+{
 
   BOOST_TEST_MESSAGE("Testing the default recob::TrackTrajectory constructor");
 
@@ -391,9 +359,8 @@ void TrackTrajectoryTestDefaultConstructor() {
   recob::TrackTrajectory traj;
 
   for (unsigned int v = 0; v <= recob::TrackTrajectory::MaxDumpVerbosity; ++v) {
-    std::cout
-      << "Default-constructed track trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Default-constructed track trajectory dump with verbosity level " << v << ":"
+              << std::endl;
     traj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -403,9 +370,9 @@ void TrackTrajectoryTestDefaultConstructor() {
 
 } // TrackTrajectoryTestDefaultConstructor()
 
-
 //------------------------------------------------------------------------------
-void TrackTrajectoryTestMainConstructor() {
+void TrackTrajectoryTestMainConstructor()
+{
 
   BOOST_TEST_MESSAGE("Testing the main recob::TrackTrajectory constructor");
 
@@ -416,88 +383,82 @@ void TrackTrajectoryTestMainConstructor() {
   Expected_t expected;
   // we describe a trajectory with uniform electric and magnetic fields aligned
   // on z; curvature is 1 on the x/y plane.
-  expected.positions = {
-    recob::TrackTrajectory::Point_t(  -1.0,   0.0,  0.0 ),
-    recob::TrackTrajectory::Point_t( -V2_2, +V2_2,  1.0 ),
-    recob::TrackTrajectory::Point_t(   0.0,  +1.0,  2.0 ),
-    recob::TrackTrajectory::Point_t( +V2_2, +V2_2,  3.0 ),
-    recob::TrackTrajectory::Point_t(  +1.0,   0.0,  4.0 ),
-    recob::TrackTrajectory::Point_t( +V2_2, -V2_2,  5.0 ),
-    recob::TrackTrajectory::Point_t(   0.0,  -1.0,  6.0 ),
-    recob::TrackTrajectory::Point_t( -V2_2, -V2_2,  7.0 ),
-    recob::TrackTrajectory::Point_t(  -1.0,   0.0,  8.0 ),
-    recob::TrackTrajectory::Point_t( -V2_2, +V2_2,  9.0 ),
-    recob::TrackTrajectory::Point_t(   0.0,  +1.0, 10.0 ),
-    recob::TrackTrajectory::Point_t( +V2_2, +V2_2, 11.0 ),
-    recob::TrackTrajectory::Point_t(  +1.0,   0.0, 12.0 ),
-    recob::TrackTrajectory::Point_t( +V2_2, -V2_2, 13.0 ),
-    recob::TrackTrajectory::Point_t(   0.0,  -1.0, 14.0 ),
-    recob::TrackTrajectory::Point_t( -V2_2, -V2_2, 15.0 ),
-    recob::TrackTrajectory::Point_t(  -1.0,   0.0, 16.0 ),
-    recob::TrackTrajectory::Point_t( -V2_2, +V2_2, 17.0 ),
-    recob::TrackTrajectory::Point_t(   0.0,  +1.0, 18.0 ),
-    recob::TrackTrajectory::Point_t( +V2_2, +V2_2, 19.0 ),
-    recob::TrackTrajectory::Point_t(  +1.0,   0.0, 20.0 ),
-    recob::TrackTrajectory::Point_t( +V2_2, -V2_2, 21.0 ),
-    recob::TrackTrajectory::Point_t(   0.0,  -1.0, 22.0 ),
-    recob::TrackTrajectory::Point_t( -V2_2, -V2_2, 23.0 ),
-    recob::TrackTrajectory::Point_t(  -1.0,   0.0, 24.0 )
-  };
-  expected.momenta = {
-    recob::TrackTrajectory::Vector_t(   0.0,  +1.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( +V2_2, +V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(  +1.0,   0.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( +V2_2, -V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(   0.0,  -1.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( -V2_2, -V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(  -1.0,   0.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( -V2_2, +V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(   0.0,  +1.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( +V2_2, +V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(  +1.0,   0.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( +V2_2, -V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(   0.0,  -1.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( -V2_2, -V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(  -1.0,   0.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( -V2_2, +V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(   0.0,  +1.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( +V2_2, +V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(  +1.0,   0.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( +V2_2, -V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(   0.0,  -1.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( -V2_2, -V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(  -1.0,   0.0, 1.0 ),
-    recob::TrackTrajectory::Vector_t( -V2_2, +V2_2, 1.0 ),
-    recob::TrackTrajectory::Vector_t(   0.0,  +1.0, 1.0 )
-  };
+  expected.positions = {recob::TrackTrajectory::Point_t(-1.0, 0.0, 0.0),
+                        recob::TrackTrajectory::Point_t(-V2_2, +V2_2, 1.0),
+                        recob::TrackTrajectory::Point_t(0.0, +1.0, 2.0),
+                        recob::TrackTrajectory::Point_t(+V2_2, +V2_2, 3.0),
+                        recob::TrackTrajectory::Point_t(+1.0, 0.0, 4.0),
+                        recob::TrackTrajectory::Point_t(+V2_2, -V2_2, 5.0),
+                        recob::TrackTrajectory::Point_t(0.0, -1.0, 6.0),
+                        recob::TrackTrajectory::Point_t(-V2_2, -V2_2, 7.0),
+                        recob::TrackTrajectory::Point_t(-1.0, 0.0, 8.0),
+                        recob::TrackTrajectory::Point_t(-V2_2, +V2_2, 9.0),
+                        recob::TrackTrajectory::Point_t(0.0, +1.0, 10.0),
+                        recob::TrackTrajectory::Point_t(+V2_2, +V2_2, 11.0),
+                        recob::TrackTrajectory::Point_t(+1.0, 0.0, 12.0),
+                        recob::TrackTrajectory::Point_t(+V2_2, -V2_2, 13.0),
+                        recob::TrackTrajectory::Point_t(0.0, -1.0, 14.0),
+                        recob::TrackTrajectory::Point_t(-V2_2, -V2_2, 15.0),
+                        recob::TrackTrajectory::Point_t(-1.0, 0.0, 16.0),
+                        recob::TrackTrajectory::Point_t(-V2_2, +V2_2, 17.0),
+                        recob::TrackTrajectory::Point_t(0.0, +1.0, 18.0),
+                        recob::TrackTrajectory::Point_t(+V2_2, +V2_2, 19.0),
+                        recob::TrackTrajectory::Point_t(+1.0, 0.0, 20.0),
+                        recob::TrackTrajectory::Point_t(+V2_2, -V2_2, 21.0),
+                        recob::TrackTrajectory::Point_t(0.0, -1.0, 22.0),
+                        recob::TrackTrajectory::Point_t(-V2_2, -V2_2, 23.0),
+                        recob::TrackTrajectory::Point_t(-1.0, 0.0, 24.0)};
+  expected.momenta = {recob::TrackTrajectory::Vector_t(0.0, +1.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(+V2_2, +V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(+1.0, 0.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(+V2_2, -V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(0.0, -1.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(-V2_2, -V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(-1.0, 0.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(-V2_2, +V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(0.0, +1.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(+V2_2, +V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(+1.0, 0.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(+V2_2, -V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(0.0, -1.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(-V2_2, -V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(-1.0, 0.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(-V2_2, +V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(0.0, +1.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(+V2_2, +V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(+1.0, 0.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(+V2_2, -V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(0.0, -1.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(-V2_2, -V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(-1.0, 0.0, 1.0),
+                      recob::TrackTrajectory::Vector_t(-V2_2, +V2_2, 1.0),
+                      recob::TrackTrajectory::Vector_t(0.0, +1.0, 1.0)};
   using trkflag = recob::TrackTrajectory::flag;
-  expected.flags = {
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex }
-  };
+  expected.flags = {{recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex}};
   expected.hasMomenta = true;
   expected.length = 12. * std::sqrt(6);
   expected.theta = util::pi() / 4.0;
@@ -512,12 +473,10 @@ void TrackTrajectoryTestMainConstructor() {
   auto positions = expected.positions;
   auto momenta = expected.momenta;
   auto flags = expected.flags;
-  recob::TrackTrajectory traj
-    (std::move(positions), std::move(momenta), std::move(flags), true);
+  recob::TrackTrajectory traj(std::move(positions), std::move(momenta), std::move(flags), true);
 
   for (unsigned int v = 0; v <= recob::TrackTrajectory::MaxDumpVerbosity; ++v) {
-    std::cout << "Track trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Track trajectory dump with verbosity level " << v << ":" << std::endl;
     traj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -530,20 +489,21 @@ void TrackTrajectoryTestMainConstructor() {
   //
 
   // step III.1: amend the expectation for a momentumless track
-  std::transform(expected.momenta.begin(), expected.momenta.end(),
-    expected.momenta.begin(), [](auto const& v){ return v.unit(); });
+  std::transform(expected.momenta.begin(),
+                 expected.momenta.end(),
+                 expected.momenta.begin(),
+                 [](auto const& v) { return v.unit(); });
   expected.hasMomenta = false;
 
   // step III.2: create a track with no momentum information
   positions = expected.positions; // copy again
   recob::TrackTrajectory::Momenta_t directions = expected.momenta;
   flags = expected.flags;
-  recob::TrackTrajectory mltraj
-    (std::move(positions), std::move(directions), std::move(flags), false);
+  recob::TrackTrajectory mltraj(
+    std::move(positions), std::move(directions), std::move(flags), false);
 
   for (unsigned int v = 0; v <= recob::TrackTrajectory::MaxDumpVerbosity; ++v) {
-    std::cout << "Momentumless trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Momentumless trajectory dump with verbosity level " << v << ":" << std::endl;
     mltraj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -556,33 +516,31 @@ void TrackTrajectoryTestMainConstructor() {
   //
 
   // step IV.2: suppress the points
-  expected.flags = {
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint },
-    { recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint }
-  };
+  expected.flags = {{recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint},
+                    {recob::TrackTrajectory::PointFlags_t::InvalidHitIndex, trkflag::NoPoint}};
   expected.hasMomenta = true;
   expected.length = 2. * std::sqrt(20.0);
 
@@ -590,12 +548,11 @@ void TrackTrajectoryTestMainConstructor() {
   positions = expected.positions; // copy again
   momenta = expected.momenta;
   flags = expected.flags;
-  recob::TrackTrajectory shorttraj
-    (std::move(positions), std::move(momenta), std::move(flags), true);
+  recob::TrackTrajectory shorttraj(
+    std::move(positions), std::move(momenta), std::move(flags), true);
 
   for (unsigned int v = 0; v <= recob::TrackTrajectory::MaxDumpVerbosity; ++v) {
-    std::cout << "Short trajectory dump with verbosity level "
-      << v << ":" << std::endl;
+    std::cout << "Short trajectory dump with verbosity level " << v << ":" << std::endl;
     shorttraj.Dump(std::cout, v, "    ", "  ");
     std::cout << std::endl;
   } // for
@@ -604,7 +561,6 @@ void TrackTrajectoryTestMainConstructor() {
   TestTrackTrajectory(shorttraj, expected);
 
 } // TrackTrajectoryTestMainConstructor()
-
 
 //------------------------------------------------------------------------------
 //--- registration of tests
@@ -615,11 +571,12 @@ void TrackTrajectoryTestMainConstructor() {
 // number of checks and it will fail if any of them does.
 //
 
-BOOST_AUTO_TEST_CASE(TrackTrajectoryTestDefaultConstructorTestCase) {
+BOOST_AUTO_TEST_CASE(TrackTrajectoryTestDefaultConstructorTestCase)
+{
   TrackTrajectoryTestDefaultConstructor();
 }
 
-BOOST_AUTO_TEST_CASE(TrackTrajectoryTestMainConstructorTestCase) {
+BOOST_AUTO_TEST_CASE(TrackTrajectoryTestMainConstructorTestCase)
+{
   TrackTrajectoryTestMainConstructor();
 }
-

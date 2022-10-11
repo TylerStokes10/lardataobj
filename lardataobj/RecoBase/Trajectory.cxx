@@ -6,7 +6,6 @@
  *
  */
 
-
 #include "lardataobj/RecoBase/Trajectory.h"
 #include "lardataobj/RecoBase/TrackingPlane.h"
 
@@ -15,33 +14,26 @@
 
 // C/C++ standard libraries
 #include <ostream>
-#include <utility> // std::move()
 #include <stdexcept> // std::runtime_error
-
+#include <utility>   // std::move()
 
 //------------------------------------------------------------------------------
-recob::Trajectory::Trajectory
-  (Positions_t&& positions, Momenta_t&& momenta, bool hasMomenta)
-  : fPositions(std::move(positions))
-  , fMomenta(std::move(momenta))
-  , fHasMomentum(hasMomenta)
+recob::Trajectory::Trajectory(Positions_t&& positions, Momenta_t&& momenta, bool hasMomenta)
+  : fPositions(std::move(positions)), fMomenta(std::move(momenta)), fHasMomentum(hasMomenta)
 {
   // invariant check
   if (fPositions.size() != fMomenta.size()) {
-    throw std::runtime_error("recob::Trajectory constructed with "
-      + std::to_string(fPositions.size()) + " positions and "
-      + std::to_string(fMomenta.size())
-      + " momenta! it requires the same number for both."
-      );
+    throw std::runtime_error("recob::Trajectory constructed with " +
+                             std::to_string(fPositions.size()) + " positions and " +
+                             std::to_string(fMomenta.size()) +
+                             " momenta! it requires the same number for both.");
   }
   if (fPositions.size() < 2) {
-    throw std::runtime_error("recob::Trajectory constructed with "
-      + std::to_string(fPositions.size())
-      + " trajectory points! it requires at least 2."
-      );
+    throw std::runtime_error("recob::Trajectory constructed with " +
+                             std::to_string(fPositions.size()) +
+                             " trajectory points! it requires at least 2.");
   }
 } // recob::Trajectory::Trajectory()
-
 
 //------------------------------------------------------------------------------
 /**
@@ -60,7 +52,8 @@ recob::Trajectory::Trajectory
  *
  * This operation is slow, and the result should be stored in a variable.
  */
-double recob::Trajectory::Length(size_t startAt /* = 0 */) const {
+double recob::Trajectory::Length(size_t startAt /* = 0 */) const
+{
 
   // sanity check
   if (startAt >= LastPoint()) return 0.;
@@ -77,9 +70,9 @@ double recob::Trajectory::Length(size_t startAt /* = 0 */) const {
   return length;
 } // recob::Trajectory::Length()
 
-
 //------------------------------------------------------------------------------
-double recob::Trajectory::ZenithAngle(size_t p /* = 0 */) const {
+double recob::Trajectory::ZenithAngle(size_t p /* = 0 */) const
+{
 
   // The zenith angle is defined by the angle between the track starting
   // direction and the y axis.
@@ -91,9 +84,9 @@ double recob::Trajectory::ZenithAngle(size_t p /* = 0 */) const {
 
 } // recob::Trajectory::ZenithAngle()
 
-
 //------------------------------------------------------------------------------
-double recob::Trajectory::AzimuthAngle(size_t p /* = 0 */) const {
+double recob::Trajectory::AzimuthAngle(size_t p /* = 0 */) const
+{
   //
   // std::atan2(y, x) returns the angle of a point (x,y) respect to x axis.
   // In our case, the definition of the angle (0 for z axis, pi/2 for x axis)
@@ -102,7 +95,6 @@ double recob::Trajectory::AzimuthAngle(size_t p /* = 0 */) const {
   decltype(auto) startDir = DirectionAtPoint(p);
   return std::atan2(startDir.X(), startDir.Z());
 } // recob::Trajectory::AzimuthAngle()
-
 
 //------------------------------------------------------------------------------
 /**
@@ -118,31 +110,27 @@ recob::Trajectory::Vector_t recob::Trajectory::DirectionAtPoint(size_t i) const
 {
 
   auto const& mom = MomentumVectorAtPoint(i);
-  return HasMomentum()? (mom / mom.R()): mom;
+  return HasMomentum() ? (mom / mom.R()) : mom;
 
 } // recob::Trajectory::DirectionAtPoint()
 
-
 //------------------------------------------------------------------------------
-recob::Trajectory::Rotation_t recob::Trajectory::GlobalToLocalRotationAtPoint
-  (size_t p) const
+recob::Trajectory::Rotation_t recob::Trajectory::GlobalToLocalRotationAtPoint(size_t p) const
 {
   return recob::tracking::Plane::Global3DToLocal3DRotation(DirectionAtPoint(p));
 } // recob::Trajectory::GlobalToLocalRotationAtPoint()
 
-
 //------------------------------------------------------------------------------
-recob::Trajectory::Rotation_t recob::Trajectory::LocalToGlobalRotationAtPoint
-  (size_t p) const
+recob::Trajectory::Rotation_t recob::Trajectory::LocalToGlobalRotationAtPoint(size_t p) const
 {
   return recob::tracking::Plane::Local3DToGlobal3DRotation(DirectionAtPoint(p));
 } // recob::Trajectory::GlobalToLocalRotationAtPoint()
 
-
 //------------------------------------------------------------------------------
-std::ostream& recob::operator <<
-  (std::ostream& out, recob::Trajectory const& traj)
-  { traj.Dump(out); return out; }
-
+std::ostream& recob::operator<<(std::ostream& out, recob::Trajectory const& traj)
+{
+  traj.Dump(out);
+  return out;
+}
 
 //------------------------------------------------------------------------------

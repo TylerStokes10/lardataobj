@@ -17,7 +17,6 @@
 // C/C++ standard library
 #include <algorithm> // std::equal()
 
-
 // Boost libraries
 /*
  * Boost Magic: define the name of the module;
@@ -28,28 +27,24 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( rawdigit_test )
+#define BOOST_TEST_MODULE (rawdigit_test)
 #include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
-#include "lardataobj/RawData/raw.h"
 #include "lardataobj/RawData/RawDigit.h"
-
-
+#include "lardataobj/RawData/raw.h"
 
 //------------------------------------------------------------------------------
 //--- Test code
 //
 
-
-void CheckRawDigit(
-  raw::RawDigit const& digits,
-  raw::ChannelID_t channel,
-  unsigned short samples,
-  raw::RawDigit::ADCvector_t const& uncompressed_adclist,
-  raw::Compress_t compression
-) {
+void CheckRawDigit(raw::RawDigit const& digits,
+                   raw::ChannelID_t channel,
+                   unsigned short samples,
+                   raw::RawDigit::ADCvector_t const& uncompressed_adclist,
+                   raw::Compress_t compression)
+{
 
   // this is a parameters validation check
   BOOST_TEST(samples == uncompressed_adclist.size());
@@ -72,8 +67,7 @@ void CheckRawDigit(
   raw::Uncompress(digits.ADCs(), ADCs, digits.Compression());
 
   BOOST_WARN(digits.NADC() <= samples); // is this always the case?
-  BOOST_TEST
-    (std::equal(ADCs.begin(), ADCs.end(), uncompressed_adclist.begin()));
+  BOOST_TEST(std::equal(ADCs.begin(), ADCs.end(), uncompressed_adclist.begin()));
 
   // - others
   BOOST_TEST(digits.GetPedestal() == 0.);
@@ -81,8 +75,8 @@ void CheckRawDigit(
 
 } // CheckRawDigit()
 
-
-void RawDigitTestDefaultConstructor() {
+void RawDigitTestDefaultConstructor()
+{
 
   //
   // Part I: initialization of wire inputs
@@ -92,7 +86,7 @@ void RawDigitTestDefaultConstructor() {
   const unsigned short samples = 0;
   raw::RawDigit::ADCvector_t adclist;
   const raw::Compress_t compression = raw::kNone;
-// raw::RawDigit::Flags_t flags;
+  // raw::RawDigit::Flags_t flags;
 
   //
   // Part II: default constructor
@@ -100,14 +94,13 @@ void RawDigitTestDefaultConstructor() {
   // step II.1: create a wire with the signal-copying constructor
   raw::RawDigit digits;
 
-
   // step II.2: verify that the values are as expected
   CheckRawDigit(digits, channel, samples, adclist, compression);
 
 } // RawDigitTestDefaultConstructor()
 
-
-void RawDigitTestCustomConstructors() {
+void RawDigitTestCustomConstructors()
+{
 
   //
   // Part I: initialization of wire inputs
@@ -116,14 +109,13 @@ void RawDigitTestCustomConstructors() {
   const unsigned short samples = 1000;
   raw::RawDigit::ADCvector_t adclist(samples);
   for (size_t i = 0; i < samples; ++i)
-    adclist[i] = (i % 3)? 0: i;
+    adclist[i] = (i % 3) ? 0 : i;
   const raw::Compress_t compression = raw::kHuffman;
-// raw::RawDigit::Flags_t flags;
+  // raw::RawDigit::Flags_t flags;
 
   // working a copy of the original data:
   std::vector<short> buffer(adclist);
   raw::Compress(buffer, compression); // compression happens in place
-
 
   //
   // Part II: constructor with signal copy
@@ -134,14 +126,12 @@ void RawDigitTestCustomConstructors() {
   // step II.2: verify that the values are as expected
   CheckRawDigit(digits1, channel, samples, adclist, compression);
 
-
   //
   // Part III: constructor with signal move
   //
   // step III.1: create a wire with the signal-moving constructor
   std::vector<short> buffer_copy(buffer);
-  raw::RawDigit digits2
-    (channel, samples, std::move(buffer_copy), compression /*, flags */);
+  raw::RawDigit digits2(channel, samples, std::move(buffer_copy), compression /*, flags */);
 
   // step III.2: verify that the values are as expected
   CheckRawDigit(digits2, channel, samples, adclist, compression);
@@ -151,8 +141,8 @@ void RawDigitTestCustomConstructors() {
 
 } // RawDigitTestCustomConstructors()
 
-
-void FibonacciCompressionTestCustomConstructor() {
+void FibonacciCompressionTestCustomConstructor()
+{
 
   //
   // Part I: initialization of wire inputs
@@ -161,10 +151,10 @@ void FibonacciCompressionTestCustomConstructor() {
   const unsigned short samples = 1000;
   raw::RawDigit::ADCvector_t adclist(samples);
   for (size_t i = 0; i < samples; ++i)
-    adclist[i] = (i % 3)? 0: i;
+    adclist[i] = (i % 3) ? 0 : i;
   const raw::Compress_t compression = raw::kHuffman;
 
-// working a copy of the original data:
+  // working a copy of the original data:
   std::vector<short> buffer(adclist);
   raw::Compress(buffer, compression); // compression happens in place
 
@@ -179,7 +169,6 @@ void FibonacciCompressionTestCustomConstructor() {
 
 } // FibonacciCompressionTestCustomConstructors()
 
-
 //------------------------------------------------------------------------------
 //--- registration of tests
 //
@@ -189,14 +178,17 @@ void FibonacciCompressionTestCustomConstructor() {
 // number of checks and it will fail if any of them does.
 //
 
-BOOST_AUTO_TEST_CASE(RawDigitDefaultConstructor) {
+BOOST_AUTO_TEST_CASE(RawDigitDefaultConstructor)
+{
   RawDigitTestDefaultConstructor();
 }
 
-BOOST_AUTO_TEST_CASE(RawDigitCustomConstructors) {
+BOOST_AUTO_TEST_CASE(RawDigitCustomConstructors)
+{
   RawDigitTestCustomConstructors();
 }
 
-BOOST_AUTO_TEST_CASE(FibonacciCompressionConstructor) {
+BOOST_AUTO_TEST_CASE(FibonacciCompressionConstructor)
+{
   FibonacciCompressionTestCustomConstructor();
 }

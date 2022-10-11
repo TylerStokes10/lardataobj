@@ -12,7 +12,6 @@
 // LArSoft libraries
 #include "nusimdata/SimulationBase/simb.h" // sim::GeneratedParticleIndex_t, ...
 
-
 namespace sim {
 
   /**
@@ -38,8 +37,7 @@ namespace sim {
    */
   class GeneratedParticleInfo {
 
-      public:
-
+  public:
     //--- BEGIN Generated particle index ---------------------------------------
     /// @{
     /// @name Generated particle index
@@ -48,23 +46,23 @@ namespace sim {
     using GeneratedParticleIndex_t = simb::GeneratedParticleIndex_t;
 
     /// Constant representing the absence of generator truth information.
-    static constexpr GeneratedParticleIndex_t NoGeneratedParticleIndex
-      = simb::NoGeneratedParticleIndex;
+    static constexpr GeneratedParticleIndex_t NoGeneratedParticleIndex =
+      simb::NoGeneratedParticleIndex;
 
     /**
      * @brief  Returns the generated particle index.
      * @return generated particle index (`NoGeneratedParticleIndex` if none)
      */
-    GeneratedParticleIndex_t generatedParticleIndex() const
-      { return fGeneratedParticleIndex; }
+    GeneratedParticleIndex_t generatedParticleIndex() const { return fGeneratedParticleIndex; }
 
     /// Returns whether the specified one is an acceptable generator index.
     bool hasGeneratedParticleIndex() const
-      { return simb::isGeneratedParticleIndex(fGeneratedParticleIndex); }
+    {
+      return simb::isGeneratedParticleIndex(fGeneratedParticleIndex);
+    }
 
     /// @}
     //--- END Generated particle index -----------------------------------------
-
 
     //--- BEGIN Constructors ---------------------------------------------------
     /// Default constructor (for ROOT I/O only).
@@ -74,20 +72,14 @@ namespace sim {
      * @brief Constructor: assigns all the values.
      * @param index generated particle index (`NoGeneratedParticleIndex` if none)
      */
-    GeneratedParticleInfo(GeneratedParticleIndex_t index)
-      : fGeneratedParticleIndex(index)
-      {}
+    GeneratedParticleInfo(GeneratedParticleIndex_t index) : fGeneratedParticleIndex(index) {}
     //--- END Constructors ---------------------------------------------------
 
-
-      private:
-
+  private:
     /// Index of the generated particle in its `simb::MCTruth` record.
     GeneratedParticleIndex_t fGeneratedParticleIndex = NoGeneratedParticleIndex;
 
   }; // class GeneratedParticleInfo
-
-
 
 } // namespace sim
 

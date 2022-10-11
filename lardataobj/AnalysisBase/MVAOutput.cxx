@@ -9,6 +9,4 @@
 
 #include "lardataobj/AnalysisBase/MVAOutput.h"
 
-namespace anab {
-
-} // namespace anab
+namespace anab {} // namespace anab

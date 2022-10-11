@@ -14,7 +14,7 @@
 
 namespace larpandoraobj {
 
-   /**
+  /**
    * @brief Metadata associated to PFParticles
    *
    * Originally defined in larpandora, moved to lardataobj for usage
@@ -27,28 +27,28 @@ namespace larpandoraobj {
   class PFParticleMetadata {
 
   public:
+    PFParticleMetadata(); ///< Default constructor
 
-      PFParticleMetadata();	  ///< Default constructor
+    typedef std::map<std::string, float> PropertiesMap;
 
-	  typedef std::map<std::string, float> PropertiesMap;
+    PFParticleMetadata(
+      const PropertiesMap&
+        propertiesMap); ///< Constructor given a properties map (std::map<string,float>)
 
-	  PFParticleMetadata(const PropertiesMap &propertiesMap); ///< Constructor given a properties map (std::map<string,float>)
+    /// @name Accessors
+    /// @{
+    // Returns the properties map
+    const PropertiesMap& GetPropertiesMap() const;
+    /// @}
 
-	  /// @name Accessors
-      /// @{
-	  // Returns the properties map
-	  const PropertiesMap &GetPropertiesMap() const;
-	  /// @}
+    /// @name Set method
+    /// @{
+    // Sets the properties map
+    void SetPropertiesMap(const PropertiesMap& propertiesMap);
+    /// @}
 
-	  /// @name Set method
-      /// @{
-	  // Sets the properties map
-	  void SetPropertiesMap(const PropertiesMap &propertiesMap);
-	  /// @}
-
-	private:
-
-	  PropertiesMap   m_propertiesMap;                ///< The properties map
+  private:
+    PropertiesMap m_propertiesMap; ///< The properties map
 
   }; // class PFParticle
 } // namespace recob

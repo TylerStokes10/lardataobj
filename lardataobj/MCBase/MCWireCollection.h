@@ -10,32 +10,28 @@ namespace sim {
   class MCWireCollection : public std::vector<sim::MCWire> {
 
   public:
-
     /// Default ctor
-    MCWireCollection(const unsigned int ch=sim::kINVALID_UINT)
+    MCWireCollection(const unsigned int ch = sim::kINVALID_UINT)
     {
       Reset();
-      fChannel    = ch;
+      fChannel = ch;
     }
 
     void Reset()
     {
       std::vector<sim::MCWire>::clear();
-      fChannel  = sim::kINVALID_UINT;
+      fChannel = sim::kINVALID_UINT;
     }
 
   private:
-
     unsigned int fChannel;
 
-
   public:
-
     /// Getter for channel number
     unsigned int Channel() const { return fChannel; }
 
     /// For sorting
-    inline bool operator< ( const MCWireCollection& rhs ) const { return fChannel < rhs.fChannel; }
+    inline bool operator<(const MCWireCollection& rhs) const { return fChannel < rhs.fChannel; }
 
     /// wrapper for push_back
     inline void push_back(const MCWire& wire)
@@ -45,8 +41,7 @@ namespace sim {
 
       std::vector<sim::MCWire>::push_back(wire);
 
-      if(sort) std::sort(begin(),end());
-
+      if (sort) std::sort(begin(), end());
     }
   };
 }
@@ -54,11 +49,12 @@ namespace sim {
 // Define a pointer comparison
 namespace std {
   template <>
-  class less<sim::MCWireCollection*>
-  {
+  class less<sim::MCWireCollection*> {
   public:
-    bool operator()( const sim::MCWireCollection* lhs, const sim::MCWireCollection* rhs )
-    { return (*lhs) < (*rhs); }
+    bool operator()(const sim::MCWireCollection* lhs, const sim::MCWireCollection* rhs)
+    {
+      return (*lhs) < (*rhs);
+    }
   };
 }
 

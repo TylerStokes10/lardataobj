@@ -8,7 +8,7 @@
 
 #include "lardataobj/RawData/DAQHeader.h"
 
-namespace raw{
+namespace raw {
 
   //----------------------------------------------------------------------
   DAQHeader::DAQHeader()
@@ -22,9 +22,7 @@ namespace raw{
     , fTime(0)
     , fSpare(0)
     , fNchan(0)
-  {
-
-  }
+  {}
 
   //----------------------------------------------------------------------
   DAQHeader::DAQHeader(unsigned int status)
@@ -38,21 +36,19 @@ namespace raw{
     , fTime(0)
     , fSpare(0)
     , fNchan(0)
-  {
-
-  }
+  {}
 
   //----------------------------------------------------------------------
   DAQHeader::DAQHeader(unsigned int status,
-		       int fixed,
-		       unsigned short format,
-		       unsigned short software,
-		       unsigned short run,
-		       unsigned short subrun,
-		       unsigned short event,
-		       time_t time,
-		       short spare,
-		       uint32_t nchan)
+                       int fixed,
+                       unsigned short format,
+                       unsigned short software,
+                       unsigned short run,
+                       unsigned short subrun,
+                       unsigned short event,
+                       time_t time,
+                       short spare,
+                       uint32_t nchan)
     : fStatus(status)
     , fFixed(fixed)
     , fFormat(format)
@@ -63,21 +59,18 @@ namespace raw{
     , fTime(time)
     , fSpare(spare)
     , fNchan(nchan)
-  {
-
-  }
-
+  {}
 
   //----------------------------------------------------------------------
   DAQHeader::DAQHeader(unsigned int status,
-		       int fixed,
-		       unsigned short format,
-		       unsigned short software,
-		       unsigned short run,
-		       unsigned short event,
-		       time_t time,
-		       short spare,
-		       uint32_t nchan)
+                       int fixed,
+                       unsigned short format,
+                       unsigned short software,
+                       unsigned short run,
+                       unsigned short event,
+                       time_t time,
+                       short spare,
+                       uint32_t nchan)
     : fStatus(status)
     , fFixed(fixed)
     , fFormat(format)
@@ -88,10 +81,7 @@ namespace raw{
     , fTime(time)
     , fSpare(spare)
     , fNchan(nchan)
-  {
-
-  }
+  {}
 
 }
 ////////////////////////////////////////////////////////////////////////
-

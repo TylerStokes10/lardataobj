@@ -15,9 +15,9 @@
  */
 
 // C/C++ standard library
+#include <algorithm> // std::is_sorted(), std::lower_bound()
 #include <array>
 #include <iostream>
-#include <algorithm> // std::is_sorted(), std::lower_bound()
 #include <stdexcept> // std::runtime_error
 
 // Boost libraries
@@ -30,20 +30,18 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( hit_test )
+#define BOOST_TEST_MODULE (hit_test)
 #include "boost/test/unit_test.hpp"
-
 
 // LArSoft libraries
 #include "lardataobj/RecoBase/Edge.h"
 #include "lardataobj/RecoBase/SpacePoint.h"
 
-
-
 //------------------------------------------------------------------------------
 //--- Test code
 //
-void EdgeTestDefaultConstructor() {
+void EdgeTestDefaultConstructor()
+{
 
   /*
    * Tested interface:
@@ -87,16 +85,16 @@ void EdgeTestDefaultConstructor() {
   BOOST_TEST(e.SecondPointID() == PinvID);
   BOOST_TEST(e.Length() == 0.0); // exactly so
 
-  BOOST_TEST(!(e      < e));
-  BOOST_TEST(!(e      < e.ID()));
+  BOOST_TEST(!(e < e));
+  BOOST_TEST(!(e < e.ID()));
   BOOST_TEST(!(e.ID() < e));
 
   std::cout << "Printout of a default-constructed edge: " << e << std::endl;
 
 } // EdgeTestDefaultConstructor()
 
-
-void EdgeTestValueConstructor() {
+void EdgeTestValueConstructor()
+{
 
   /*
    * Tested interface:
@@ -141,23 +139,23 @@ void EdgeTestValueConstructor() {
   BOOST_TEST(e.SecondPointID() == 10);
   BOOST_TEST(e.Length() == 3.0); // exactly so
 
-  BOOST_TEST(!(e      < e));
-  BOOST_TEST(!(e      < e.ID()));
+  BOOST_TEST(!(e < e));
+  BOOST_TEST(!(e < e.ID()));
   BOOST_TEST(!(e.ID() < e));
 
   std::cout << "Printout of a value-constructed edge: " << e << std::endl;
 
   recob::Edge o(3.0, 5, 10, 4);
 
-  BOOST_TEST( (e      < o));
-  BOOST_TEST(!(o      < e));
-  BOOST_TEST( (e      < o.ID()));
+  BOOST_TEST((e < o));
+  BOOST_TEST(!(o < e));
+  BOOST_TEST((e < o.ID()));
   BOOST_TEST(!(o.ID() < e));
 
 } // EdgeTestValueConstructor()
 
-
-void EdgeTestSpacePointConstructor() {
+void EdgeTestSpacePointConstructor()
+{
 
   /*
    * Tested interface:
@@ -206,17 +204,17 @@ void EdgeTestSpacePointConstructor() {
 
   // BUG the double brace syntax is required to work around clang bug 21629
   // (https://bugs.llvm.org/show_bug.cgi?id=21629)
-  std::array<double, 3U> const error = {{ 0.1, 0.1, 0.1 }};
+  std::array<double, 3U> const error = {{0.1, 0.1, 0.1}};
   std::array<double, 3U> point;
 
   // BUG the double brace syntax is required to work around clang bug 21629
   // (https://bugs.llvm.org/show_bug.cgi?id=21629)
-  point = {{ 1.0, 1.0, 1.0 }};
+  point = {{1.0, 1.0, 1.0}};
   recob::SpacePoint const p1(point.data(), error.data(), 1.0, 0);
 
   // BUG the double brace syntax is required to work around clang bug 21629
   // (https://bugs.llvm.org/show_bug.cgi?id=21629)
-  point = {{ 4.0, 5.0, 13.0 }};
+  point = {{4.0, 5.0, 13.0}};
   recob::SpacePoint const p2(point.data(), error.data(), 1.0, 1);
 
   recob::Edge const e(p1, p2, 0);
@@ -230,15 +228,15 @@ void EdgeTestSpacePointConstructor() {
 
 } // EdgeTestSpacePointConstructor()
 
-
 //------------------------------------------------------------------------------
-void EdgeClassDocumentationTest() {
+void EdgeClassDocumentationTest()
+{
 
   // prepare the space points for the test, already sorted
   // BUG the double brace syntax is required to work around clang bug 21629
   // (https://bugs.llvm.org/show_bug.cgi?id=21629)
-  std::array<double, 3U> const error = {{ 0.1, 0.1, 0.1 }};
-  std::array<double, 3U> const point = {{ 1.0, 1.0, 1.0 }};
+  std::array<double, 3U> const error = {{0.1, 0.1, 0.1}};
+  std::array<double, 3U> const point = {{1.0, 1.0, 1.0}};
   std::vector<recob::SpacePoint> points;
   for (unsigned int i = 0; i < 10; ++i)
     points.emplace_back(point.data(), error.data(), 1.0, i);
@@ -251,22 +249,18 @@ void EdgeClassDocumentationTest() {
     throw std::runtime_error("Space points not sorted!");
 
   // find the first space point
-  auto const iFirstPoint = std::lower_bound
-    (points.begin(), points.end(), edge.FirstPointID());
+  auto const iFirstPoint = std::lower_bound(points.begin(), points.end(), edge.FirstPointID());
 
   if ((iFirstPoint == points.end()) || (iFirstPoint->ID() != edge.FirstPointID())) {
-    throw std::runtime_error
-      ("First point not found: ID=" + std::to_string(edge.FirstPointID()));
+    throw std::runtime_error("First point not found: ID=" + std::to_string(edge.FirstPointID()));
   }
   recob::SpacePoint const& firstPoint = *iFirstPoint;
 
   // find the second space point
-  auto const iSecondPoint = std::lower_bound
-    (points.begin(), points.end(), edge.SecondPointID());
+  auto const iSecondPoint = std::lower_bound(points.begin(), points.end(), edge.SecondPointID());
 
   if ((iSecondPoint == points.end()) || (iSecondPoint->ID() != edge.SecondPointID())) {
-    throw std::runtime_error
-      ("Second point not found: ID=" + std::to_string(edge.SecondPointID()));
+    throw std::runtime_error("Second point not found: ID=" + std::to_string(edge.SecondPointID()));
   }
   recob::SpacePoint const& secondPoint = *iSecondPoint;
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -274,9 +268,7 @@ void EdgeClassDocumentationTest() {
   BOOST_TEST(&firstPoint == &points[3]);
   BOOST_TEST(&secondPoint == &points[6]);
 
-
 } // EdgeClassDocumentationTest()
-
 
 //------------------------------------------------------------------------------
 //--- registration of tests
@@ -287,12 +279,14 @@ void EdgeClassDocumentationTest() {
 // number of checks and it will fail if any of them does.
 //
 
-BOOST_AUTO_TEST_CASE(EdgeTests) {
+BOOST_AUTO_TEST_CASE(EdgeTests)
+{
   EdgeTestDefaultConstructor();
   EdgeTestValueConstructor();
   EdgeTestSpacePointConstructor();
 } // EdgeTests
 
-BOOST_AUTO_TEST_CASE(EdgeDocumentationTests) {
+BOOST_AUTO_TEST_CASE(EdgeDocumentationTests)
+{
   EdgeClassDocumentationTest();
 }

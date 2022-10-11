@@ -11,31 +11,28 @@ namespace sim {
   void MCShower::ClearData()
   //-------------------------------------------------------------
   {
-    TLorentzVector invalid(kINVALID_DOUBLE,
-			   kINVALID_DOUBLE,
-			   kINVALID_DOUBLE,
-			   kINVALID_DOUBLE);
-    MCStep invalid_step(invalid,invalid);
+    TLorentzVector invalid(kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE, kINVALID_DOUBLE);
+    MCStep invalid_step(invalid, invalid);
 
-    fOrigin  = simb::kUnknown;
+    fOrigin = simb::kUnknown;
 
     fPDGCode = kINVALID_INT;
     fTrackID = kINVALID_UINT;
     fProcess = "";
-    fStart   = invalid_step;
-    fEnd     = invalid_step;
+    fStart = invalid_step;
+    fEnd = invalid_step;
 
     fMotherPDGCode = kINVALID_INT;
     fMotherTrackID = kINVALID_UINT;
     fMotherProcess = "";
-    fMotherStart   = invalid_step;
-    fMotherEnd     = invalid_step;
+    fMotherStart = invalid_step;
+    fMotherEnd = invalid_step;
 
     fAncestorPDGCode = kINVALID_INT;
     fAncestorTrackID = kINVALID_UINT;
     fAncestorProcess = "";
-    fAncestorStart   = invalid_step;
-    fAncestorEnd     = invalid_step;
+    fAncestorStart = invalid_step;
+    fAncestorEnd = invalid_step;
 
     fDetProfile = invalid_step;
 

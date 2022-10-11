@@ -32,7 +32,6 @@
 // ROOT includes
 #include "RtypesCore.h"
 
-
 /// Raw data description and utilities
 namespace raw {
 
@@ -72,7 +71,7 @@ namespace raw {
     /// Type representing a (compressed) vector of ADC counts
     typedef std::vector<short> ADCvector_t;
 
-/*
+    /*
 // removed waiting for a real use for flags
     /// Type for the digit flags
     typedef std::bitset<16> Flags_t;
@@ -82,8 +81,7 @@ namespace raw {
     RawDigit();
 
   public:
-
-  /*
+    /*
     // removed waiting for a real use for flags
     typedef enum {
       fiSaturation,       ///< saturation flag: set if saturated at any time
@@ -102,12 +100,12 @@ namespace raw {
      * Data from the adclist is copied into the raw digits.
      * Pedestal is set to 0 by default.
      */
-    RawDigit(ChannelID_t        channel,
-             ULong64_t          samples,
+    RawDigit(ChannelID_t channel,
+             ULong64_t samples,
              ADCvector_t const& adclist,
-             raw::Compress_t    compression = raw::kNone /*,
+             raw::Compress_t compression = raw::kNone /*,
              const Flags_t&     flags = DefaultFlags */
-             );
+    );
 
     /**
      * @brief Constructor: sets all the fields
@@ -119,46 +117,46 @@ namespace raw {
      * Data from the adclist is moved into the raw digits.
      * Pedestal is set to 0 by default.
      */
-    RawDigit(ChannelID_t        channel,
-             ULong64_t          samples,
-             ADCvector_t&&      adclist,
-             raw::Compress_t    compression = raw::kNone /*,
+    RawDigit(ChannelID_t channel,
+             ULong64_t samples,
+             ADCvector_t&& adclist,
+             raw::Compress_t compression = raw::kNone /*,
              const Flags_t&     flags = DefaultFlags */
-             );
+    );
 
     /// Set pedestal and its RMS (the latter is 0 by default)
-    void            SetPedestal(float ped, float sigma = 1.);
+    void SetPedestal(float ped, float sigma = 1.);
 
     ///@{
     ///@name Accessors
 
     /// Reference to the compressed ADC count vector
-    const ADCvector_t& ADCs()     const;
+    const ADCvector_t& ADCs() const;
 
     /// Number of elements in the compressed ADC sample vector
-    size_t          NADC()        const;
+    size_t NADC() const;
 
     /// ADC vector element number i; no decompression is applied
-    short           ADC(int i)    const;
+    short ADC(int i) const;
 
     /// DAQ channel this raw data was read from
-    ChannelID_t     Channel()     const;
+    ChannelID_t Channel() const;
 
     /// Number of samples in the uncompressed ADC data
-    ULong64_t       Samples()     const;
+    ULong64_t Samples() const;
 
     /// Pedestal level (ADC counts)
     /// @deprecated Might be removed soon
-    float           GetPedestal() const;
+    float GetPedestal() const;
 
     /// TODO RMS of the pedestal level?
-    float           GetSigma()    const;
+    float GetSigma() const;
 
     /// Compression algorithm used to store the ADC counts
     raw::Compress_t Compression() const;
     ///@}
 
-  /*
+    /*
     // removed waiting for a real use for flags
     ///@{
     ///@name Raw digit flag interface
@@ -178,49 +176,66 @@ namespace raw {
     ///@}
   */
 
-
   private:
-    std::vector<short> fADC;      ///< ADC readout per tick, before pedestal subtraction
+    std::vector<short> fADC; ///< ADC readout per tick, before pedestal subtraction
 
-    ChannelID_t     fChannel;     ///< channel number in the readout
-    ULong64_t       fSamples;     ///< number of ticks of the clock
+    ChannelID_t fChannel; ///< channel number in the readout
+    ULong64_t fSamples;   ///< number of ticks of the clock
 
-    float           fPedestal;    ///< pedestal for this channel
-    float           fSigma;       ///< sigma of the pedestal counts for this channel
+    float fPedestal; ///< pedestal for this channel
+    float fSigma;    ///< sigma of the pedestal counts for this channel
 
-    Compress_t      fCompression; ///< compression scheme used for the ADC vector
-
+    Compress_t fCompression; ///< compression scheme used for the ADC vector
 
     // removed waiting for a real use for flags
     // Flags_t         fFlags;       ///< set of digit flags
 
   }; // class RawDigit
 
-
 } // namespace raw
-
 
 //------------------------------------------------------------------------------
 //--- inline implementation
 //---
 
-inline size_t          raw::RawDigit::NADC()        const { return fADC.size();  }
-inline short           raw::RawDigit::ADC(int i)    const { return fADC.at(i);   }
-inline const raw::RawDigit::ADCvector_t&
-                       raw::RawDigit::ADCs()        const { return fADC;         }
-inline raw::ChannelID_t
-                       raw::RawDigit::Channel()     const { return fChannel;     }
-inline ULong64_t       raw::RawDigit::Samples()     const { return fSamples;     }
-inline float           raw::RawDigit::GetPedestal() const { return fPedestal;    }
-inline float           raw::RawDigit::GetSigma()    const { return fSigma;       }
-inline raw::Compress_t raw::RawDigit::Compression() const { return fCompression; }
+inline size_t raw::RawDigit::NADC() const
+{
+  return fADC.size();
+}
+inline short raw::RawDigit::ADC(int i) const
+{
+  return fADC.at(i);
+}
+inline const raw::RawDigit::ADCvector_t& raw::RawDigit::ADCs() const
+{
+  return fADC;
+}
+inline raw::ChannelID_t raw::RawDigit::Channel() const
+{
+  return fChannel;
+}
+inline ULong64_t raw::RawDigit::Samples() const
+{
+  return fSamples;
+}
+inline float raw::RawDigit::GetPedestal() const
+{
+  return fPedestal;
+}
+inline float raw::RawDigit::GetSigma() const
+{
+  return fSigma;
+}
+inline raw::Compress_t raw::RawDigit::Compression() const
+{
+  return fCompression;
+}
 /*
 // removed waiting for a real use for flags
 inline const raw::RawDigit::Flags_t&
                        raw::RawDigit::Flags()       const { return fFlags;       }
 inline bool            raw::RawDigit::isSaturated() const { return fFlags.test(fiSaturation); }
 */
-
 
 #endif // RAWDATA_RAWDIGIT_H
 

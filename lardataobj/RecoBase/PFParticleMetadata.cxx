@@ -8,28 +8,26 @@
 
 #include "lardataobj/RecoBase/PFParticleMetadata.h"
 
-namespace larpandoraobj{
+namespace larpandoraobj {
 
-    PFParticleMetadata::PFParticleMetadata()
-	{}
+  PFParticleMetadata::PFParticleMetadata() {}
 
-	// Constructor with a given map
-	PFParticleMetadata::PFParticleMetadata(const PropertiesMap &propertiesMap) :
-	    m_propertiesMap(propertiesMap)
-	{}
-
+  // Constructor with a given map
+  PFParticleMetadata::PFParticleMetadata(const PropertiesMap& propertiesMap)
+    : m_propertiesMap(propertiesMap)
+  {}
 
   //-------------------------------------------------------------------------------------------------------------
-  const PFParticleMetadata::PropertiesMap &PFParticleMetadata::GetPropertiesMap() const
+  const PFParticleMetadata::PropertiesMap& PFParticleMetadata::GetPropertiesMap() const
   {
     return m_propertiesMap;
   }
 
   //-----------------------------------------------------------------------------------------------------------------
 
-  void PFParticleMetadata::SetPropertiesMap(const PropertiesMap &propertiesMap)
+  void PFParticleMetadata::SetPropertiesMap(const PropertiesMap& propertiesMap)
   {
     m_propertiesMap = propertiesMap;
   }
 
-}// namespace
+} // namespace

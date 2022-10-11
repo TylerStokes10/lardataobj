@@ -15,8 +15,7 @@
 // C++ includes
 #include <vector>
 
-namespace sim
-{
+namespace sim {
   /**
    * @brief Energy deposition in the active material (lite version).
    *
@@ -25,26 +24,24 @@ namespace sim
    * These are usually stored in sim::SimEnergyDeposit objects. For
    * filesize concerns we pare it down to the essential information.
    */
-  class SimEnergyDepositLite
-  {
+  class SimEnergyDepositLite {
   public:
-
     using Length_t = float;
     using Point_t = geo::Point_t;
 
     SimEnergyDepositLite(double e = 0.,
-                        geo::Point_t middle = {0., 0., 0.},
-                        double t = 0.,
-                        int id = 0)
-                      : edep(e)
-                      , middlePos(middle)
-                      , middleTime(t)
-                      , trackID(id)
+                         geo::Point_t middle = {0., 0., 0.},
+                         double t = 0.,
+                         int id = 0)
+      : edep(e), middlePos(middle), middleTime(t), trackID(id)
     {}
 
     double Energy() const { return edep; }
     geo::Point_t const& Position() const noexcept { return middlePos; }
-    geo::Point_t const& MidPoint() const noexcept { return Position();} ///< Just an alias for compatibility with SED
+    geo::Point_t const& MidPoint() const noexcept
+    {
+      return Position();
+    } ///< Just an alias for compatibility with SED
     double Time() const { return middleTime; }
     int TrackID() const { return trackID; }
 
@@ -71,26 +68,19 @@ namespace sim
 
     // Need to be aware that information is obviously not complete
     // (e.g. no exact start/end point or time, only middle point or time)
-    operator sim::SimEnergyDeposit() const {
-      return sim::SimEnergyDeposit(0, 0, 0,
-                                  edep,
-                                  middlePos,
-                                  middlePos,
-                                  middleTime,
-                                  middleTime,
-                                  trackID,
-                                  0);
+    operator sim::SimEnergyDeposit() const
+    {
+      return sim::SimEnergyDeposit(
+        0, 0, 0, edep, middlePos, middlePos, middleTime, middleTime, trackID, 0);
     }
 
   private:
-    float        edep; ///< energy deposition (MeV)
+    float edep;             ///< energy deposition (MeV)
     geo::Point_t middlePos; ///< position in (cm)
-    double       middleTime; ///< (ns)
-    int          trackID; ///< simulation track id
-
+    double middleTime;      ///< (ns)
+    int trackID;            ///< simulation track id
   };
 
   typedef std::vector<SimEnergyDepositLite> SimEnergyDepositLiteCollection;
 } // namespace sim
 #endif // LARDATAOBJ_SIMULATION_SIMENERGYDEPOSITLITE_H
-

@@ -17,8 +17,7 @@ namespace recob {
 
   class SpacePoint;
 
-  class Seed
-  {
+  class Seed {
   public:
     // Basic constructors
     Seed();
@@ -28,58 +27,48 @@ namespace recob {
     double fSeedDirection[3];
     double fSeedPointError[3];
     double fSeedDirectionError[3];
-    bool   fIsValid;
-
+    bool fIsValid;
 
   public:
-
-    Seed(double* Pt,
-	 double * Dir,
-	 double* PtErr,
-	 double* DirErr);
-
+    Seed(double* Pt, double* Dir, double* PtErr, double* DirErr);
 
     // Getters and setters
     void GetDirection(double* Dir, double* Err) const;
-    void GetPoint(double*     Pt,  double* Err) const;
-    double GetLength()                          const;
+    void GetPoint(double* Pt, double* Err) const;
+    double GetLength() const;
 
     void Print() const;
 
     void SetDirection(double* Dir, double* Err);
-    void SetPoint(double *    Pt,  double* Err);
+    void SetPoint(double* Pt, double* Err);
 
-
-    double GetAngle(                Seed const & AnotherSeed ) const;
-    double GetProjDiscrepancy (     Seed const & AnotherSeed ) const;
-    double GetProjAngleDiscrepancy( Seed const & AnotherSeed ) const;
-    double GetDistance(             Seed const & AnotherSeed ) const;
+    double GetAngle(Seed const& AnotherSeed) const;
+    double GetProjDiscrepancy(Seed const& AnotherSeed) const;
+    double GetProjAngleDiscrepancy(Seed const& AnotherSeed) const;
+    double GetDistance(Seed const& AnotherSeed) const;
 
     Seed Reverse();
-    void GetVectorBetween(          Seed const & AnotherSeed, double * xyz ) const;
+    void GetVectorBetween(Seed const& AnotherSeed, double* xyz) const;
 
-    double GetDistanceFrom(         SpacePoint const & SomePoint) const;
+    double GetDistanceFrom(SpacePoint const& SomePoint) const;
 
-    int GetPointingSign(            Seed const & AnotherSeed ) const;
+    int GetPointingSign(Seed const& AnotherSeed) const;
 
     // Methods for errorless seeds
-    Seed(double* Pt, double * Dir);
+    Seed(double* Pt, double* Dir);
     void SetDirection(double* Dir);
-    void SetPoint(double *    Pt);
+    void SetPoint(double* Pt);
 
     // Seed validity checks
     bool IsValid() const;
     void SetValidity(bool Validity);
 
-    friend std::ostream& operator << (std::ostream& stream, Seed const& a);
+    friend std::ostream& operator<<(std::ostream& stream, Seed const& a);
 
-    friend bool          operator <   (const Seed & a, const Seed & b);
-
+    friend bool operator<(const Seed& a, const Seed& b);
   };
 
-  void CrossProd(double, double, double,
-		 double, double, double,
-		 double&, double&, double&);
+  void CrossProd(double, double, double, double, double, double, double&, double&, double&);
 }
 
 #endif // SEED_H

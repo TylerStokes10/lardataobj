@@ -7,36 +7,29 @@
 #define optdata_FIFOChannel_h
 
 // LArSoft includes
-#include "lardataobj/OpticalDetectorData/OpticalTypes.h"
 #include "lardataobj/OpticalDetectorData/ChannelData.h"
+#include "lardataobj/OpticalDetectorData/OpticalTypes.h"
 
 // C++ includes
-#include <vector>
 #include <functional> // so we can redefine less<> below
 #include <limits>
+#include <vector>
 
 namespace optdata {
 
-  class FIFOChannel : public ChannelData
-  {
+  class FIFOChannel : public ChannelData {
   public:
-
     // Simple constructor/destructor.
-    FIFOChannel ( Optical_Category_t category = kUndefined,
-		  TimeSlice_t time = 0,
-		  Frame_t frame = 0,
-		  Channel_t channel = std::numeric_limits<Channel_t>::max(),
-		  size_type len = 0 )
-      : ChannelData(channel,len)
-      , fm_category(category)
-      , fm_timeSlice(time)
-      , fm_frame(frame)
-    {};
+    FIFOChannel(Optical_Category_t category = kUndefined,
+                TimeSlice_t time = 0,
+                Frame_t frame = 0,
+                Channel_t channel = std::numeric_limits<Channel_t>::max(),
+                size_type len = 0)
+      : ChannelData(channel, len), fm_category(category), fm_timeSlice(time), fm_frame(frame){};
 
-    ~FIFOChannel() {};
+    ~FIFOChannel(){};
 
     // Here we have getters and setters for the time information.
-
 
     Optical_Category_t Category() const { return fm_category; }
 
@@ -44,12 +37,11 @@ namespace optdata {
     // data. For example, the first bin of the ADC channel may refer
     // to clock value 8595824 (in some arbitrary units).
     TimeSlice_t TimeSlice() const { return fm_timeSlice; }
-    void SetTimeSlice( TimeSlice_t t ) { fm_timeSlice = t; }
+    void SetTimeSlice(TimeSlice_t t) { fm_timeSlice = t; }
 
     // The frame number associated with the first frame in the channel.
     Frame_t Frame() const { return fm_frame; }
-    void SetFrame( Frame_t f ) { fm_frame = f; }
-
+    void SetFrame(Frame_t f) { fm_frame = f; }
 
   private:
     Optical_Category_t fm_category; // A channel category from Types.h
@@ -60,12 +52,11 @@ namespace optdata {
   // In case we want to sort a collection of FIFOChannels (e.g.,
   // std::set<FIFOChannel>), here's the definition of the less-than
   // operator.
-  bool operator<( const FIFOChannel& lhs, const FIFOChannel& rhs )
+  bool operator<(const FIFOChannel& lhs, const FIFOChannel& rhs)
   {
     // Sort by channel, frame number, and time associated with the first bin.
-    if ( lhs.ChannelNumber()   < rhs.ChannelNumber()  &&
-	 lhs.Frame()           < rhs.Frame()          &&
-	 lhs.TimeSlice()       < rhs.TimeSlice() )
+    if (lhs.ChannelNumber() < rhs.ChannelNumber() && lhs.Frame() < rhs.Frame() &&
+        lhs.TimeSlice() < rhs.TimeSlice())
       return true;
     return false;
   }
@@ -76,10 +67,9 @@ namespace optdata {
 // case we want (for example) a std::set<FIFOChannel*>.
 namespace std {
   template <>
-  class less<optdata::FIFOChannel*>
-  {
+  class less<optdata::FIFOChannel*> {
   public:
-    bool operator()( const optdata::FIFOChannel* lhs, const optdata::FIFOChannel* rhs )
+    bool operator()(const optdata::FIFOChannel* lhs, const optdata::FIFOChannel* rhs)
     {
       return (*lhs) < (*rhs);
     }

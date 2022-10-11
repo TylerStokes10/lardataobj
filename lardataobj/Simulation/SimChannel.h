@@ -12,32 +12,31 @@
 #define LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 
 // LArSoftObj libraries
-#include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::kBogusI
+#include "larcoreobj/SimpleTypesAndConstants/RawTypes.h"          // raw::ChannelID_t
 
 // C/C++ standard libraries
 #include <string>
-#include <vector>
 #include <utility> // std::pair
+#include <vector>
 
 namespace sim {
 
   /// Ionization energy from a Geant4 track
-  struct TrackIDE{
-    int trackID;      ///< Geant4 supplied trackID
-    float energyFrac; ///< fraction of hit energy from the particle with this trackID
-    float energy;     ///< energy from the particle with this trackID [MeV]
+  struct TrackIDE {
+    int trackID;        ///< Geant4 supplied trackID
+    float energyFrac;   ///< fraction of hit energy from the particle with this trackID
+    float energy;       ///< energy from the particle with this trackID [MeV]
     float numElectrons; ///< number of electrons from the particle detected on the wires
-    int origTrackID;      ///< Geant4 supplied trackID, including no modification for shower secondaries/tertiaries
+    int
+      origTrackID; ///< Geant4 supplied trackID, including no modification for shower secondaries/tertiaries
 
     TrackIDE() {}
 
-
-    TrackIDE(int id, float ef, float e, float ne, int gid = util::kBogusI) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne), origTrackID(gid) {}
-
-
+    TrackIDE(int id, float ef, float e, float ne, int gid = util::kBogusI)
+      : trackID(id), energyFrac(ef), energy(e), numElectrons(ne), origTrackID(gid)
+    {}
   };
-
 
   /**
    * @brief Ionization at a point of the TPC sensitive volume
@@ -83,14 +82,13 @@ namespace sim {
    * sim::SimChannel.
    *
    */
-  struct IDE{
+  struct IDE {
 
     /// Type of track ID (the value comes from Geant4)
     typedef int TrackID_t;
 
     /// Default constructor (sets "bogus" values)
     IDE();
-
 
     /// Constructor: copies an IDE, and applies the specified offset to track ID
     IDE(IDE const& ide, int offset);
@@ -103,15 +101,8 @@ namespace sim {
         float ypos,
         float zpos,
         TrackID_t gid = util::kBogusI)
-    : trackID     (tid)
-    , numElectrons(nel)
-    , energy      (e)
-    , x           (xpos)
-    , y           (ypos)
-    , z           (zpos)
-    , origTrackID     (gid)
+      : trackID(tid), numElectrons(nel), energy(e), x(xpos), y(ypos), z(zpos), origTrackID(gid)
     {}
-
 
     TrackID_t trackID;  ///< Geant4 supplied track ID
     float numElectrons; ///< number of electrons at the readout for this track ID and time
@@ -119,12 +110,12 @@ namespace sim {
     float x;            ///< x position of ionization [cm]
     float y;            ///< y position of ionization [cm]
     float z;            ///< z position of ionization [cm]
-    TrackID_t origTrackID;  ///< Geant4 supplied track ID (remains true trackID even for shower secondaries/tertiaries etc)
-  }; // struct IDE
-
+    TrackID_t
+      origTrackID; ///< Geant4 supplied track ID (remains true trackID even for shower secondaries/tertiaries etc)
+  };               // struct IDE
 
   /// List of energy deposits at the same time (on this channel)
-  typedef std::pair<unsigned short, std::vector<sim::IDE> > TDCIDE;
+  typedef std::pair<unsigned short, std::vector<sim::IDE>> TDCIDE;
 
   /**
    * @brief Energy deposited on a readout channel by simulated tracks
@@ -142,8 +133,7 @@ namespace sim {
    * Note that there can be multiple energy deposit records (that is `sim::IDE`)
    * for a single track in a single TDC tick.
    */
-  class SimChannel
-  {
+  class SimChannel {
   public:
     /// Type for TDC tick used in the internal representation
     typedef TDCIDE::first_type StoredTDC_t;
@@ -153,11 +143,9 @@ namespace sim {
 
   private:
     raw::ChannelID_t fChannel; ///< readout channel where electrons are collected
-    TDCIDEs_t        fTDCIDEs; ///< list of energy deposits for each TDC with signal
-
+    TDCIDEs_t fTDCIDEs;        ///< list of energy deposits for each TDC with signal
 
   public:
-
     // Default constructor
     SimChannel();
 
@@ -168,7 +156,6 @@ namespace sim {
 
     /// Type of track ID (the value comes from Geant4)
     typedef IDE::TrackID_t TrackID_t;
-
 
     /// Constructor: immediately sets the channel number
     explicit SimChannel(raw::ChannelID_t channel);
@@ -211,8 +198,7 @@ namespace sim {
      *
      * Entries are sorted by track ID number.
      */
-    std::vector<sim::IDE> TrackIDsAndEnergies(TDC_t startTDC,
-                                              TDC_t endTDC) const;
+    std::vector<sim::IDE> TrackIDsAndEnergies(TDC_t startTDC, TDC_t endTDC) const;
 
     /**
      * @brief Returns all the deposited energy information as stored
@@ -227,7 +213,6 @@ namespace sim {
      * content.
      */
     TDCIDEs_t const& TDCIDEMap() const;
-
 
     /// Returns the total number of ionization electrons on this channel in the specified TDC
     double Charge(TDC_t tdc) const;
@@ -257,14 +242,13 @@ namespace sim {
      *
      * Entries are sorted by track ID number.
      */
-    std::vector<sim::TrackIDE> TrackIDEs(TDC_t startTDC,
-                                         TDC_t endTDC) const;
+    std::vector<sim::TrackIDE> TrackIDEs(TDC_t startTDC, TDC_t endTDC) const;
 
     /// Comparison: sorts by channel ID
-    bool operator<  (const SimChannel& other)     const;
+    bool operator<(const SimChannel& other) const;
 
     /// Comparison: true if SimChannels have the same channel ID
-    bool operator== (const SimChannel& other)     const;
+    bool operator==(const SimChannel& other) const;
 
     /**
      * @brief Merges the deposits from another channel into this one
@@ -291,9 +275,7 @@ namespace sim {
      *
      * The channel number of the merged channel is ignored.
      */
-    std::pair<TrackID_t,TrackID_t> MergeSimChannel
-      (const SimChannel& channel, int offset);
-
+    std::pair<TrackID_t, TrackID_t> MergeSimChannel(const SimChannel& channel, int offset);
 
     /**
      * @brief Dumps the full content of the SimChannel into a stream
@@ -308,8 +290,9 @@ namespace sim {
     /// Documentation at `Dump(Stream&&, std::string, std::string) const`.
     template <typename Stream>
     void Dump(Stream&& out, std::string indent = "") const
-      { Dump(std::forward<Stream>(out), indent, indent); }
-
+    {
+      Dump(std::forward<Stream>(out), indent, indent);
+    }
 
   private:
     /// Comparison functor, sorts by increasing TDCtick value
@@ -319,55 +302,56 @@ namespace sim {
     TDCIDEs_t::iterator findClosestTDCIDE(StoredTDC_t tdc);
 
     /// Return the (constant) iterator to the first TDCIDE not earlier than tdc
-    TDCIDEs_t::const_iterator findClosestTDCIDE
-      (StoredTDC_t tdc) const;
+    TDCIDEs_t::const_iterator findClosestTDCIDE(StoredTDC_t tdc) const;
     /// @}
-
-
   };
 
 } // namespace sim
 
-
-inline bool                           sim::SimChannel::operator<  (const sim::SimChannel& other) const { return fChannel < other.Channel(); }
-inline bool                           sim::SimChannel::operator== (const sim::SimChannel& other) const { return fChannel == other.Channel(); }
-inline sim::SimChannel::TDCIDEs_t const& sim::SimChannel::TDCIDEMap()                             const { return fTDCIDEs; }
-inline raw::ChannelID_t                sim::SimChannel::Channel()                                 const { return fChannel; }
-
+inline bool sim::SimChannel::operator<(const sim::SimChannel& other) const
+{
+  return fChannel < other.Channel();
+}
+inline bool sim::SimChannel::operator==(const sim::SimChannel& other) const
+{
+  return fChannel == other.Channel();
+}
+inline sim::SimChannel::TDCIDEs_t const& sim::SimChannel::TDCIDEMap() const
+{
+  return fTDCIDEs;
+}
+inline raw::ChannelID_t sim::SimChannel::Channel() const
+{
+  return fChannel;
+}
 
 // -----------------------------------------------------------------------------
 // ---  template implementation
 // ---
 template <class Stream>
-void sim::SimChannel::Dump
-  (Stream&& out, std::string indent, std::string first_indent) const
+void sim::SimChannel::Dump(Stream&& out, std::string indent, std::string first_indent) const
 {
-  out << first_indent << "channel #" << Channel() << " read " << fTDCIDEs.size()
-    << " TDCs:\n";
+  out << first_indent << "channel #" << Channel() << " read " << fTDCIDEs.size() << " TDCs:\n";
   double channel_energy = 0., channel_charge = 0.;
-  for (const auto& TDCinfo: fTDCIDEs) {
+  for (const auto& TDCinfo : fTDCIDEs) {
     auto const tdc = TDCinfo.first;
-    out << indent << "  TDC #" << tdc
-      << " with " << TDCinfo.second.size() << " IDEs\n";
+    out << indent << "  TDC #" << tdc << " with " << TDCinfo.second.size() << " IDEs\n";
     double tdc_energy = 0., tdc_charge = 0.;
-    for (const sim::IDE& ide: TDCinfo.second) {
-      out << indent
-        << "    (" << ide.x << ", " << ide.y << ", " << ide.z << ") "
-        << ide.numElectrons << " electrons, " << ide.energy << " MeV (trkID="
-        << ide.trackID << ")\n";
+    for (const sim::IDE& ide : TDCinfo.second) {
+      out << indent << "    (" << ide.x << ", " << ide.y << ", " << ide.z << ") "
+          << ide.numElectrons << " electrons, " << ide.energy << " MeV (trkID=" << ide.trackID
+          << ")\n";
       tdc_energy += ide.energy;
       tdc_charge += ide.numElectrons;
     } // for IDEs
-    out << indent << "    => TDC #" << tdc << " CH #" << Channel()
-      << " collected " << tdc_charge << " electrons and " << tdc_energy
-      << " MeV\n";
+    out << indent << "    => TDC #" << tdc << " CH #" << Channel() << " collected " << tdc_charge
+        << " electrons and " << tdc_energy << " MeV\n";
     channel_energy += tdc_energy;
     channel_charge += tdc_charge;
   } // for TDCs
-  out << indent << "  => channel #" << Channel() << " collected "
-    << channel_charge << " electrons and " << channel_energy << " MeV\n";
+  out << indent << "  => channel #" << Channel() << " collected " << channel_charge
+      << " electrons and " << channel_energy << " MeV\n";
 } // sim::SimChannel::Dump<>()
-
 
 #endif // LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 

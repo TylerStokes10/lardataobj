@@ -13,26 +13,21 @@
 
 // C/C++ standard libraries
 #include <string>
-#include <vector>
 #include <utility> // std::pair
-
+#include <vector>
 
 namespace sim {
 
   /// Ionization photons from a Geant4 track
-  struct TrackSDP{
+  struct TrackSDP {
     int trackID;      ///< Geant4 supplied trackID
     float energyFrac; ///< fraction of OpHit energy from the particle with this trackID
     float energy;     ///< energy from the particle with this trackID [MeV]
 
     TrackSDP() {}
 
-
-    TrackSDP(int id, float phF, float ph) : trackID(id), energyFrac(phF), energy (ph) {}
-
-
+    TrackSDP(int id, float phF, float ph) : trackID(id), energyFrac(phF), energy(ph) {}
   };
-
 
   /**
    * This class stores information about the Scintillation Light from the simulation
@@ -63,7 +58,7 @@ namespace sim {
    * The SDP (Scintillation Deposited Photons) records are generated in OpFastScintillation.cxx.
    *
    */
-  struct SDP{
+  struct SDP {
 
     /// Type of track ID (the value comes from Geant4)
     typedef int TrackID_t;
@@ -71,37 +66,24 @@ namespace sim {
     /// Default constructor (sets "bogus" values)
     SDP();
 
-
     /// Constructor: copies an SDP, and applies the specified offset to track ID
     SDP(SDP const& sdp, int offset);
 
     /// Constructor: sets all data members
-    SDP(TrackID_t tid,
-        float nPh,
-        float e,
-        float xpos,
-        float ypos,
-        float zpos)
-    : trackID     (tid)
-    , numPhotons  (nPh)
-    , energy      (e)
-    , x           (xpos)
-    , y           (ypos)
-    , z           (zpos)
+    SDP(TrackID_t tid, float nPh, float e, float xpos, float ypos, float zpos)
+      : trackID(tid), numPhotons(nPh), energy(e), x(xpos), y(ypos), z(zpos)
     {}
 
-
-    TrackID_t trackID;  ///< Geant4 supplied track ID
-    float numPhotons;   ///< number of photons at the optical detector for this track ID and time
-    float energy;       ///< energy deposited by ionization
-    float x;            ///< x position of ionization [cm]
-    float y;            ///< y position of ionization [cm]
-    float z;            ///< z position of ionization [cm]
-  }; // struct SDP
-
+    TrackID_t trackID; ///< Geant4 supplied track ID
+    float numPhotons;  ///< number of photons at the optical detector for this track ID and time
+    float energy;      ///< energy deposited by ionization
+    float x;           ///< x position of ionization [cm]
+    float y;           ///< y position of ionization [cm]
+    float z;           ///< z position of ionization [cm]
+  };                   // struct SDP
 
   /// List of energy deposits at the same time (on this Optical Detector)
-  typedef std::pair< double, std::vector<sim::SDP> > timePDclockSDP_t;
+  typedef std::pair<double, std::vector<sim::SDP>> timePDclockSDP_t;
 
   /**
    * @brief Energy deposited on a readout Optical Detector by simulated tracks
@@ -120,8 +102,7 @@ namespace sim {
    * Note that there can be multiple energy deposit records (that is `sim::SDP`)
    * for a single track in a single timePDclock tick.
    */
-  class OpDetBacktrackerRecord
-  {
+  class OpDetBacktrackerRecord {
   public:
     /// Type for timePDclock tick used in the internal representation
     typedef timePDclockSDP_t::first_type storedTimePDclock_t;
@@ -130,22 +111,19 @@ namespace sim {
     typedef std::vector<timePDclockSDP_t> timePDclockSDPs_t;
 
   private:
-    int              iOpDetNum; ///< OpticalDetector where the photons were detected
-    timePDclockSDPs_t      timePDclockSDPs; ///< list of energy deposits for each timePDclock with signal
-
+    int iOpDetNum;                     ///< OpticalDetector where the photons were detected
+    timePDclockSDPs_t timePDclockSDPs; ///< list of energy deposits for each timePDclock with signal
 
   public:
-
     // Default constructor
     OpDetBacktrackerRecord();
 
     /// Type for iTimePDclock tick used in the interface
     //typedef unsigned short timePDclock_t;
-    typedef double timePDclock_t;//This is the G4Time from OpFastScintillation. (ns)
+    typedef double timePDclock_t; //This is the G4Time from OpFastScintillation. (ns)
 
     /// Type of track ID (the value comes from Geant4)
     typedef SDP::TrackID_t TrackID_t;
-
 
     /// Constructor: immediately sets the Optical Detector number
     explicit OpDetBacktrackerRecord(int detNum);
@@ -160,10 +138,10 @@ namespace sim {
      *
      */
     void AddScintillationPhotons(TrackID_t trackID,
-                                timePDclock_t timePDclock,
-                                double numberPhotons,
-                                double const* xyz,
-                                double energy);
+                                 timePDclock_t timePDclock,
+                                 double numberPhotons,
+                                 double const* xyz,
+                                 double energy);
 
     /// Returns the readout Optical Detector this object describes
     int OpDetNum() const;
@@ -202,7 +180,6 @@ namespace sim {
      */
     timePDclockSDPs_t const& timePDclockSDPsMap() const;
 
-
     /// Returns the total number of scintillation photons on this Optical Detector in the specified timePDclock
     double Photons(timePDclock_t iTimePDclock) const;
 
@@ -235,10 +212,10 @@ namespace sim {
                                          timePDclock_t endTimePDclock) const;
 
     /// Comparison: sorts by Optical Detector ID
-    bool operator<  (const OpDetBacktrackerRecord& other)     const;
+    bool operator<(const OpDetBacktrackerRecord& other) const;
 
     /// Comparison: true if OpDetBacktrackerRecords have the same Optical Detector ID
-    bool operator== (const OpDetBacktrackerRecord& other)     const;
+    bool operator==(const OpDetBacktrackerRecord& other) const;
 
     /**
      * @brief Merges the deposits from another Optical Detector into this one
@@ -265,9 +242,9 @@ namespace sim {
      *
      * The opDetNum number of the merged opDetRecord is ignored.
      */
-    std::pair<TrackID_t,TrackID_t> MergeOpDetBacktrackerRecord
-      (const OpDetBacktrackerRecord& opDetNum, int offset);
-
+    std::pair<TrackID_t, TrackID_t> MergeOpDetBacktrackerRecord(
+      const OpDetBacktrackerRecord& opDetNum,
+      int offset);
 
     /**
      * @brief Dumps the full content of the OpDetBacktrackerRecord into a stream
@@ -282,8 +259,9 @@ namespace sim {
     /// Documentation at `Dump(Stream&&, std::string, std::string) const`.
     template <typename Stream>
     void Dump(Stream&& out, std::string indent = "") const
-      { Dump(std::forward<Stream>(out), indent, indent); }
-
+    {
+      Dump(std::forward<Stream>(out), indent, indent);
+    }
 
   private:
     /// Comparison functor, sorts by increasing timePDclocktick value
@@ -293,54 +271,61 @@ namespace sim {
     timePDclockSDPs_t::iterator findClosestTimePDclockSDP(storedTimePDclock_t timePDclock);
 
     /// Return the (constant) iterator to the first timePDclockSDP not earlier than timePDclock
-    timePDclockSDPs_t::const_iterator findClosestTimePDclockSDP
-      (storedTimePDclock_t timePDclock) const;
-
-
+    timePDclockSDPs_t::const_iterator findClosestTimePDclockSDP(
+      storedTimePDclock_t timePDclock) const;
   };
 
 } // namespace sim
 
-
-inline bool                                sim::OpDetBacktrackerRecord::operator<  (const sim::OpDetBacktrackerRecord& other) const { return iOpDetNum < other.OpDetNum(); }
-inline bool                                sim::OpDetBacktrackerRecord::operator== (const sim::OpDetBacktrackerRecord& other) const { return iOpDetNum == other.OpDetNum(); }
-inline                                     sim::OpDetBacktrackerRecord::timePDclockSDPs_t const& sim::OpDetBacktrackerRecord::timePDclockSDPsMap()                             const { return timePDclockSDPs; }
-inline int                                 sim::OpDetBacktrackerRecord::OpDetNum()                                 const { return iOpDetNum; }
-
+inline bool sim::OpDetBacktrackerRecord::operator<(const sim::OpDetBacktrackerRecord& other) const
+{
+  return iOpDetNum < other.OpDetNum();
+}
+inline bool sim::OpDetBacktrackerRecord::operator==(const sim::OpDetBacktrackerRecord& other) const
+{
+  return iOpDetNum == other.OpDetNum();
+}
+inline sim::OpDetBacktrackerRecord::timePDclockSDPs_t const&
+sim::OpDetBacktrackerRecord::timePDclockSDPsMap() const
+{
+  return timePDclockSDPs;
+}
+inline int sim::OpDetBacktrackerRecord::OpDetNum() const
+{
+  return iOpDetNum;
+}
 
 // -----------------------------------------------------------------------------
 // ---  template implementation
 // ---
 template <class Stream>
-void sim::OpDetBacktrackerRecord::Dump
-  (Stream&& out, std::string indent, std::string first_indent) const
+void sim::OpDetBacktrackerRecord::Dump(Stream&& out,
+                                       std::string indent,
+                                       std::string first_indent) const
 {
   out << first_indent << "OpDet #" << OpDetNum() << " read " << timePDclockSDPs.size()
-    << " timePDclocks:\n";
+      << " timePDclocks:\n";
   double opDet_energy = 0., opDet_photons = 0.;
-  for (const auto& timePDclockinfo: timePDclockSDPs) {
+  for (const auto& timePDclockinfo : timePDclockSDPs) {
     auto const iTimePDclock = timePDclockinfo.first;
-    out << indent << "  timePDclock #" << iTimePDclock
-      << " with " << timePDclockinfo.second.size() << " SDPs\n";
+    out << indent << "  timePDclock #" << iTimePDclock << " with " << timePDclockinfo.second.size()
+        << " SDPs\n";
     double timePDclock_energy = 0., timePDclock_photons = 0.;
-    for (const sim::SDP& sdp: timePDclockinfo.second) {
-      out << indent
-        << "    (" << sdp.x << ", " << sdp.y << ", " << sdp.z << ") "
-        << sdp.numPhotons << " photons, " << sdp.energy << "MeV  (trkID="
-        << sdp.trackID << ")\n";
+    for (const sim::SDP& sdp : timePDclockinfo.second) {
+      out << indent << "    (" << sdp.x << ", " << sdp.y << ", " << sdp.z << ") " << sdp.numPhotons
+          << " photons, " << sdp.energy << "MeV  (trkID=" << sdp.trackID << ")\n";
       timePDclock_energy += sdp.energy;
       timePDclock_photons += sdp.numPhotons;
     } // for SDPs
     out << indent << "    => timePDclock #" << iTimePDclock << " CH #" << OpDetNum()
-      << " collected " << timePDclock_energy << " MeV and "
-      << timePDclock_photons <<" photons. \n";
+        << " collected " << timePDclock_energy << " MeV and " << timePDclock_photons
+        << " photons. \n";
     opDet_energy += timePDclock_energy;
     opDet_photons += timePDclock_photons;
   } // for timePDclocks
-  out << indent << "  => channel #" << OpDetNum() << " collected "
-    << opDet_photons << " photons and "<< opDet_energy << " MeV.\n" ;
+  out << indent << "  => channel #" << OpDetNum() << " collected " << opDet_photons
+      << " photons and " << opDet_energy << " MeV.\n";
 } // sim::OpDetBacktrackerRecord::Dump<>()
-
 
 #endif // LARSIMOBJ_SIMULATION_OPDETBACKTRACKERRECORD_H
 

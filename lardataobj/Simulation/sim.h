@@ -7,11 +7,11 @@
 #ifndef LARDATAOBJ_SIMULATION_SIM_H
 #define LARDATAOBJ_SIMULATION_SIM_H
 
-#include <limits>
 #include "TRandom3.h"
+#include <limits>
 
 ///Monte Carlo Simulation
-namespace sim{
+namespace sim {
 
   unsigned int GetRandomNumberSeed();
 
@@ -22,16 +22,16 @@ namespace sim{
 
 }
 
-inline unsigned int sim::GetRandomNumberSeed(){
+inline unsigned int sim::GetRandomNumberSeed()
+{
 
-    // the maximum allowed seed for the art::RandomNumberGenerator
-    // is 900000000. Use TRandom3 to get the seed value in that range.
-    // Instantiating TRandom3 with a 0 means that its seed is set based
-    // on the TUUID and should always be random, even for jobs running on the
-    // same machine
-    TRandom3 rand(0);
-    return rand.Integer(900000000);
+  // the maximum allowed seed for the art::RandomNumberGenerator
+  // is 900000000. Use TRandom3 to get the seed value in that range.
+  // Instantiating TRandom3 with a 0 means that its seed is set based
+  // on the TUUID and should always be random, even for jobs running on the
+  // same machine
+  TRandom3 rand(0);
+  return rand.Integer(900000000);
 }
 
-
-#endif// LARDATAOBJ_SIMULATION_SIM_H
+#endif // LARDATAOBJ_SIMULATION_SIM_H

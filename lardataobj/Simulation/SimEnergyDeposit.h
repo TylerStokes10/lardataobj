@@ -14,9 +14,7 @@
 // C++ includes
 #include <vector>
 
-
-namespace sim
-{
+namespace sim {
   /**
    * @brief Energy deposition in the active material.
    *
@@ -39,10 +37,8 @@ namespace sim
    *
    * _William Seligman, Nevis Labs, 10/12/2017_
    */
-  class SimEnergyDeposit
-  {
+  class SimEnergyDeposit {
   public:
-
     // Define the types for the private members below.
     using Length_t = float;
     using Point_t = geo::Point_t;
@@ -60,21 +56,21 @@ namespace sim
     //                             pdgCode);
 
     SimEnergyDeposit(int np = 0,
-//             int nfp = 0,
-//             int nsp = 0,
-               int ne = 0,
-               double sy = 0,
-               double e = 0.,
-               geo::Point_t start = {0.,0.,0.},
-               geo::Point_t end = {0.,0.,0.},
-               double t0 = 0.,
-               double t1 = 0.,
-               int id = 0,
-               int pdg = 0,
-               int origTrackID = 0)
+                     //             int nfp = 0,
+                     //             int nsp = 0,
+                     int ne = 0,
+                     double sy = 0,
+                     double e = 0.,
+                     geo::Point_t start = {0., 0., 0.},
+                     geo::Point_t end = {0., 0., 0.},
+                     double t0 = 0.,
+                     double t1 = 0.,
+                     int id = 0,
+                     int pdg = 0,
+                     int origTrackID = 0)
       : numPhotons(np)
-//      , numFPhotons(nfp)
-//      , numSPhotons(nsp)
+      //      , numFPhotons(nfp)
+      //      , numSPhotons(nsp)
       , numElectrons(ne)
       , scintYieldRatio(sy)
       , edep(e)
@@ -85,9 +81,7 @@ namespace sim
       , trackID(id)
       , pdgCode(pdg)
       , origTrackID(origTrackID)
-    {
-    }
-
+    {}
 
     // Note that even if we store a value as float, we return
     // it as double so the user doesn't have to think about
@@ -97,11 +91,11 @@ namespace sim
     int NumFPhotons() const { return round(numPhotons * scintYieldRatio); }
     int NumSPhotons() const { return round(numPhotons * (1.0 - scintYieldRatio)); }
     int NumElectrons() const { return numElectrons; }
-    double ScintYieldRatio() const { return scintYieldRatio;}
+    double ScintYieldRatio() const { return scintYieldRatio; }
     double Energy() const { return edep; }
-    geo::Point_t Start() const { return { startPos.X(), startPos.Y(), startPos.Z() }; }
-    geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
-    double Time() const { return (startTime+endTime)/2.; }
+    geo::Point_t Start() const { return {startPos.X(), startPos.Y(), startPos.Z()}; }
+    geo::Point_t End() const { return {endPos.X(), endPos.Y(), endPos.Z()}; }
+    double Time() const { return (startTime + endTime) / 2.; }
     int TrackID() const { return trackID; }
     int OrigTrackID() const { return origTrackID; }
     void setTrackID(int id) { trackID = id; }
@@ -121,20 +115,19 @@ namespace sim
     double EndT() const { return endTime; }
 
     // Step mid-point.
-    geo::Point_t MidPoint() const {
-      return {
-        ( startPos.X() + endPos.X() )/2.
-      , ( startPos.Y() + endPos.Y() )/2.
-      , ( startPos.Z() + endPos.Z() )/2.
-      };
+    geo::Point_t MidPoint() const
+    {
+      return {(startPos.X() + endPos.X()) / 2.,
+              (startPos.Y() + endPos.Y()) / 2.,
+              (startPos.Z() + endPos.Z()) / 2.};
     }
-    geo::Length_t MidPointX() const { return ( startPos.X() + endPos.X() )/2.; }
-    geo::Length_t MidPointY() const { return ( startPos.Y() + endPos.Y() )/2.; }
-    geo::Length_t MidPointZ() const { return ( startPos.Z() + endPos.Z() )/2.; }
-    geo::Length_t X() const { return ( startPos.X() + endPos.X() )/2.; }
-    geo::Length_t Y() const { return ( startPos.Y() + endPos.Y() )/2.; }
-    geo::Length_t Z() const { return ( startPos.Z() + endPos.Z() )/2.; }
-    double T() const { return (startTime+endTime)/2.; }
+    geo::Length_t MidPointX() const { return (startPos.X() + endPos.X()) / 2.; }
+    geo::Length_t MidPointY() const { return (startPos.Y() + endPos.Y()) / 2.; }
+    geo::Length_t MidPointZ() const { return (startPos.Z() + endPos.Z()) / 2.; }
+    geo::Length_t X() const { return (startPos.X() + endPos.X()) / 2.; }
+    geo::Length_t Y() const { return (startPos.Y() + endPos.Y()) / 2.; }
+    geo::Length_t Z() const { return (startPos.Z() + endPos.Z()) / 2.; }
+    double T() const { return (startTime + endTime) / 2.; }
     double T0() const { return startTime; }
     double T1() const { return endTime; }
     double E() const { return edep; }
@@ -142,7 +135,7 @@ namespace sim
     // Step length. (Recall that the difference between two
     // geo::Point_t objects is a geo::Vector_t; we get the length from
     // spherical coordinates.
-    geo::Length_t StepLength() const { return ( endPos - startPos ).R(); }
+    geo::Length_t StepLength() const { return (endPos - startPos).R(); }
 
     // Just in case someone wants to store sim::SimEnergyDeposit
     // objects in a sorted container, define a sort function. Note
@@ -153,12 +146,9 @@ namespace sim
 
     bool operator<(const SimEnergyDeposit& rhs) const
     {
-      return trackID < rhs.trackID
-      && startTime < rhs.startTime
-      && startPos.Z() < rhs.startPos.Z()
-      && startPos.Y() < rhs.startPos.Y()
-      && startPos.X() < rhs.startPos.X()
-      && edep > rhs.edep; // sort by _decreasing_ energy
+      return trackID < rhs.trackID && startTime < rhs.startTime &&
+             startPos.Z() < rhs.startPos.Z() && startPos.Y() < rhs.startPos.Y() &&
+             startPos.X() < rhs.startPos.X() && edep > rhs.edep; // sort by _decreasing_ energy
     }
 
   private:
@@ -185,19 +175,20 @@ namespace sim
     // will take care of that, but let's make sure that any overlay studies
     // won't suffer due to lack of precision.
 
-    int           numPhotons;      ///< of scintillation photons
-//    int           numFPhotons;     ///< of fast scintillation photons
-//    int           numSPhotons;     ///< of slow scintillation photons
-    int           numElectrons;    ///< of ionization electrons
-    float         scintYieldRatio; ///< scintillation yield of LAr
-    float         edep;            ///< energy deposition (MeV)
-    geo::Point_t       startPos;     ///< positions in (cm)
-    geo::Point_t       endPos;
-    double        startTime;    ///< (ns)
-    double        endTime;      ///< (ns)
-    int           trackID;      ///< simulation track id
-    int           pdgCode;      ///< pdg code of particle to avoid lookup by particle type later
-    int           origTrackID;      ///< complementary simulation track id, kept true to G4 even for shower secondaries/tertiaries etc.
+    int numPhotons;        ///< of scintillation photons
+                           //    int           numFPhotons;     ///< of fast scintillation photons
+                           //    int           numSPhotons;     ///< of slow scintillation photons
+    int numElectrons;      ///< of ionization electrons
+    float scintYieldRatio; ///< scintillation yield of LAr
+    float edep;            ///< energy deposition (MeV)
+    geo::Point_t startPos; ///< positions in (cm)
+    geo::Point_t endPos;
+    double startTime; ///< (ns)
+    double endTime;   ///< (ns)
+    int trackID;      ///< simulation track id
+    int pdgCode;      ///< pdg code of particle to avoid lookup by particle type later
+    int
+      origTrackID; ///< complementary simulation track id, kept true to G4 even for shower secondaries/tertiaries etc.
   };
   /*
   // Class utility functions.

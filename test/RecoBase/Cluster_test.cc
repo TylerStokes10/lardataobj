@@ -17,7 +17,6 @@
 // C/C++ standard libraries
 #include <utility> // std::move()
 
-
 // Boost libraries
 /*
  * Boost Magic: define the name of the module;
@@ -28,47 +27,43 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( cluster_test )
+#define BOOST_TEST_MODULE (cluster_test)
 #include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t
 #include "lardataobj/RecoBase/Cluster.h"
 
-
-
 //------------------------------------------------------------------------------
 //--- Test code
 //
 
-
-void CheckCluster(
-  recob::Cluster const& cluster,
-  float start_wire,
-  float sigma_start_wire,
-  float start_tick,
-  float sigma_start_tick,
-  float start_charge,
-  float start_angle,
-  float start_opening,
-  float end_wire,
-  float sigma_end_wire,
-  float end_tick,
-  float sigma_end_tick,
-  float end_charge,
-  float end_angle,
-  float end_opening,
-  float integral,
-  float integral_stddev,
-  float summedADC,
-  float summedADC_stddev,
-  unsigned int n_hits,
-  float multiple_hit_density,
-  float width,
-  recob::Cluster::ID_t ID,
-  geo::View_t view,
-  geo::PlaneID const& plane
-) {
+void CheckCluster(recob::Cluster const& cluster,
+                  float start_wire,
+                  float sigma_start_wire,
+                  float start_tick,
+                  float sigma_start_tick,
+                  float start_charge,
+                  float start_angle,
+                  float start_opening,
+                  float end_wire,
+                  float sigma_end_wire,
+                  float end_tick,
+                  float sigma_end_tick,
+                  float end_charge,
+                  float end_angle,
+                  float end_opening,
+                  float integral,
+                  float integral_stddev,
+                  float summedADC,
+                  float summedADC_stddev,
+                  unsigned int n_hits,
+                  float multiple_hit_density,
+                  float width,
+                  recob::Cluster::ID_t ID,
+                  geo::View_t view,
+                  geo::PlaneID const& plane)
+{
 
   // verify that the values are as expected
   // - NHits
@@ -99,24 +94,16 @@ void CheckCluster(
   BOOST_TEST(cluster.SigmaEndTick() == sigma_end_tick);
 
   // - wire coordinates
-  BOOST_TEST
-    (cluster.WireCoord(recob::Cluster::clStart) == start_wire);
-  BOOST_TEST
-    (cluster.WireCoord((unsigned int) recob::Cluster::clStart) == start_wire);
-  BOOST_TEST
-    (cluster.WireCoord(recob::Cluster::clEnd) == end_wire);
-  BOOST_TEST
-    (cluster.WireCoord((unsigned int) recob::Cluster::clEnd) == end_wire);
+  BOOST_TEST(cluster.WireCoord(recob::Cluster::clStart) == start_wire);
+  BOOST_TEST(cluster.WireCoord((unsigned int)recob::Cluster::clStart) == start_wire);
+  BOOST_TEST(cluster.WireCoord(recob::Cluster::clEnd) == end_wire);
+  BOOST_TEST(cluster.WireCoord((unsigned int)recob::Cluster::clEnd) == end_wire);
 
   // - tick coordinates
-  BOOST_TEST
-    (cluster.TickCoord(recob::Cluster::clStart) == start_tick);
-  BOOST_TEST
-    (cluster.TickCoord((unsigned int) recob::Cluster::clStart) == start_tick);
-  BOOST_TEST
-    (cluster.TickCoord(recob::Cluster::clEnd) == end_tick);
-  BOOST_TEST
-    (cluster.TickCoord((unsigned int) recob::Cluster::clEnd) == end_tick);
+  BOOST_TEST(cluster.TickCoord(recob::Cluster::clStart) == start_tick);
+  BOOST_TEST(cluster.TickCoord((unsigned int)recob::Cluster::clStart) == start_tick);
+  BOOST_TEST(cluster.TickCoord(recob::Cluster::clEnd) == end_tick);
+  BOOST_TEST(cluster.TickCoord((unsigned int)recob::Cluster::clEnd) == end_tick);
 
   // - start charge
   BOOST_TEST(cluster.StartCharge() == start_charge);
@@ -137,34 +124,22 @@ void CheckCluster(
   BOOST_TEST(cluster.EndOpeningAngle() == end_opening);
 
   // - edge charge
-  BOOST_TEST
-    (cluster.EdgeCharge(recob::Cluster::clStart) == start_charge);
-  BOOST_TEST
-    (cluster.EdgeCharge((unsigned int) recob::Cluster::clStart) == start_charge);
-  BOOST_TEST
-    (cluster.EdgeCharge(recob::Cluster::clEnd) == end_charge);
-  BOOST_TEST
-    (cluster.EdgeCharge((unsigned int) recob::Cluster::clEnd) == end_charge);
+  BOOST_TEST(cluster.EdgeCharge(recob::Cluster::clStart) == start_charge);
+  BOOST_TEST(cluster.EdgeCharge((unsigned int)recob::Cluster::clStart) == start_charge);
+  BOOST_TEST(cluster.EdgeCharge(recob::Cluster::clEnd) == end_charge);
+  BOOST_TEST(cluster.EdgeCharge((unsigned int)recob::Cluster::clEnd) == end_charge);
 
   // - angle
-  BOOST_TEST
-    (cluster.Angle(recob::Cluster::clStart) == start_angle);
-  BOOST_TEST
-    (cluster.Angle((unsigned int) recob::Cluster::clStart) == start_angle);
-  BOOST_TEST
-    (cluster.Angle(recob::Cluster::clEnd) == end_angle);
-  BOOST_TEST
-    (cluster.Angle((unsigned int) recob::Cluster::clEnd) == end_angle);
+  BOOST_TEST(cluster.Angle(recob::Cluster::clStart) == start_angle);
+  BOOST_TEST(cluster.Angle((unsigned int)recob::Cluster::clStart) == start_angle);
+  BOOST_TEST(cluster.Angle(recob::Cluster::clEnd) == end_angle);
+  BOOST_TEST(cluster.Angle((unsigned int)recob::Cluster::clEnd) == end_angle);
 
   // - edge opening angle
-  BOOST_TEST
-    (cluster.OpeningAngle(recob::Cluster::clStart) == start_opening);
-  BOOST_TEST
-    (cluster.OpeningAngle((unsigned int) recob::Cluster::clStart) == start_opening);
-  BOOST_TEST
-    (cluster.OpeningAngle(recob::Cluster::clEnd) == end_opening);
-  BOOST_TEST
-    (cluster.OpeningAngle((unsigned int) recob::Cluster::clEnd) == end_opening);
+  BOOST_TEST(cluster.OpeningAngle(recob::Cluster::clStart) == start_opening);
+  BOOST_TEST(cluster.OpeningAngle((unsigned int)recob::Cluster::clStart) == start_opening);
+  BOOST_TEST(cluster.OpeningAngle(recob::Cluster::clEnd) == end_opening);
+  BOOST_TEST(cluster.OpeningAngle((unsigned int)recob::Cluster::clEnd) == end_opening);
 
   // - integral
   BOOST_TEST(cluster.Integral() == integral);
@@ -173,7 +148,7 @@ void CheckCluster(
   BOOST_TEST(cluster.IntegralStdDev() == integral_stddev);
 
   // - integral average
-  const float integral_average = (n_hits != 0)? integral / n_hits: 0.;
+  const float integral_average = (n_hits != 0) ? integral / n_hits : 0.;
   BOOST_TEST(cluster.IntegralAverage() == integral_average);
 
   // - summed ADC
@@ -183,37 +158,26 @@ void CheckCluster(
   BOOST_TEST(cluster.SummedADCstdDev() == summedADC_stddev);
 
   // - summed ADC average
-  const float summedADC_average = (n_hits != 0)? summedADC / n_hits: 0.;
+  const float summedADC_average = (n_hits != 0) ? summedADC / n_hits : 0.;
   BOOST_TEST(cluster.SummedADCaverage() == summedADC_average);
 
   // - charge
   BOOST_TEST(cluster.Charge(recob::Cluster::cmFit) == integral);
-  BOOST_TEST
-    (cluster.Charge((unsigned int) recob::Cluster::cmFit) == integral);
-  BOOST_TEST
-    (cluster.Charge(recob::Cluster::cmADC) == summedADC);
-  BOOST_TEST
-    (cluster.Charge((unsigned int) recob::Cluster::cmADC) == summedADC);
+  BOOST_TEST(cluster.Charge((unsigned int)recob::Cluster::cmFit) == integral);
+  BOOST_TEST(cluster.Charge(recob::Cluster::cmADC) == summedADC);
+  BOOST_TEST(cluster.Charge((unsigned int)recob::Cluster::cmADC) == summedADC);
 
   // - charge standard deviation
-  BOOST_TEST
-    (cluster.ChargeStdDev(recob::Cluster::cmFit) == integral_stddev);
-  BOOST_TEST
-    (cluster.ChargeStdDev((unsigned int) recob::Cluster::cmFit) == integral_stddev);
-  BOOST_TEST
-    (cluster.ChargeStdDev(recob::Cluster::cmADC) == summedADC_stddev);
-  BOOST_TEST
-    (cluster.ChargeStdDev((unsigned int) recob::Cluster::cmADC) == summedADC_stddev);
+  BOOST_TEST(cluster.ChargeStdDev(recob::Cluster::cmFit) == integral_stddev);
+  BOOST_TEST(cluster.ChargeStdDev((unsigned int)recob::Cluster::cmFit) == integral_stddev);
+  BOOST_TEST(cluster.ChargeStdDev(recob::Cluster::cmADC) == summedADC_stddev);
+  BOOST_TEST(cluster.ChargeStdDev((unsigned int)recob::Cluster::cmADC) == summedADC_stddev);
 
   // - charge standard deviation
-  BOOST_TEST
-    (cluster.ChargeAverage(recob::Cluster::cmFit) == integral_average);
-  BOOST_TEST
-    (cluster.ChargeAverage((unsigned int) recob::Cluster::cmFit) == integral_average);
-  BOOST_TEST
-    (cluster.ChargeAverage(recob::Cluster::cmADC) == summedADC_average);
-  BOOST_TEST
-    (cluster.ChargeAverage((unsigned int) recob::Cluster::cmADC) == summedADC_average);
+  BOOST_TEST(cluster.ChargeAverage(recob::Cluster::cmFit) == integral_average);
+  BOOST_TEST(cluster.ChargeAverage((unsigned int)recob::Cluster::cmFit) == integral_average);
+  BOOST_TEST(cluster.ChargeAverage(recob::Cluster::cmADC) == summedADC_average);
+  BOOST_TEST(cluster.ChargeAverage((unsigned int)recob::Cluster::cmADC) == summedADC_average);
 
   // - wires over hits
   BOOST_TEST(cluster.MultipleHitDensity() == multiple_hit_density);
@@ -233,36 +197,36 @@ void CheckCluster(
 
 } // CheckCluster()
 
-
-void ClusterTestDefaultConstructor() {
+void ClusterTestDefaultConstructor()
+{
 
   //
   // Part I: initialization of cluster inputs
   //
   // these are the values expected for a default-constructed cluster
-  const float start_wire         =    0.0;
-  const float sigma_start_wire   =    0.0;
-  const float start_tick         =    0.0;
-  const float sigma_start_tick   =    0.0;
-  const float start_charge       =    0.0;
-  const float start_angle        =    0.0;
-  const float start_opening      =    0.0;
-  const float end_wire           =    0.0;
-  const float sigma_end_wire     =    0.0;
-  const float end_tick           =    0.0;
-  const float sigma_end_tick     =    0.0;
-  const float end_charge         =    0.0;
-  const float end_angle          =    0.0;
-  const float end_opening        =    0.0;
-  const float integral           =    0.0;
-  const float integral_stddev    =    0.0;
-  const float summedADC          =    0.0;
-  const float summedADC_stddev   =    0.0;
-  const unsigned int n_hits      =    0;
-  const float multiple_hit_density =    0.0;
-  const float width              =    0.0;
-  const recob::Cluster::ID_t ID  = recob::Cluster::InvalidID;
-  const geo::View_t view         = geo::kUnknown;
+  const float start_wire = 0.0;
+  const float sigma_start_wire = 0.0;
+  const float start_tick = 0.0;
+  const float sigma_start_tick = 0.0;
+  const float start_charge = 0.0;
+  const float start_angle = 0.0;
+  const float start_opening = 0.0;
+  const float end_wire = 0.0;
+  const float sigma_end_wire = 0.0;
+  const float end_tick = 0.0;
+  const float sigma_end_tick = 0.0;
+  const float end_charge = 0.0;
+  const float end_angle = 0.0;
+  const float end_opening = 0.0;
+  const float integral = 0.0;
+  const float integral_stddev = 0.0;
+  const float summedADC = 0.0;
+  const float summedADC_stddev = 0.0;
+  const unsigned int n_hits = 0;
+  const float multiple_hit_density = 0.0;
+  const float width = 0.0;
+  const recob::Cluster::ID_t ID = recob::Cluster::InvalidID;
+  const geo::View_t view = geo::kUnknown;
   const geo::PlaneID plane;
 
   //
@@ -271,195 +235,184 @@ void ClusterTestDefaultConstructor() {
   // step II.1: create a cluster with default constructor
   recob::Cluster cluster;
 
-
   // step II.2: verify that the values are as expected
   CheckCluster(cluster,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
 } // WireTestDefaultConstructor()
 
-
-void ClusterTestCustomConstructor() {
+void ClusterTestCustomConstructor()
+{
 
   //
   // Part I: initialization of cluster inputs
   //
-  const float start_wire         =   12.5;
-  const float sigma_start_wire   =    1.0;
-  const float start_tick         =  141.3;
-  const float sigma_start_tick   =    0.2;
-  const float start_charge       =   45.2;
-  const float start_angle        =    1.5;
-  const float start_opening      =    0.7;
-  const float end_wire           =  223.4;
-  const float sigma_end_wire     =    1.0;
-  const float end_tick           =  563.2;
-  const float sigma_end_tick     =    0.3;
-  const float end_charge         =  152.1;
-  const float end_angle          =    0.6;
-  const float end_opening        =    0.1;
-  const float integral           = 4856.7;
-  const float integral_stddev    =    4.3;
-  const float summedADC          = 4702.4;
-  const float summedADC_stddev   =    6.2;
-  const unsigned int n_hits      =  210;
-  const float multiple_hit_density =    1.0;
-  const float width              =   75.2;
-  const recob::Cluster::ID_t ID  = 1234;
-  const geo::View_t view         = geo::kV;
+  const float start_wire = 12.5;
+  const float sigma_start_wire = 1.0;
+  const float start_tick = 141.3;
+  const float sigma_start_tick = 0.2;
+  const float start_charge = 45.2;
+  const float start_angle = 1.5;
+  const float start_opening = 0.7;
+  const float end_wire = 223.4;
+  const float sigma_end_wire = 1.0;
+  const float end_tick = 563.2;
+  const float sigma_end_tick = 0.3;
+  const float end_charge = 152.1;
+  const float end_angle = 0.6;
+  const float end_opening = 0.1;
+  const float integral = 4856.7;
+  const float integral_stddev = 4.3;
+  const float summedADC = 4702.4;
+  const float summedADC_stddev = 6.2;
+  const unsigned int n_hits = 210;
+  const float multiple_hit_density = 1.0;
+  const float width = 75.2;
+  const recob::Cluster::ID_t ID = 1234;
+  const geo::View_t view = geo::kV;
   const geo::PlaneID plane(0, 1, 2);
 
   //
   // Part II: constructor
   //
   // step II.1: create a cluster
-  recob::Cluster cluster(
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane,
-    recob::Cluster::Sentry
-    );
-
+  recob::Cluster cluster(start_wire,
+                         sigma_start_wire,
+                         start_tick,
+                         sigma_start_tick,
+                         start_charge,
+                         start_angle,
+                         start_opening,
+                         end_wire,
+                         sigma_end_wire,
+                         end_tick,
+                         sigma_end_tick,
+                         end_charge,
+                         end_angle,
+                         end_opening,
+                         integral,
+                         integral_stddev,
+                         summedADC,
+                         summedADC_stddev,
+                         n_hits,
+                         multiple_hit_density,
+                         width,
+                         ID,
+                         view,
+                         plane,
+                         recob::Cluster::Sentry);
 
   // step II.2: verify that the values are as expected
   CheckCluster(cluster,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
-
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
 } // ClusterTestCustomConstructor()
 
-
-
-void ClusterTestCopyMoveOperations() {
+void ClusterTestCopyMoveOperations()
+{
 
   //
   // Part I: initialization of wire inputs
   //
-  const float start_wire         =   12.5;
-  const float sigma_start_wire   =    1.0;
-  const float start_tick         =  141.3;
-  const float sigma_start_tick   =    0.2;
-  const float start_charge       =   45.2;
-  const float start_angle        =    1.5;
-  const float start_opening      =    0.7;
-  const float end_wire           =  223.4;
-  const float sigma_end_wire     =    1.0;
-  const float end_tick           =  563.2;
-  const float sigma_end_tick     =    0.3;
-  const float end_charge         =  152.1;
-  const float end_angle          =    0.6;
-  const float end_opening        =    0.1;
-  const float integral           = 4856.7;
-  const float integral_stddev    =    4.3;
-  const float summedADC          = 4702.4;
-  const float summedADC_stddev   =    6.2;
-  const unsigned int n_hits      =  210;
-  const float multiple_hit_density =    1.0;
-  const float width              =   75.2;
-  const recob::Cluster::ID_t ID  = 1234;
-  const geo::View_t view         = geo::kV;
+  const float start_wire = 12.5;
+  const float sigma_start_wire = 1.0;
+  const float start_tick = 141.3;
+  const float sigma_start_tick = 0.2;
+  const float start_charge = 45.2;
+  const float start_angle = 1.5;
+  const float start_opening = 0.7;
+  const float end_wire = 223.4;
+  const float sigma_end_wire = 1.0;
+  const float end_tick = 563.2;
+  const float sigma_end_tick = 0.3;
+  const float end_charge = 152.1;
+  const float end_angle = 0.6;
+  const float end_opening = 0.1;
+  const float integral = 4856.7;
+  const float integral_stddev = 4.3;
+  const float summedADC = 4702.4;
+  const float summedADC_stddev = 6.2;
+  const unsigned int n_hits = 210;
+  const float multiple_hit_density = 1.0;
+  const float width = 75.2;
+  const recob::Cluster::ID_t ID = 1234;
+  const geo::View_t view = geo::kV;
   const geo::PlaneID plane(0, 1, 2);
 
   //
   // Part II: full constructor (tested elsewhere)
   //
-  const recob::Cluster cluster(
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane,
-    recob::Cluster::Sentry
-    );
-
+  const recob::Cluster cluster(start_wire,
+                               sigma_start_wire,
+                               start_tick,
+                               sigma_start_tick,
+                               start_charge,
+                               start_angle,
+                               start_opening,
+                               end_wire,
+                               sigma_end_wire,
+                               end_tick,
+                               sigma_end_tick,
+                               end_charge,
+                               end_angle,
+                               end_opening,
+                               integral,
+                               integral_stddev,
+                               summedADC,
+                               summedADC_stddev,
+                               n_hits,
+                               multiple_hit_density,
+                               width,
+                               ID,
+                               view,
+                               plane,
+                               recob::Cluster::Sentry);
 
   //
   // Part III: copy constructor
@@ -469,60 +422,57 @@ void ClusterTestCopyMoveOperations() {
 
   // step III.2: verify that the original cluster has not changed
   CheckCluster(cluster,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
   // step III.3: verify that the copy cluster is as the original one
   CheckCluster(cluster_copy,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
-
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
   //
   // Part IV: move constructor
@@ -532,60 +482,57 @@ void ClusterTestCopyMoveOperations() {
 
   // step IV.2: verify that the original cluster differ only by the invalid ID
   CheckCluster(cluster_copy,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    recob::Cluster::InvalidID,
-    view,
-    plane
-    );
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               recob::Cluster::InvalidID,
+               view,
+               plane);
 
   // step IV.3: verify that the new cluster is as the original was
   CheckCluster(cluster_move,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
-
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
   //
   // Part V: copy assignment
@@ -595,60 +542,57 @@ void ClusterTestCopyMoveOperations() {
 
   // step V.2: verify that the original cluster is unchanged
   CheckCluster(cluster,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
   // step V.3: verify that the new cluster is as the original
   CheckCluster(cluster_copy,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
-
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
   //
   // Part VI: move assignment (regular)
@@ -658,59 +602,57 @@ void ClusterTestCopyMoveOperations() {
 
   // step IV.2: verify that the original cluster differ only by the invalid ID
   CheckCluster(cluster_copy,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    recob::Cluster::InvalidID,
-    view,
-    plane
-    );
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               recob::Cluster::InvalidID,
+               view,
+               plane);
 
   // step VI.3: verify that the new cluster is as the original was
   CheckCluster(cluster_move,
-    start_wire,
-    sigma_start_wire,
-    start_tick,
-    sigma_start_tick,
-    start_charge,
-    start_angle,
-    start_opening,
-    end_wire,
-    sigma_end_wire,
-    end_tick,
-    sigma_end_tick,
-    end_charge,
-    end_angle,
-    end_opening,
-    integral,
-    integral_stddev,
-    summedADC,
-    summedADC_stddev,
-    n_hits,
-    multiple_hit_density,
-    width,
-    ID,
-    view,
-    plane
-    );
+               start_wire,
+               sigma_start_wire,
+               start_tick,
+               sigma_start_tick,
+               start_charge,
+               start_angle,
+               start_opening,
+               end_wire,
+               sigma_end_wire,
+               end_tick,
+               sigma_end_tick,
+               end_charge,
+               end_angle,
+               end_opening,
+               integral,
+               integral_stddev,
+               summedADC,
+               summedADC_stddev,
+               n_hits,
+               multiple_hit_density,
+               width,
+               ID,
+               view,
+               plane);
 
   //
   // Part VII: move assignment (self)
@@ -751,8 +693,6 @@ void ClusterTestCopyMoveOperations() {
 
 } // ClusterTestCopyMoveOperations()
 
-
-
 //------------------------------------------------------------------------------
 //--- registration of tests
 //
@@ -762,14 +702,17 @@ void ClusterTestCopyMoveOperations() {
 // number of checks and it will fail if any of them does.
 //
 
-BOOST_AUTO_TEST_CASE(ClusterDefaultConstructor) {
+BOOST_AUTO_TEST_CASE(ClusterDefaultConstructor)
+{
   ClusterTestDefaultConstructor();
 }
 
-BOOST_AUTO_TEST_CASE(ClusterCustomConstructors) {
+BOOST_AUTO_TEST_CASE(ClusterCustomConstructors)
+{
   ClusterTestCustomConstructor();
 }
 
-BOOST_AUTO_TEST_CASE(ClusterCopyMoveOperations) {
+BOOST_AUTO_TEST_CASE(ClusterCopyMoveOperations)
+{
   ClusterTestCopyMoveOperations();
 }

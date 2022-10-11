@@ -13,11 +13,10 @@
 
 // C/C++ standard libraries
 #include <algorithm>
-#include <vector>
-#include <string> // std::to_string()
-#include <stdexcept> // std::out_of_range
 #include <cassert>
-
+#include <stdexcept> // std::out_of_range
+#include <string>    // std::to_string()
+#include <vector>
 
 namespace util {
 
@@ -79,24 +78,22 @@ namespace util {
 
     using Data_t = std::vector<T, A>; ///< Actual data storage type.
 
-      public:
-
+  public:
     // --- BEGIN STL vector types ----------------------------------------------
     /// @name STL vector types
     /// @{
 
-    using allocator_type  = typename Data_t::allocator_type;
-    using value_type      = typename Data_t::value_type;
-    using size_type       = typename Data_t::size_type;
+    using allocator_type = typename Data_t::allocator_type;
+    using value_type = typename Data_t::value_type;
+    using size_type = typename Data_t::size_type;
     using difference_type = typename Data_t::difference_type;
-    using reference       = typename Data_t::reference;
+    using reference = typename Data_t::reference;
     using const_reference = typename Data_t::const_reference;
-    using pointer         = typename Data_t::pointer;
-    using const_pointer   = typename Data_t::const_pointer;
+    using pointer = typename Data_t::pointer;
+    using const_pointer = typename Data_t::const_pointer;
 
     /// @}
     // --- END STL vector types ------------------------------------------------
-
 
     /// --- BEGIN Constructors -------------------------------------------------
     /// Default constructor: an empty vector.
@@ -104,7 +101,6 @@ namespace util {
 
     /// Constructor: like default, but using the specified allocator.
     LazyVector(allocator_type const& a);
-
 
     /**
      * @brief Constructor: a lazy vector with a specified maximum size.
@@ -143,10 +139,7 @@ namespace util {
      */
     LazyVector(size_type n, value_type const& defValue);
 
-
     /// --- END Constructors -------------------------------------------------
-
-
 
     // --- BEGIN Container information -----------------------------------------
     /// @name Container information
@@ -177,12 +170,13 @@ namespace util {
 
     /// Index after the last data element in the storage
     /// (undefined if `data_empty()`).
-    size_type data_end_index() const
-      { return data_begin_index() + data_size(); }
+    size_type data_end_index() const { return data_begin_index() + data_size(); }
 
     /// Returns the internal storage index for the specified position.
     bool data_has_index(size_type pos) const
-      { return (pos >= data_begin_index()) && (pos < data_end_index()); }
+    {
+      return (pos >= data_begin_index()) && (pos < data_end_index());
+    }
 
     /**
      * @brief Returns a constant pointer to the specified element.
@@ -198,8 +192,6 @@ namespace util {
 
     /// @}
     // --- END Container information -------------------------------------------
-
-
 
     // --- BEGIN Access to data elements ---------------------------------------
     /**
@@ -299,17 +291,12 @@ namespace util {
     /// @}
     // --- END Access to data elements -----------------------------------------
 
-
-
     // --- BEGIN Setting data elements -----------------------------------------
     /// @name Setting data elements
     /// @{
 
-
     /// @}
     // --- END Setting data elements -------------------------------------------
-
-
 
     // --- BEGIN Container operations -----------------------------------------
     /// @name Container operations
@@ -421,15 +408,13 @@ namespace util {
      */
     void data_init(size_type n) { data_init(0U, n); }
 
-
-
     /// @}
     // --- END Container operations --------------------------------------------
 
-      private:
+  private:
     Data_t fData; ///< Actual data storage.
 
-    size_type fNominalSize = 0U; ///< Alleged data size.
+    size_type fNominalSize = 0U;               ///< Alleged data size.
     size_type fFirstIndex = fData.max_size();  ///< First element currently stored.
     value_type fDefValue = defaultValueType(); ///< Default value.
 
@@ -466,50 +451,38 @@ namespace util {
     /// Throws `std::out_of_range` if `pos` is not contained in the vector.
     void check_range(size_type pos) const;
 
-
     /// Returns the class default value (used when user does not specify any).
     static value_type const& defaultValueType() { return fDefaultDefaultValue; }
-
 
   }; // LazyVector<>
 
 } // namespace util
 
-
 //------------------------------------------------------------------------------
 //---  template implementation
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::value_type const
-util::LazyVector<T,A>::fDefaultDefaultValue{};
-
+typename util::LazyVector<T, A>::value_type const util::LazyVector<T, A>::fDefaultDefaultValue{};
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-util::LazyVector<T,A>::LazyVector(allocator_type const& a)
-  : fData(a)
-  {}
-
+util::LazyVector<T, A>::LazyVector(allocator_type const& a) : fData(a)
+{}
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-util::LazyVector<T,A>::LazyVector(size_type n)
-  : LazyVector(n, defaultValueType())
-  {}
-
+util::LazyVector<T, A>::LazyVector(size_type n) : LazyVector(n, defaultValueType())
+{}
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-util::LazyVector<T,A>::LazyVector(size_type n, value_type const& defValue)
-  : fNominalSize(n)
-  , fDefValue(defValue)
-  {}
-
+util::LazyVector<T, A>::LazyVector(size_type n, value_type const& defValue)
+  : fNominalSize(n), fDefValue(defValue)
+{}
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::reference util::LazyVector<T,A>::at
-  (size_type pos)
+typename util::LazyVector<T, A>::reference util::LazyVector<T, A>::at(size_type pos)
 {
   /*
    * Behaviour summary:
@@ -522,11 +495,9 @@ typename util::LazyVector<T,A>::reference util::LazyVector<T,A>::at
   return storage()[index_of(pos)]; // we already know it's valid
 }
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::value_type util::LazyVector<T,A>::at
-  (size_type pos) const
+typename util::LazyVector<T, A>::value_type util::LazyVector<T, A>::at(size_type pos) const
 {
   /*
    * Behaviour summary:
@@ -535,14 +506,12 @@ typename util::LazyVector<T,A>::value_type util::LazyVector<T,A>::at
    * * otherwise, return a copy of the element at `pos`
    */
   check_range(pos); // verify that `pos` is valid, throw otherwise
-  return data_has_index(pos)? storage()[index_of(pos)]: data_defvalue();
+  return data_has_index(pos) ? storage()[index_of(pos)] : data_defvalue();
 } // util::LazyVector<T,A>::at() const
-
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::reference util::LazyVector<T,A>::operator[]
-  (size_type pos)
+typename util::LazyVector<T, A>::reference util::LazyVector<T, A>::operator[](size_type pos)
 {
   /*
    * Behaviour summary:
@@ -558,11 +527,9 @@ typename util::LazyVector<T,A>::reference util::LazyVector<T,A>::operator[]
   return storage()[index_of(pos)];
 } // util::LazyVector<T,A>::operator[]()
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::value_type util::LazyVector<T,A>::operator[]
-  (size_type pos) const
+typename util::LazyVector<T, A>::value_type util::LazyVector<T, A>::operator[](size_type pos) const
 {
   /*
    * Behaviour summary:
@@ -574,14 +541,13 @@ typename util::LazyVector<T,A>::value_type util::LazyVector<T,A>::operator[]
   // this is not a requirement, and may change at any time.
   if (pos < data_begin_index()) return data_defvalue();
   auto const index = index_of(pos);
-  return (index < data_size())? storage()[index]: data_defvalue();
+  return (index < data_size()) ? storage()[index] : data_defvalue();
 } // util::LazyVector<T,A>::operator[] () const
-
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::const_pointer
-util::LazyVector<T,A>::data_address(size_type pos) const
+typename util::LazyVector<T, A>::const_pointer util::LazyVector<T, A>::data_address(
+  size_type pos) const
 {
   /*
    * Behaviour summary:
@@ -593,13 +559,13 @@ util::LazyVector<T,A>::data_address(size_type pos) const
   // this is not a requirement, and may change at any time.
   if (pos < data_begin_index()) return nullptr;
   auto const index = index_of(pos);
-  return (index < data_size())? storage().data() + index: nullptr;
+  return (index < data_size()) ? storage().data() + index : nullptr;
 } // util::LazyVector<T,A>::data_address()
-
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::resize(size_type newSize) {
+void util::LazyVector<T, A>::resize(size_type newSize)
+{
   /*
    * Behaviour summary:
    * * when extending, do not change storage
@@ -608,27 +574,25 @@ void util::LazyVector<T,A>::resize(size_type newSize) {
   fNominalSize = newSize;
   // delete any excess data
   if (data_end_index() > newSize) {
-    if (fNominalSize <= data_begin_index()) data_clear(); // no data is left
+    if (fNominalSize <= data_begin_index())
+      data_clear(); // no data is left
     else {
-      storage().erase
-        (storage().begin() + index_of(fNominalSize), storage().end());
+      storage().erase(storage().begin() + index_of(fNominalSize), storage().end());
     }
   }
 } // util::LazyVector<T,A>::resize()
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::clear() {
+void util::LazyVector<T, A>::clear()
+{
   data_clear();
   fNominalSize = 0U;
 } // util::LazyVector<T,A>::clear()
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::data_prepare
-  (size_type startIndex, size_type endIndex)
+void util::LazyVector<T, A>::data_prepare(size_type startIndex, size_type endIndex)
 {
   // we do not go beyond the declared size of the vector:
   size_type const e = std::min(endIndex, size());
@@ -640,11 +604,9 @@ void util::LazyVector<T,A>::data_prepare
 
 } // util::LazyVector<T,A>::data_prepare(size_type, size_type)
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::data_init
-  (size_type startIndex, size_type endIndex)
+void util::LazyVector<T, A>::data_init(size_type startIndex, size_type endIndex)
 {
   // we do not go beyond the declared size of the vector:
   size_type const e = std::min(endIndex, size());
@@ -656,72 +618,71 @@ void util::LazyVector<T,A>::data_init
 
 } // util::LazyVector<T,A>::data_init(size_type, size_type)
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::expand(size_type pos) {
+void util::LazyVector<T, A>::expand(size_type pos)
+{
   // this is just a dispatcher
-  if      (data_empty())              init(pos);
-  else if (pos <  data_begin_index()) expand_front(pos);
-  else if (pos >= data_end_index())   expand_back(pos);
+  if (data_empty())
+    init(pos);
+  else if (pos < data_begin_index())
+    expand_front(pos);
+  else if (pos >= data_end_index())
+    expand_back(pos);
 }
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::init(size_type pos, size_type n /* = 1 */) {
+void util::LazyVector<T, A>::init(size_type pos, size_type n /* = 1 */)
+{
   assert(data_empty());
   storage().assign(n, data_defvalue());
   fFirstIndex = pos;
   fix_size();
 }
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::expand_front(size_type pos) {
+void util::LazyVector<T, A>::expand_front(size_type pos)
+{
   assert(pos < data_begin_index());
-  storage().insert
-    (storage().begin(), data_begin_index() - pos, data_defvalue());
+  storage().insert(storage().begin(), data_begin_index() - pos, data_defvalue());
   fFirstIndex = pos;
 }
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::expand_back(size_type pos) {
+void util::LazyVector<T, A>::expand_back(size_type pos)
+{
   assert(pos >= data_end_index());
   storage().resize(pos + 1U - data_begin_index(), data_defvalue());
   fix_size();
 }
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::fix_size(){
+void util::LazyVector<T, A>::fix_size()
+{
   auto const min_size = data_end_index();
   if (fNominalSize < min_size) fNominalSize = min_size;
 }
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::data_clear() {
+void util::LazyVector<T, A>::data_clear()
+{
   storage().clear();
   fFirstIndex = storage().max_size();
 } // util::LazyVector<T,A>::data_clear()
 
-
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-void util::LazyVector<T,A>::check_range(size_type pos) const {
+void util::LazyVector<T, A>::check_range(size_type pos) const
+{
   if (has_index(pos)) return;
-  throw std::out_of_range(
-    "Index " + std::to_string(pos) + " is out of LazyVector range (size: "
-    + std::to_string(size()) + ")"
-    );
+  throw std::out_of_range("Index " + std::to_string(pos) +
+                          " is out of LazyVector range (size: " + std::to_string(size()) + ")");
 } // util::LazyVector<T,A>::check_range()
-
 
 //------------------------------------------------------------------------------
 

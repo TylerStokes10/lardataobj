@@ -17,7 +17,6 @@
 // C/C++ standard library
 #include <algorithm> // std::equal()
 
-
 // Boost libraries
 /*
  * Boost Magic: define the name of the module;
@@ -28,28 +27,24 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( wire_test )
+#define BOOST_TEST_MODULE (wire_test)
 #include "boost/test/unit_test.hpp"
 
 // LArSoft libraries
-#include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
+#include "larcoreobj/SimpleTypesAndConstants/RawTypes.h"  // raw::ChannelID_t
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t
-#include "lardataobj/Utilities/sparse_vector.h"
 #include "lardataobj/RecoBase/Wire.h"
-
-
+#include "lardataobj/Utilities/sparse_vector.h"
 
 //------------------------------------------------------------------------------
 //--- Test code
 //
 
-
-void CheckWire(
-  recob::Wire const& wire,
-  recob::Wire::RegionsOfInterest_t const& sigROIlist,
-  raw::ChannelID_t channel,
-  geo::View_t view
-) {
+void CheckWire(recob::Wire const& wire,
+               recob::Wire::RegionsOfInterest_t const& sigROIlist,
+               raw::ChannelID_t channel,
+               geo::View_t view)
+{
 
   // verify that the values are as expected
   // - channel ID
@@ -65,19 +60,18 @@ void CheckWire(
   BOOST_TEST(wireROI.n_ranges() == sigROIlist.n_ranges());
 
   unsigned int index = 0;
-  for (auto sample: wireROI) {
+  for (auto sample : wireROI) {
     BOOST_TEST(sample == sigROIlist[index++]);
   }
 
   // - other elements of interface
   auto const& wire_signal = wire.Signal();
-  BOOST_TEST
-    (std::equal(wire_signal.begin(), wire_signal.end(), sigROIlist.cbegin()));
+  BOOST_TEST(std::equal(wire_signal.begin(), wire_signal.end(), sigROIlist.cbegin()));
 
 } // CheckWire()
 
-
-void WireTestDefaultConstructor() {
+void WireTestDefaultConstructor()
+{
 
   //
   // Part I: initialization of wire inputs
@@ -93,14 +87,13 @@ void WireTestDefaultConstructor() {
   // step II.1: create a wire with the default constructor
   recob::Wire wire;
 
-
   // step II.2: verify that the values are as expected
   CheckWire(wire, sigROIlist, channel, view);
 
 } // WireTestDefaultConstructor()
 
-
-void WireTestCustomConstructors() {
+void WireTestCustomConstructors()
+{
 
   //
   // Part I: initialization of wire inputs
@@ -109,20 +102,17 @@ void WireTestCustomConstructors() {
   geo::View_t view = geo::kV;
 
   recob::Wire::RegionsOfInterest_t sigROIlist(20);
-  sigROIlist.add_range
-    (5, recob::Wire::RegionsOfInterest_t::vector_t({ 5., 6., 7. }));
-  sigROIlist.add_range
-    (11, recob::Wire::RegionsOfInterest_t::vector_t({ 11., 12., 13., 14. }));
+  sigROIlist.add_range(5, recob::Wire::RegionsOfInterest_t::vector_t({5., 6., 7.}));
+  sigROIlist.add_range(11, recob::Wire::RegionsOfInterest_t::vector_t({11., 12., 13., 14.}));
 
   // this is not a recob::Wire test, but I want to make sure anyway...
   BOOST_TEST(sigROIlist.size() == 20U);
   BOOST_TEST(sigROIlist.n_ranges() == 2U);
   size_t index = 0;
-  for (auto sample: sigROIlist) {
-    BOOST_TEST(((sample == (float) index) || (sample == 0.)));
+  for (auto sample : sigROIlist) {
+    BOOST_TEST(((sample == (float)index) || (sample == 0.)));
     ++index;
   } // for
-
 
   //
   // Part II: constructor with signal copy
@@ -130,10 +120,8 @@ void WireTestCustomConstructors() {
   // step II.1: create a wire with the signal-copying constructor
   recob::Wire wire1(sigROIlist, channel, view);
 
-
   // step II.2: verify that the values are as expected
   CheckWire(wire1, sigROIlist, channel, view);
-
 
   //
   // Part III: constructor with signal move
@@ -150,7 +138,6 @@ void WireTestCustomConstructors() {
 
 } // WireTestCustomConstructors()
 
-
 //------------------------------------------------------------------------------
 //--- registration of tests
 //
@@ -160,10 +147,12 @@ void WireTestCustomConstructors() {
 // number of checks and it will fail if any of them does.
 //
 
-BOOST_AUTO_TEST_CASE(WireDefaultConstructor) {
+BOOST_AUTO_TEST_CASE(WireDefaultConstructor)
+{
   WireTestDefaultConstructor();
 }
 
-BOOST_AUTO_TEST_CASE(WireCustomConstructors) {
+BOOST_AUTO_TEST_CASE(WireCustomConstructors)
+{
   WireTestCustomConstructors();
 }

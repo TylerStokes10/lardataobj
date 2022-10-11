@@ -8,9 +8,9 @@
 #ifndef SHOWER_H
 #define SHOWER_H
 
+#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 #include <iosfwd>
 #include <limits> // std::numeric_limits<>
-#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 
 #include "TVector3.h"
 
@@ -19,23 +19,21 @@ namespace recob {
   class Shower {
 
   public:
+    Shower(); ///Default constructor
 
-    Shower();  ///Default constructor
-
-   private:
-
+  private:
     int fID;
-    TVector3 fDCosStart;             ///< direction cosines at start of shower
-    TVector3 fSigmaDCosStart;        ///< uncertainty on initial direction cosines
-    TVector3 fXYZstart;             ///< direction cosines at start of shower
-    TVector3 fSigmaXYZstart;        ///< uncertainty on initial direction cosines
-    std::vector< double > fTotalEnergy;           ///< Calculated Energy per each plane
-    std::vector< double > fSigmaTotalEnergy;           ///< Calculated Energy per each plane
-    std::vector< double > fdEdx;           ///< Calculated dE/dx per each plane
-    std::vector< double > fSigmadEdx;           ///< Calculated dE/dx per each plane
+    TVector3 fDCosStart;                   ///< direction cosines at start of shower
+    TVector3 fSigmaDCosStart;              ///< uncertainty on initial direction cosines
+    TVector3 fXYZstart;                    ///< direction cosines at start of shower
+    TVector3 fSigmaXYZstart;               ///< uncertainty on initial direction cosines
+    std::vector<double> fTotalEnergy;      ///< Calculated Energy per each plane
+    std::vector<double> fSigmaTotalEnergy; ///< Calculated Energy per each plane
+    std::vector<double> fdEdx;             ///< Calculated dE/dx per each plane
+    std::vector<double> fSigmadEdx;        ///< Calculated dE/dx per each plane
 
-    std::vector< double > fTotalMIPEnergy;           ///< Calculated Energy per each plane
-    std::vector< double > fSigmaTotalMIPEnergy;           ///< Calculated Energy per each plane
+    std::vector<double> fTotalMIPEnergy;      ///< Calculated Energy per each plane
+    std::vector<double> fSigmaTotalMIPEnergy; ///< Calculated Energy per each plane
     int fBestPlane;
     /**
      * @brief Shower length [cm].
@@ -72,8 +70,7 @@ namespace recob {
      * of fLength.
      *
      */
-    static constexpr double InvalidLength
-      = std::numeric_limits<double>::lowest();
+    static constexpr double InvalidLength = std::numeric_limits<double>::lowest();
 
     /**
      * @brief The magic constant indicating the invalidity of the
@@ -84,82 +81,83 @@ namespace recob {
      * of fOpenAngle.
      *
      */
-    static constexpr double InvalidOpeningAngle
-      = std::numeric_limits<double>::lowest();
+    static constexpr double InvalidOpeningAngle = std::numeric_limits<double>::lowest();
 
   public:
-
     Shower(TVector3 const& dcosVtx,
-	   TVector3 const& dcosVtxErr,
-	   TVector3 const& xyz,
-	   TVector3 const& xyzErr,
-	   std::vector< double >  TotalEnergy,
-	   std::vector< double >  TotalEnergyErr,
-	   std::vector< double >  dEdx,
-	   std::vector< double >  dEdxErr,
-	   int bestplane,
-	   int     id,
+           TVector3 const& dcosVtxErr,
+           TVector3 const& xyz,
+           TVector3 const& xyzErr,
+           std::vector<double> TotalEnergy,
+           std::vector<double> TotalEnergyErr,
+           std::vector<double> dEdx,
+           std::vector<double> dEdxErr,
+           int bestplane,
+           int id,
            double length,
            double openAngle);
 
     /// Legacy constructor (with no length and no opening angle).
     /// @deprecated Use the complete constructor instead!
     Shower(TVector3 const& dcosVtx,
-      TVector3 const& dcosVtxErr,
-      TVector3 const& xyz,
-      TVector3 const& xyzErr,
-      std::vector< double >  TotalEnergy,
-      std::vector< double >  TotalEnergyErr,
-      std::vector< double >  dEdx,
-      std::vector< double >  dEdxErr,
-      int bestplane,
-      int     id=util::kBogusI)
-      :
-      Shower(
-        dcosVtx, dcosVtxErr, xyz, xyzErr, TotalEnergy, TotalEnergyErr, dEdx, dEdxErr,
-        bestplane, id,
-        InvalidLength, InvalidOpeningAngle
-        )
-      {}
-
-
+           TVector3 const& dcosVtxErr,
+           TVector3 const& xyz,
+           TVector3 const& xyzErr,
+           std::vector<double> TotalEnergy,
+           std::vector<double> TotalEnergyErr,
+           std::vector<double> dEdx,
+           std::vector<double> dEdxErr,
+           int bestplane,
+           int id = util::kBogusI)
+      : Shower(dcosVtx,
+               dcosVtxErr,
+               xyz,
+               xyzErr,
+               TotalEnergy,
+               TotalEnergyErr,
+               dEdx,
+               dEdxErr,
+               bestplane,
+               id,
+               InvalidLength,
+               InvalidOpeningAngle)
+    {}
 
     //set methods
-    void set_id                (const int id)                      { fID = id;                 }
-    void set_total_energy      (const std::vector< double >& q)    { fTotalEnergy = q;         }
-    void set_total_energy_err  (const std::vector< double >& q)    { fSigmaTotalEnergy = q;    }
-    void set_total_MIPenergy   (const std::vector< double >& q)    { fTotalMIPEnergy = q;      }
-    void set_total_MIPenergy_err  (const std::vector< double >& q) { fSigmaTotalMIPEnergy = q; }
-    void set_total_best_plane  (const int q)                         { fBestPlane = q;        }
+    void set_id(const int id) { fID = id; }
+    void set_total_energy(const std::vector<double>& q) { fTotalEnergy = q; }
+    void set_total_energy_err(const std::vector<double>& q) { fSigmaTotalEnergy = q; }
+    void set_total_MIPenergy(const std::vector<double>& q) { fTotalMIPEnergy = q; }
+    void set_total_MIPenergy_err(const std::vector<double>& q) { fSigmaTotalMIPEnergy = q; }
+    void set_total_best_plane(const int q) { fBestPlane = q; }
 
-    void set_direction       (const TVector3& dir)        { fDCosStart = dir;        }
-    void set_direction_err   (const TVector3& dir_e)      { fSigmaDCosStart = dir_e; }
-    void set_start_point     (const TVector3& xyz)        { fXYZstart = xyz;        }
-    void set_start_point_err (const TVector3& xyz_e)      { fSigmaXYZstart = xyz_e; }
-    void set_dedx      (const std::vector< double >& q) { fdEdx = q;        }
-    void set_dedx_err  (const std::vector< double >& q) { fSigmadEdx = q;        }
+    void set_direction(const TVector3& dir) { fDCosStart = dir; }
+    void set_direction_err(const TVector3& dir_e) { fSigmaDCosStart = dir_e; }
+    void set_start_point(const TVector3& xyz) { fXYZstart = xyz; }
+    void set_start_point_err(const TVector3& xyz_e) { fSigmaXYZstart = xyz_e; }
+    void set_dedx(const std::vector<double>& q) { fdEdx = q; }
+    void set_dedx_err(const std::vector<double>& q) { fSigmadEdx = q; }
     void set_length(const double& l) { fLength = l; }
-    void set_open_angle( const double& a )              { fOpenAngle = a;   }
+    void set_open_angle(const double& a) { fOpenAngle = a; }
 
+    int ID() const;
 
-    int    ID()               const;
-
-    const TVector3& Direction()    const;
+    const TVector3& Direction() const;
     const TVector3& DirectionErr() const;
 
-    const TVector3& ShowerStart()    const;
+    const TVector3& ShowerStart() const;
     const TVector3& ShowerStartErr() const;
 
-    const std::vector< double >& Energy()    const;
-    const std::vector< double >& EnergyErr() const;
+    const std::vector<double>& Energy() const;
+    const std::vector<double>& EnergyErr() const;
 
-    const std::vector< double >& MIPEnergy()    const;
-    const std::vector< double >& MIPEnergyErr() const;
-    int    best_plane()               const;
+    const std::vector<double>& MIPEnergy() const;
+    const std::vector<double>& MIPEnergyErr() const;
+    int best_plane() const;
     double Length() const;
     double OpenAngle() const;
-    const std::vector< double >& dEdx()    const;
-    const std::vector< double >& dEdxErr() const;
+    const std::vector<double>& dEdx() const;
+    const std::vector<double>& dEdxErr() const;
 
     //
     // being floating point numbers, equality is a risky comparison;
@@ -172,46 +170,88 @@ namespace recob {
     /// Returns whether the shower has a valid length.
     bool has_length() const;
 
+    friend std::ostream& operator<<(std::ostream& stream, Shower const& a);
 
-    friend std::ostream& operator << (std::ostream& stream, Shower const& a);
-
-    friend bool          operator <   (const Shower & a, const Shower & b);
+    friend bool operator<(const Shower& a, const Shower& b);
 
     static_assert(InvalidLength < 0.0f, "Invalid length must be negative!");
-    static_assert
-      (InvalidOpeningAngle < 0.0f, "Invalid opening angle must be negative!");
+    static_assert(InvalidOpeningAngle < 0.0f, "Invalid opening angle must be negative!");
 
   }; // recob::Shower
 }
 
-   inline int    recob::Shower::ID()               const { return fID;               }
+inline int recob::Shower::ID() const
+{
+  return fID;
+}
 
-   inline const TVector3& recob::Shower::Direction()    const { return fDCosStart;          }
-   inline const TVector3& recob::Shower::DirectionErr() const { return fSigmaDCosStart;     }
+inline const TVector3& recob::Shower::Direction() const
+{
+  return fDCosStart;
+}
+inline const TVector3& recob::Shower::DirectionErr() const
+{
+  return fSigmaDCosStart;
+}
 
-   inline const TVector3& recob::Shower::ShowerStart()    const { return fXYZstart;          }
-   inline const TVector3& recob::Shower::ShowerStartErr() const { return fSigmaXYZstart;     }
+inline const TVector3& recob::Shower::ShowerStart() const
+{
+  return fXYZstart;
+}
+inline const TVector3& recob::Shower::ShowerStartErr() const
+{
+  return fSigmaXYZstart;
+}
 
-   inline const std::vector< double >& recob::Shower::Energy()    const { return fTotalEnergy;          }
-   inline const std::vector< double >& recob::Shower::EnergyErr() const { return fSigmaTotalEnergy;     }
+inline const std::vector<double>& recob::Shower::Energy() const
+{
+  return fTotalEnergy;
+}
+inline const std::vector<double>& recob::Shower::EnergyErr() const
+{
+  return fSigmaTotalEnergy;
+}
 
-   inline const std::vector< double >& recob::Shower::MIPEnergy()    const { return fTotalMIPEnergy;          }
-   inline const std::vector< double >& recob::Shower::MIPEnergyErr() const { return fSigmaTotalMIPEnergy;     }
-   inline int    recob::Shower::best_plane()               const { return fBestPlane;               }
-   inline double recob::Shower::Length() const { return fLength; }
-   inline double recob::Shower::OpenAngle() const { return fOpenAngle; }
-   inline const std::vector< double >& recob::Shower::dEdx()    const { return fdEdx;          }
-   inline const std::vector< double >& recob::Shower::dEdxErr() const { return fSigmadEdx;     }
+inline const std::vector<double>& recob::Shower::MIPEnergy() const
+{
+  return fTotalMIPEnergy;
+}
+inline const std::vector<double>& recob::Shower::MIPEnergyErr() const
+{
+  return fSigmaTotalMIPEnergy;
+}
+inline int recob::Shower::best_plane() const
+{
+  return fBestPlane;
+}
+inline double recob::Shower::Length() const
+{
+  return fLength;
+}
+inline double recob::Shower::OpenAngle() const
+{
+  return fOpenAngle;
+}
+inline const std::vector<double>& recob::Shower::dEdx() const
+{
+  return fdEdx;
+}
+inline const std::vector<double>& recob::Shower::dEdxErr() const
+{
+  return fSigmadEdx;
+}
 
-   //
-   // being floating point numbers, equality is a risky comparison;
-   // we use anything negative to denote that the following items are not valid
-   //
-   inline bool recob::Shower::has_open_angle() const { return fOpenAngle >= 0.0; }
-   inline bool recob::Shower::has_length() const { return fLength >= 0.0; }
-
-
-
-
+//
+// being floating point numbers, equality is a risky comparison;
+// we use anything negative to denote that the following items are not valid
+//
+inline bool recob::Shower::has_open_angle() const
+{
+  return fOpenAngle >= 0.0;
+}
+inline bool recob::Shower::has_length() const
+{
+  return fLength >= 0.0;
+}
 
 #endif // SHOWER_H

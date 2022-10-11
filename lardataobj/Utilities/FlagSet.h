@@ -15,9 +15,9 @@
 #include "lardataobj/Utilities/BitMask.h"
 
 // C/C++ standard library
+#include <exception>
 #include <iosfwd> // std::ostream
 #include <string>
-#include <exception>
 
 namespace util {
 
@@ -36,14 +36,13 @@ namespace util {
      * in future implementations they might disappear. For the rest, they behave
      * just like the other flags though.
      */
-    template
-      <unsigned int NFlags, typename Storage = details::smallestUInt_t<NFlags>>
-    class FlagSet: public BitMask<Storage> {
+    template <unsigned int NFlags, typename Storage = details::smallestUInt_t<NFlags>>
+    class FlagSet : public BitMask<Storage> {
 
       static_assert(details::computePages<Storage>(NFlags) <= 1,
-        "Too many flags for this storage type.");
+                    "Too many flags for this storage type.");
 
-        public:
+    public:
       using This_t = FlagSet<NFlags, Storage>; ///< Type of this class.
 
       using Mask_t = BitMask<Storage>; ///< Type of bit mask for this flag set.
@@ -59,7 +58,6 @@ namespace util {
       /// Type identifying a single flag.
       using Flag_t = typename Mask_t::Flag_t;
 
-
       /// @{
       /// @name Exceptions
 
@@ -74,21 +72,17 @@ namespace util {
 
       /// @}
 
-
       FlagSet() = default;
       FlagSet(This_t const&) = default;
       FlagSet(This_t&&) = default;
-      FlagSet& operator= (This_t const&) = default;
-      FlagSet& operator= (This_t&&) = default;
+      FlagSet& operator=(This_t const&) = default;
+      FlagSet& operator=(This_t&&) = default;
 
       /// Constructor: copy the specified mask.
       // This is effectively a copy constructor due to the definition of Mask_t.
-      constexpr FlagSet(Mask_t const& from): Base_t(from) {}
-
+      constexpr FlagSet(Mask_t const& from) : Base_t(from) {}
 
       using Base_t::Base_t; // inherit the rest of the constructors
-
-
 
       /// @{
       /// @name Access to flags
@@ -122,7 +116,6 @@ namespace util {
        */
       constexpr bool isFlag(Flag_t flag) const;
 
-
       /**
        * @brief Returns if the specified flag is set.
        * @param flag flag to test
@@ -155,17 +148,15 @@ namespace util {
 
       /// @}
 
-
       /// Dumps on screen only the "official" flags (see `size()`).
       template <typename Stream>
       void dump(Stream&& out) const
-        { mask().dump(std::forward<Stream>(out), size()); }
-
+      {
+        mask().dump(std::forward<Stream>(out), size());
+      }
 
       /// Returns the number of flags the set supports.
-      static constexpr size_t size()
-        { return NFlags; }
-
+      static constexpr size_t size() { return NFlags; }
 
       /**
        * @brief Creates a new BitMask.
@@ -180,26 +171,27 @@ namespace util {
        */
       template <typename... Args>
       static constexpr Mask_t createMask(Args... args)
-        { return Mask_t::create(args...); }
+      {
+        return Mask_t::create(args...);
+      }
 
-        private:
-
+    private:
       /// Implementation detail of test()
       bool testImpl(Flag_t flag) const;
 
     }; // class FlagSet<>
 
-
     /// Output of a flag set into a stream.
     template <unsigned int NBits, typename Storage>
-    std::ostream& operator<<
-      (std::ostream& out, FlagSet<NBits, Storage> const& flags)
-      { flags.dump(out); return out; }
+    std::ostream& operator<<(std::ostream& out, FlagSet<NBits, Storage> const& flags)
+    {
+      flags.dump(out);
+      return out;
+    }
 
   } // namespace flags
 
 } // namespace util
-
 
 //------------------------------------------------------------------------------
 //---  template implementation
@@ -208,6 +200,5 @@ namespace util {
 #include "FlagSet.tcc"
 
 //------------------------------------------------------------------------------
-
 
 #endif // LARDATAOBJ_UTILITIES_FLAGSET_H

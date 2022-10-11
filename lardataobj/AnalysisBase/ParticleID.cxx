@@ -10,15 +10,13 @@
 
 #include <ostream>
 
-namespace anab{
+namespace anab {
 
   //----------------------------------------------------------------------
-  ParticleID::ParticleID()
-  {
-  }
+  ParticleID::ParticleID() {}
 
   //----------------------------------------------------------------------
-  ParticleID::ParticleID(const std::vector<anab::sParticleIDAlgScores> &ParticleIDAlgScores,
+  ParticleID::ParticleID(const std::vector<anab::sParticleIDAlgScores>& ParticleIDAlgScores,
                          const geo::PlaneID& planeID)
   {
     fParticleIDAlgScores = ParticleIDAlgScores;
@@ -28,19 +26,19 @@ namespace anab{
   //----------------------------------------------------------------------
   // ostream operator.
   //
-  std::ostream& operator<< (std::ostream & o, ParticleID const& a)
+  std::ostream& operator<<(std::ostream& o, ParticleID const& a)
   {
-    for (size_t i=0; i < a.fParticleIDAlgScores.size(); i++){
+    for (size_t i = 0; i < a.fParticleIDAlgScores.size(); i++) {
       o << "\n ParticleIDAlg " << a.fParticleIDAlgScores.at(i).fAlgName
-	<< "\n -- Variable type: " << a.fParticleIDAlgScores.at(i).fVariableType
-  << "\n -- Track direction: " << a.fParticleIDAlgScores.at(i).fTrackDir
-	<< "\n -- Assuming PDG: " << a.fParticleIDAlgScores.at(i).fAssumedPdg
-  << "\n -- Number of degrees of freedom: " << a.fParticleIDAlgScores.at(i).fNdf
-	<< "\n -- Value: " << a.fParticleIDAlgScores.at(i).fValue
-	<< "\n -- Using planeMask: " << a.fParticleIDAlgScores.at(i).fPlaneMask;
+        << "\n -- Variable type: " << a.fParticleIDAlgScores.at(i).fVariableType
+        << "\n -- Track direction: " << a.fParticleIDAlgScores.at(i).fTrackDir
+        << "\n -- Assuming PDG: " << a.fParticleIDAlgScores.at(i).fAssumedPdg
+        << "\n -- Number of degrees of freedom: " << a.fParticleIDAlgScores.at(i).fNdf
+        << "\n -- Value: " << a.fParticleIDAlgScores.at(i).fValue
+        << "\n -- Using planeMask: " << a.fParticleIDAlgScores.at(i).fPlaneMask;
     }
     o << "\n -- Plane id: " << a.fPlaneID;
-    o <<std::endl;
+    o << std::endl;
 
     return o;
   }

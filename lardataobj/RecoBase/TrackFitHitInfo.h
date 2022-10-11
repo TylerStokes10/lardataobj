@@ -6,7 +6,7 @@
 
 namespace recob {
 
-  using SVector5     = tracking::SVector5;
+  using SVector5 = tracking::SVector5;
   using SMatrixSym55 = tracking::SMatrixSym55;
 
   /// \file  lardataobj/RecoBase/TrackFitHitInfo.h
@@ -28,35 +28,45 @@ namespace recob {
 
   class TrackFitHitInfo {
   public:
-  TrackFitHitInfo(double aHitMeas, double aHitMeasErr2, const SVector5& aTrackStatePar, const SMatrixSym55& aTrackStateCov, const geo::WireID& aWireId)
-    : fHitMeas(aHitMeas), fHitMeasErr2(aHitMeasErr2),
-      fTrackStatePar(aTrackStatePar), fTrackStateCov(aTrackStateCov),
-      fWireId(aWireId.Wire), fPlaneId(aWireId.Plane), fTpcId(aWireId.TPC), fCryostatId(aWireId.Cryostat) { }
+    TrackFitHitInfo(double aHitMeas,
+                    double aHitMeasErr2,
+                    const SVector5& aTrackStatePar,
+                    const SMatrixSym55& aTrackStateCov,
+                    const geo::WireID& aWireId)
+      : fHitMeas(aHitMeas)
+      , fHitMeasErr2(aHitMeasErr2)
+      , fTrackStatePar(aTrackStatePar)
+      , fTrackStateCov(aTrackStateCov)
+      , fWireId(aWireId.Wire)
+      , fPlaneId(aWireId.Plane)
+      , fTpcId(aWireId.TPC)
+      , fCryostatId(aWireId.Cryostat)
+    {}
 
     TrackFitHitInfo() {}
 
     /// hit position measurement
-    double hitMeas()     const { return fHitMeas; }
+    double hitMeas() const { return fHitMeas; }
     /// squared uncertainty of the hit position measurement
     double hitMeasErr2() const { return fHitMeasErr2; }
 
     /// track parameters
-    const SVector5&     trackStatePar() const { return fTrackStatePar; }
+    const SVector5& trackStatePar() const { return fTrackStatePar; }
     /// covariance matrix
     const SMatrixSym55& trackStateCov() const { return fTrackStateCov; }
 
     /// wire id where the hit is located
-    geo::WireID WireId() const { return geo::WireID(fCryostatId,fTpcId,fPlaneId,fWireId); }
+    geo::WireID WireId() const { return geo::WireID(fCryostatId, fTpcId, fPlaneId, fWireId); }
 
   private:
-    float             fHitMeas;       ///< hit position measurement
-    float             fHitMeasErr2;   ///< squared uncertainty of the hit position measurement
-    SVector5          fTrackStatePar; ///< track parameters
-    SMatrixSym55      fTrackStateCov; ///< covariance matrix
-    unsigned int      fWireId;        ///< wire id where the hit is located
-    unsigned int      fPlaneId;       ///< plane id where the hit is located
-    unsigned int      fTpcId;         ///< tpc id where the hit is located
-    unsigned int      fCryostatId;    ///< cryostat id where the hit is located
+    float fHitMeas;              ///< hit position measurement
+    float fHitMeasErr2;          ///< squared uncertainty of the hit position measurement
+    SVector5 fTrackStatePar;     ///< track parameters
+    SMatrixSym55 fTrackStateCov; ///< covariance matrix
+    unsigned int fWireId;        ///< wire id where the hit is located
+    unsigned int fPlaneId;       ///< plane id where the hit is located
+    unsigned int fTpcId;         ///< tpc id where the hit is located
+    unsigned int fCryostatId;    ///< cryostat id where the hit is located
   };
 
 }

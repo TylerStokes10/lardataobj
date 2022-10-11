@@ -1,9 +1,6 @@
 #include "lardataobj/RecoBase/Slice.h"
 
-namespace recob{
+namespace recob {
 
-  Slice::Slice()
-  {
-    fID = -999;
-  }
+  Slice::Slice() { fID = -999; }
 }
