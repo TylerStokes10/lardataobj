@@ -25,3 +25,4 @@
 #include "lardataobj/Simulation/SimEnergyDepositLite.h"
 #include "lardataobj/Simulation/SimPhotons.h"
 #include "lardataobj/Simulation/SupernovaTruth.h"
+#include "lardataobj/Simulation/ParticleAncestryMap.h"
