@@ -1,4 +1,4 @@
-/** 
+/**
  * \class ParticleAncestryMap
  *
  * \brief Product to store the mapping of track IDs that were
@@ -22,24 +22,22 @@ namespace sim {
     std::map<int, std::set<int>> fParticleMap;
 
   public:
-
     ParticleAncestryMap() {}
-    
-    ParticleAncestryMap(const std::map<int, std::set<int>> &particleMap)
-      : fParticleMap(particleMap)
+
+    ParticleAncestryMap(const std::map<int, std::set<int>>& particleMap) : fParticleMap(particleMap)
     {}
 
-    void SetMap(const std::map<int, std::set<int>> &map);
+    void SetMap(const std::map<int, std::set<int>>& map);
 
     std::map<int, std::set<int>> GetMap() const;
 
-    bool HasDroppedDescendants(const int &trackid);
+    bool HasDroppedDescendants(const int& trackid);
 
-    std::set<int> GetAllDroppedDescendants(const int &trackid);
+    std::set<int> GetAllDroppedDescendants(const int& trackid);
 
-    bool HasAncestor(const int &trackid);
-    
-    int GetAncestor(const int &trackid);
+    bool HasAncestor(const int& trackid);
+
+    int GetAncestor(const int& trackid);
   };
 }
 #endif
