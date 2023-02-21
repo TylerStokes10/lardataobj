@@ -9,6 +9,7 @@
 #ifndef OPFLASH_H
 #define OPFLASH_H
 
+#include <iosfwd> // std::ostream
 #include <limits> // std::numeric_limits<>
 #include <vector>
 
@@ -106,6 +107,11 @@ namespace recob {
     double TotalPE() const;
     double FastToTotal() const;
   };
+
+  /// Human-readable, almost-complete dump of the `hit` content.
+  ///
+  /// `Frame()` value is not printed. No end-of-line added.
+  std::ostream& operator<<(std::ostream& out, OpFlash const& flash);
 
 }
 
