@@ -9,6 +9,7 @@
 #ifndef OPHIT_H
 #define OPHIT_H
 
+#include <iosfwd> // std::ostream
 #include <limits>
 
 namespace recob {
@@ -74,6 +75,12 @@ namespace recob {
     //Returns true if the StartTime has been initialized
     bool HasStartTime() const;
   };
+
+  /// Human-readable, single-line almost-complete dump of the `hit` content.
+  ///
+  /// `Frame()` value is not printed. No end-of-line added.
+  std::ostream& operator<<(std::ostream& out, OpHit const& hit);
+
 }
 
 inline int recob::OpHit::OpChannel() const
