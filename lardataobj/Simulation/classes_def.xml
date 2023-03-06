@@ -127,6 +127,7 @@
  <class name="art::Wrapper< art::Assns<simb::MCTruth, sim::SupernovaTruth, void>>"/>
 
  <class name="std::map<int, std::set<int>>"/>
+ <class name="std::pair<int, std::set<int>>"/>
  <class name="sim::ParticleAncestryMap"/>
  <class name="art::Wrapper<sim::ParticleAncestryMap>"/>
  <class name="std::vector<sim::ParticleAncestryMap>"/>
