@@ -29,15 +29,15 @@ namespace sim {
 
     void SetMap(const std::map<int, std::set<int>>& map);
 
-    std::map<int, std::set<int>> GetMap() const;
+    std::map<int, std::set<int>> const& GetMap() const;
 
-    bool HasDroppedDescendants(const int& trackid);
+    bool HasDroppedDescendants(const int trackid);
 
-    std::set<int> GetAllDroppedDescendants(const int& trackid);
+    std::set<int> const& GetAllDroppedDescendants(const int trackid);
 
-    bool HasAncestor(const int& trackid);
+    bool HasAncestor(const int trackid);
 
-    int GetAncestor(const int& trackid);
+    int GetAncestor(const int trackid);
   };
 }
 #endif
