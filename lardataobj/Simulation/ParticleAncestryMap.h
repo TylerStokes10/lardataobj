@@ -22,22 +22,30 @@ namespace sim {
     std::map<int, std::set<int>> fParticleMap;
 
   public:
+    // Default constructor
     ParticleAncestryMap() {}
 
+    // Construction from a pre filled map
     ParticleAncestryMap(const std::map<int, std::set<int>>& particleMap) : fParticleMap(particleMap)
     {}
 
+    // Set the map contents
     void SetMap(const std::map<int, std::set<int>>& map);
 
+    // Return the whole ancestry map
     std::map<int, std::set<int>> const& GetMap() const;
 
+    // Whether there are any dropped descendants for a given track id
     bool HasDroppedDescendants(const int trackid);
 
+    // Return the set of dropped descendants from a given ancestor's track id
     std::set<int> const& GetAllDroppedDescendants(const int trackid);
 
-    bool Exists(const int trackid);
-
+    // Get the stored ancestor from a given dropped track id
     int GetAncestor(const int trackid);
+
+    // Whether or not the returned track id from GetAncestor is valid or set to the default value
+    bool Exists(const int trackid);
   };
 }
 #endif

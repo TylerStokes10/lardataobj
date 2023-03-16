@@ -19,11 +19,6 @@ namespace sim {
     return fParticleMap[trackid];
   }
 
-  bool ParticleAncestryMap::Exists(const int trackid)
-  {
-    return trackid != -std::numeric_limits<int>::max();
-  }
-
   int ParticleAncestryMap::GetAncestor(const int trackid)
   {
     for (auto const& [ancestor, descendants] : fParticleMap) {
@@ -31,6 +26,11 @@ namespace sim {
     }
 
     return -std::numeric_limits<int>::max();
+  }
+
+  bool ParticleAncestryMap::Exists(const int trackid)
+  {
+    return trackid != -std::numeric_limits<int>::max();
   }
 }
 
