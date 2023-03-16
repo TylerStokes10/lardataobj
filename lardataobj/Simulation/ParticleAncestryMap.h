@@ -35,7 +35,7 @@ namespace sim {
 
     std::set<int> const& GetAllDroppedDescendants(const int trackid);
 
-    bool HasAncestor(const int trackid);
+    bool Exists(const int trackid);
 
     int GetAncestor(const int trackid);
   };

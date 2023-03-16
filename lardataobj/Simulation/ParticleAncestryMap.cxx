@@ -19,13 +19,9 @@ namespace sim {
     return fParticleMap[trackid];
   }
 
-  bool ParticleAncestryMap::HasAncestor(const int trackid)
+  bool ParticleAncestryMap::Exists(const int trackid)
   {
-    for (auto const& [ancestor, descendants] : fParticleMap) {
-      if (descendants.count(trackid) != 0) return true;
-    }
-
-    return false;
+    return trackid != -std::numeric_limits<int>::max();
   }
 
   int ParticleAncestryMap::GetAncestor(const int trackid)
