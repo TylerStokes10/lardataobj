@@ -19,6 +19,7 @@
 #include "lardataobj/Simulation/BeamGateInfo.h"
 #include "lardataobj/Simulation/GeneratedParticleInfo.h"
 #include "lardataobj/Simulation/OpDetBacktrackerRecord.h"
+#include "lardataobj/Simulation/ParticleAncestryMap.h"
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/SimDriftedElectronCluster.h"
 #include "lardataobj/Simulation/SimEnergyDeposit.h"
