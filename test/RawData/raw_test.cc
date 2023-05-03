@@ -239,7 +239,7 @@ void RunDataCompressionTests(DataCreatorBase* pDataCreator)
   DataSizes[9600] = "medium size";
   DataSizes[1048576] = "large size";
 
-  for (const auto size_info : DataSizes) {
+  for (const auto &size_info : DataSizes) {
     // create the original data:
     const std::vector<short> data(pDataCreator->create(size_info.first));
 
