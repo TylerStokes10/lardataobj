@@ -65,10 +65,9 @@ namespace lar {
   /// @tparam T type of the value returned by dereferenciation
   template <typename T>
   class value_const_iterator {
-    typedef value_const_iterator<T> this_t;                           ///< alias for this type
+    typedef value_const_iterator<T> this_t; ///< alias for this type
 
   public:
-
     using iterator_category = std::random_access_iterator_tag;
     using value_type = T;
     using difference_type = std::ptrdiff_t;
