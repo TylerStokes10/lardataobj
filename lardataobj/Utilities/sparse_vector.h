@@ -64,13 +64,16 @@ namespace lar {
   /// @brief A constant iterator returning always the same value
   /// @tparam T type of the value returned by dereferenciation
   template <typename T>
-  class value_const_iterator : public std::iterator<std::random_access_iterator_tag, T> {
-    typedef std::iterator<std::random_access_iterator_tag, T> base_t; ///< base type
+  class value_const_iterator {
     typedef value_const_iterator<T> this_t;                           ///< alias for this type
 
   public:
-    using typename base_t::difference_type;
-    using typename base_t::value_type;
+
+    using iterator_category = std::random_access_iterator_tag;
+    using value_type = T;
+    using difference_type = std::ptrdiff_t;
+    using pointer = T*;
+    using reference = T&;
 
     /// Default constructor: use the default value
     value_const_iterator() : value() {}
