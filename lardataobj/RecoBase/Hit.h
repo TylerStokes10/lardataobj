@@ -172,7 +172,7 @@ namespace recob {
     geo::SigType_t SignalType() const;
 
     ///< ID of the wire the hit is on (Cryostat, TPC, Plane, Wire)
-    geo::WireID WireID() const;
+    geo::WireID const& WireID() const;
 
     /// @}
 
@@ -277,7 +277,7 @@ inline geo::View_t recob::Hit::View() const
 {
   return fView;
 }
-inline geo::WireID recob::Hit::WireID() const
+inline geo::WireID const& recob::Hit::WireID() const
 {
   return fWireID;
 }

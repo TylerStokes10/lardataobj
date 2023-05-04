@@ -28,11 +28,10 @@
 namespace util {
 
   template <typename _Key, typename _Value, typename _BinaryOperation = std::plus<_Value>>
-  class SumSecondFunction : public std::binary_function<_Value, std::pair<_Key, _Value>, _Value> {
-  public:
-    const _Value operator()(const _Value& value, const std::pair<_Key, _Value>& entry) const
+  struct SumSecondFunction {
+    _Value operator()(const _Value& value, const std::pair<_Key, _Value>& entry) const
     {
-      return _BinaryOperation()(value, entry.second);
+      return _BinaryOperation{}(value, entry.second);
     }
   };
 
