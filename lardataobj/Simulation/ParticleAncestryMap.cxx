@@ -3,6 +3,8 @@
 
 #include "lardataobj/Simulation/ParticleAncestryMap.h"
 
+#include <limits>
+
 namespace sim {
 
   void ParticleAncestryMap::SetMap(const std::map<int, std::set<int>>& map) { fParticleMap = map; }
