@@ -9,17 +9,17 @@ namespace sim {
 
   std::map<int, std::set<int>> const& ParticleAncestryMap::GetMap() const { return fParticleMap; }
 
-  bool ParticleAncestryMap::HasDroppedDescendants(const int trackid)
+  bool ParticleAncestryMap::HasDroppedDescendants(const int trackid) const
   {
     return fParticleMap.count(trackid) != 0;
   }
 
-  std::set<int> const& ParticleAncestryMap::GetAllDroppedDescendants(const int trackid)
+  std::set<int> const& ParticleAncestryMap::GetAllDroppedDescendants(const int trackid) const
   {
-    return fParticleMap[trackid];
+    return fParticleMap.at(trackid);
   }
 
-  int ParticleAncestryMap::GetAncestor(const int trackid)
+  int ParticleAncestryMap::GetAncestor(const int trackid) const
   {
     for (auto const& [ancestor, descendants] : fParticleMap) {
       if (descendants.count(trackid) != 0) return ancestor;
@@ -28,7 +28,7 @@ namespace sim {
     return -std::numeric_limits<int>::max();
   }
 
-  bool ParticleAncestryMap::Exists(const int trackid)
+  bool ParticleAncestryMap::Exists(const int trackid) const
   {
     return trackid != -std::numeric_limits<int>::max();
   }
