@@ -36,16 +36,16 @@ namespace sim {
     std::map<int, std::set<int>> const& GetMap() const;
 
     // Whether there are any dropped descendants for a given track id
-    bool HasDroppedDescendants(const int trackid);
+    bool HasDroppedDescendants(const int trackid) const;
 
     // Return the set of dropped descendants from a given ancestor's track id
-    std::set<int> const& GetAllDroppedDescendants(const int trackid);
+    std::set<int> const& GetAllDroppedDescendants(const int trackid) const;
 
     // Get the stored ancestor from a given dropped track id
-    int GetAncestor(const int trackid);
+    int GetAncestor(const int trackid) const;
 
     // Whether or not the returned track id from GetAncestor is valid or set to the default value
-    bool Exists(const int trackid);
+    bool Exists(const int trackid) const;
   };
 }
 #endif
