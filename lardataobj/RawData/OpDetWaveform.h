@@ -12,6 +12,7 @@
 #include <functional> // so we can redefine less<> below
 #include <limits>
 #include <vector>
+#include <cstdint>  // for uint16_t
 
 namespace raw {
 
