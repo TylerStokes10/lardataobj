@@ -87,7 +87,7 @@
 #>  define_pythonpath
 ####################################
 parent		lardataobj
-defaultqual	e20
+defaultqual	e26
 ####################################
 
 ####################################
@@ -248,9 +248,9 @@ fwdir   product_dir    compatibility
 #
 ####################################
 product		version		qual	flags		<table_format=2>
-larcorealg	v09_12_00	-
-larcoreobj	v09_09_00	-
-nusimdata	v1_27_01	-
+larcorealg	v09_12_01	-
+larcoreobj	v09_09_01	-
+nusimdata	v1_27_02	-
 cetmodules	v3_20_00	-	only_for_build
 end_product_list
 ####################################
@@ -309,12 +309,8 @@ end_product_list
 qualifier	larcoreobj	larcorealg	nusimdata
 c14:debug	c14:debug	c14:debug	c14:debug
 c14:prof	c14:prof	c14:prof	c14:prof
-c7:debug	c7:debug	c7:debug	c7:debug
-c7:prof		c7:prof		c7:prof		c7:prof
 e26:debug	e26:debug	e26:debug	e26:debug
 e26:prof	e26:prof	e26:prof	e26:prof
-e20:debug	e20:debug	e20:debug	e20:debug
-e20:prof	e20:prof	e20:prof	e20:prof
 end_qualifier_list
 ####################################
 
