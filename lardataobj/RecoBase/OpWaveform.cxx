@@ -24,9 +24,7 @@ namespace recob {
   {}
 
   //----------------------------------------------------------------------
-  OpWaveform::OpWaveform(double time,
-                         raw::ChannelID_t channel,
-                         RegionsOfInterest_t&& sigROIlist)
+  OpWaveform::OpWaveform(double time, raw::ChannelID_t channel, RegionsOfInterest_t&& sigROIlist)
     : fTimeStamp(time), fChannel(channel), fSignalROI(std::move(sigROIlist))
   {}
 

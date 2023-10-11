@@ -100,7 +100,7 @@ namespace recob {
     OpWaveform();
 
   private:
-    double fTimeStamp;    ///< Time stamp
+    double fTimeStamp;              ///< Time stamp
     raw::ChannelID_t fChannel;      ///< ID of the associated channel.
     RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
 
@@ -120,9 +120,7 @@ namespace recob {
        *
        * For more details, see the other constructor documentation.
        */
-    OpWaveform(double time,
-               raw::ChannelID_t channel,
-               RegionsOfInterest_t const& sigROIlist);
+    OpWaveform(double time, raw::ChannelID_t channel, RegionsOfInterest_t const& sigROIlist);
 
     /**
        * @brief Constructor: uses specified signal in regions of interest.
