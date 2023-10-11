@@ -11,7 +11,6 @@
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
-#include "lardataobj/RawData/RDTimeStamp.h"
 #include "lardataobj/Utilities/sparse_vector.h"
 
 // C/C++ standard libraries
@@ -101,7 +100,7 @@ namespace recob {
     OpWaveform();
 
   private:
-    raw::RDTimeStamp fTimeStamp;    ///< Time stamp
+    double fTimeStamp;    ///< Time stamp
     raw::ChannelID_t fChannel;      ///< ID of the associated channel.
     RegionsOfInterest_t fSignalROI; ///< Signal on the channel as function of time tick.
 
@@ -121,7 +120,7 @@ namespace recob {
        *
        * For more details, see the other constructor documentation.
        */
-    OpWaveform(raw::RDTimeStamp time,
+    OpWaveform(double time,
                raw::ChannelID_t channel,
                RegionsOfInterest_t const& sigROIlist);
 
@@ -148,7 +147,7 @@ namespace recob {
        * This also preserves the sparse region of interest structure within
        * `sigROIlist`.
        */
-    OpWaveform(raw::RDTimeStamp time, raw::ChannelID_t channel, RegionsOfInterest_t&& sigROIlist);
+    OpWaveform(double time, raw::ChannelID_t channel, RegionsOfInterest_t&& sigROIlist);
     // --- END -- Constructors -----------------------------------------------
 
     // --- BEGIN -- Accessors ------------------------------------------------
@@ -168,7 +167,7 @@ namespace recob {
     raw::ChannelID_t Channel() const;
 
     /// Returns the time stamp
-    raw::RDTimeStamp TimeStamp() const;
+    double TimeStamp() const;
 
     ///@}
     // --- END -- Accessors --------------------------------------------------
@@ -201,7 +200,7 @@ inline raw::ChannelID_t recob::OpWaveform::Channel() const
 {
   return fChannel;
 }
-inline raw::RDTimeStamp recob::OpWaveform::TimeStamp() const
+inline double recob::OpWaveform::TimeStamp() const
 {
   return fTimeStamp;
 }

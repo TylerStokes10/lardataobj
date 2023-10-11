@@ -17,14 +17,14 @@ namespace recob {
   OpWaveform::OpWaveform() : fTimeStamp(0), fChannel(raw::InvalidChannelID), fSignalROI() {}
 
   //----------------------------------------------------------------------
-  OpWaveform::OpWaveform(raw::RDTimeStamp time,
+  OpWaveform::OpWaveform(double time,
                          raw::ChannelID_t channel,
                          RegionsOfInterest_t const& sigROIlist)
     : fTimeStamp(time), fChannel(channel), fSignalROI(sigROIlist)
   {}
 
   //----------------------------------------------------------------------
-  OpWaveform::OpWaveform(raw::RDTimeStamp time,
+  OpWaveform::OpWaveform(double time,
                          raw::ChannelID_t channel,
                          RegionsOfInterest_t&& sigROIlist)
     : fTimeStamp(time), fChannel(channel), fSignalROI(std::move(sigROIlist))
