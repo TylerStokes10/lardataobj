@@ -306,4 +306,16 @@
     ]]>
   </ioread>
 
+  <ioread
+    version="[12]"
+    sourceClass="recob::OpWaveform"
+    source="raw::RDTimeStamp fTimeStamp;"
+    targetClass="recob::OpWaveform"
+    target="fTimeStamp"
+    include="lardataobj/RecoBase/OpWaveform.h">
+    <![CDATA[
+         fTimeStamp = TTimeStamp(onfile.fTimeStamp.GetTimeStamp_High(),onfile.fTimeStamp.GetTimeStamp_Low()).AsDouble();
+    ]]>
+  </ioread>
+
 </lcgdict>
