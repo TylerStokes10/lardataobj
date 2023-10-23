@@ -307,7 +307,7 @@
   </ioread>
 
   <ioread
-    version="[12]"
+    version="[-12]"
     sourceClass="recob::OpWaveform"
     source="raw::RDTimeStamp fTimeStamp;"
     targetClass="recob::OpWaveform"
