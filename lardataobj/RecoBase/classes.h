@@ -5,8 +5,8 @@
 #include "TTimeStamp.h"
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 
-#include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RawData/RDTimeStamp.h"
+#include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RecoBase/Cluster.h"
 #include "lardataobj/RecoBase/Edge.h"
 #include "lardataobj/RecoBase/EndPoint2D.h"
