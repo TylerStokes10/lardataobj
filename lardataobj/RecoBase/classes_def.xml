@@ -111,7 +111,8 @@
   <class name="recob::Event" ClassVersion="11">
     <version ClassVersion="11" checksum="4046040025"/>
   </class>
-  <class name="recob::OpWaveform" ClassVersion="12">
+  <class name="recob::OpWaveform" ClassVersion="13">
+    <version ClassVersion="13" checksum="418859428"/>
     <version ClassVersion="12" checksum="290846489"/>
     <version ClassVersion="11" checksum="352214401"/>
   </class>
@@ -302,6 +303,18 @@
 >
     <![CDATA[
          fHitMeasErr2 = float(onfile.fHitMeasErr2);
+    ]]>
+  </ioread>
+
+  <ioread
+    version="[-12]"
+    sourceClass="recob::OpWaveform"
+    source="raw::RDTimeStamp fTimeStamp;"
+    targetClass="recob::OpWaveform"
+    target="fTimeStamp"
+    include="lardataobj/RecoBase/OpWaveform.h">
+    <![CDATA[
+         fTimeStamp = TTimeStamp(onfile.fTimeStamp.GetTimeStamp_High(),onfile.fTimeStamp.GetTimeStamp_Low()).AsDouble();
     ]]>
   </ioread>
 

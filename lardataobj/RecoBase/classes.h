@@ -2,8 +2,10 @@
 #include "canvas/Persistency/Common/PtrVector.h"
 #include "canvas/Persistency/Common/Wrapper.h"
 
+#include "TTimeStamp.h"
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 
+#include "lardataobj/RawData/RDTimeStamp.h"
 #include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RecoBase/Cluster.h"
 #include "lardataobj/RecoBase/Edge.h"
