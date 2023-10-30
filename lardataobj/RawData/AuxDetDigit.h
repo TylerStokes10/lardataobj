@@ -9,6 +9,7 @@
 #ifndef RAWDATA_AUXDETDIGIT_H
 #define RAWDATA_AUXDETDIGIT_H
 
+#include <cstdint>
 #include <iosfwd>
 #include <string>
 #include <vector>
