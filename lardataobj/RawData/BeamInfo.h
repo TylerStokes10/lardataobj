@@ -5,6 +5,7 @@
 #ifndef RAWDATA_BEAMINFO_H
 #define RAWDATA_BEAMINFO_H
 
+#include <cstdint>
 #include <iosfwd>
 #include <map>
 #include <string>
