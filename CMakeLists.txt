@@ -27,9 +27,10 @@ find_package(nusimdata REQUIRED EXPORT)
 find_package(canvas_root_io REQUIRED EXPORT)
 find_package(canvas REQUIRED EXPORT)
 find_package(messagefacility REQUIRED EXPORT)
+find_package(cetlib REQUIRED)
 find_package(cetlib_except REQUIRED EXPORT)
 
-find_package(Boost COMPONENTS HEADERS REQUIRED EXPORT)
+find_package(Boost REQUIRED EXPORT)
 find_package(ROOT COMPONENTS Core GenVector MathCore Matrix Physics REQUIRED EXPORT)
 
 find_package(larcoreobj REQUIRED EXPORT)
