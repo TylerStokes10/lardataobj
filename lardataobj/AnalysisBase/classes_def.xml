@@ -54,6 +54,17 @@
  <class name="std::vector< anab::FeatureVector<5>>"/>
  <class name="art::Ptr< anab::FeatureVector<5>>"/>
  <class name="art::Wrapper< std::vector< anab::FeatureVector<5>>>"/>
+
+
+ <class name="anab::FeatureVector<7>" ClassVersion="10">
+  <version ClassVersion="10" checksum="513865899"/>
+ </class>
+ <class name="art::Wrapper< anab::FeatureVector<7>>"/>
+ <class name="std::vector< anab::FeatureVector<7>>"/>
+ <class name="art::Ptr< anab::FeatureVector<7>>"/>
+ <class name="art::Wrapper< std::vector< anab::FeatureVector<7>>>"/>
+
+
  
  <!-- MVA output metadata, length 1-5                                -->
  <class name="anab::MVADescription<1>" ClassVersion="10">
@@ -95,6 +106,17 @@
  <class name="std::vector< anab::MVADescription<5>>"/>
  <class name="art::Ptr< anab::MVADescription<5>>"/>
  <class name="art::Wrapper< std::vector< anab::MVADescription<5>>>"/>
+
+
+ <class name="anab::MVADescription<7>" ClassVersion="10">
+  <version ClassVersion="10" checksum="1426583464"/>
+ </class>
+ <class name="art::Wrapper< anab::MVADescription<7>>"/>
+ <class name="std::vector< anab::MVADescription<7>>"/>
+ <class name="art::Ptr< anab::MVADescription<7>>"/>
+ <class name="art::Wrapper< std::vector< anab::MVADescription<7>>>"/>
+
+
 
  <enum name="anab::kVariableType"/>
  <enum name="anab::kTrackDir"/>
